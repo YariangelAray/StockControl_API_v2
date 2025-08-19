@@ -4,6 +4,8 @@ import cors from "cors";
 import bodyParser from "body-parser";
 import cookieParser from "cookie-parser";
 
+import * as rutas from './src/routes/index.js';
+
 dotenv.config();
 
 // Crear la instancia de Express
@@ -26,7 +28,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 
 // Rutas
-
+app.use('/stockcontrol_api/elementos', rutas.elementos);
 
 // Puerto para ejecutar el servidor
 const port = process.env.PORT || 3000;
