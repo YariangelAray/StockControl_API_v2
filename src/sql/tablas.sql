@@ -156,7 +156,7 @@ CREATE TABLE elementos (
 
 CREATE TABLE reportes (
   id INT AUTO_INCREMENT PRIMARY KEY,
-  fecha DATE DEFAULT CURRENT_TIMESTAMP,
+  fecha DATE DEFAULT (CURDATE()),
   asunto VARCHAR(100),
   mensaje TEXT,
   usuario_id INT,

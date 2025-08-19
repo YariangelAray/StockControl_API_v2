@@ -1,6 +1,8 @@
 import connection from '../utils/db.js';
+import Modelo from './Modelo.js';
 
-class Elemento {
+class Elemento extends Modelo {
+
   /**
    * Método para obtener los elementos almacenados en la base de datos
    *
@@ -8,11 +10,9 @@ class Elemento {
    */
   async getAll() {
     try {
-      const [rows] = await connection.query("SELECT * FROM elementos");
-      // Retorna los elementos obtenidos
-      return rows;
+      return await super.getAll('elementos');
     } catch (error) {
-      throw new Error("Error al obtener los elementos");
+      throw new Error("Error al obtener todos los elementos");
     }
   }
 
@@ -24,15 +24,9 @@ class Elemento {
    */
   async getById(id) {
     try {
-      const [rows] = await connection.query("SELECT * FROM elementos WHERE id = ?", [id]);
-      if (rows.length === 0) {
-        // Retorna un array vacío si no se encuentra el elemento
-        return [];
-      }
-      // Retorna el elemento encontrado
-      return rows[0];
+      return await super.getById('elementos', id)
     } catch (error) {
-      throw new Error("Error al obtener el prodcuto");
+      throw new Error("Error al obtener el elemento");
     }
   }
 
@@ -90,7 +84,7 @@ class Elemento {
   // }
 
   // /**
-  //  * Método para eliminar un prodcuto
+  //  * Método para eliminar un elemento
   //  * @param {Number} id identificador del elemento
   //  * @returns {String} Mensaje de respuesta
   //  */

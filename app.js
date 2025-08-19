@@ -4,7 +4,7 @@ import cors from "cors";
 import bodyParser from "body-parser";
 import cookieParser from "cookie-parser";
 
-import * as rutas from './src/routes/index.js';
+import rutas from './src/routes/index.js';
 
 dotenv.config();
 
@@ -28,7 +28,9 @@ app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 
 // Rutas
-app.use('/stockcontrol_api/elementos', rutas.elementos);
+rutas.forEach(({ path, router }) => {
+  app.use('/stockcontrol_api' + path, router);
+});
 
 // Puerto para ejecutar el servidor
 const port = process.env.PORT || 3000;

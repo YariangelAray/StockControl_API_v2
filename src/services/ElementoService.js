@@ -5,13 +5,13 @@ class ElementoService {
 
   static objElemento = new Elemento();
 
-  static async getElementos() {
+  static async getAllElementos() {
     try {
       // Creamos la instancia del modelo elemento
       // const objElemento = new Elemento();
 
       // Llamamos el método listar
-      const elementos = await objElemento.getAll();
+      const elementos = await this.objElemento.getAll();
 
       // Validamos si no hay elementos
       if (elementos.length === 0) {
@@ -30,6 +30,8 @@ class ElementoService {
       };
     } catch (error) {
       // Retornamos un error en caso de excepción
+      console.log(error);
+      
       return {
         error: true,
         code: 500,
@@ -44,7 +46,7 @@ class ElementoService {
       // const objElemento = new Elemento();
 
       // Llamamos el método consultar por ID
-      const elemento = await objElemento.getById(id);
+      const elemento = await this.objElemento.getById(id);
       // Validamos si no hay elemento
       if (elemento.length === 0) {
         return {
