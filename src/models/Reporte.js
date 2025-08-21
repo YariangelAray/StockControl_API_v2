@@ -35,7 +35,7 @@ class Reporte extends Modelo {
      * @returns {Promise<Array>} Lista de reportes del usuario
      * @throws {Error} Si ocurre un error en la consulta
      */
-    async getByUsuarioId(usuarioId) {
+    async getAllByUsuarioId(usuarioId) {
         try {
             return await super.getByField('reportes', 'usuario_id', usuarioId);
         } catch (error) {
@@ -49,7 +49,7 @@ class Reporte extends Modelo {
      * @returns {Promise<Array>} Lista de reportes del elemento
      * @throws {Error} Si ocurre un error en la consulta
      */
-    async getByElementoId(elementoId) {
+    async getAllByElementoId(elementoId) {
         try {
             return await super.getByField('reportes', 'elemento_id', elementoId);
         } catch (error) {

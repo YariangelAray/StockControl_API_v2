@@ -35,7 +35,7 @@ class Ambiente extends Modelo {
    * @returns {Promise<Array>} Lista de ambientes del centro
    * @throws {Error} Si ocurre un error en la consulta
    */
-  async getByCentroId(centroId) {
+  async getAllByCentroId(centroId) {
     try {
       return await super.getByField('ambientes', 'centro_id', centroId);
     } catch (error) {

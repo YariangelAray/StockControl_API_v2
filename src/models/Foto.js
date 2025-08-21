@@ -34,7 +34,7 @@ class Foto extends Modelo {
    * @returns {Promise<Array>} Array de fotos asociadas al reporte
    * @throws {Error} Si ocurre un error al consultar la base de datos
    */
-  async getByReporteId(reporteId) {
+  async getAllByReporteId(reporteId) {
     try {
       return await super.getByField('fotos', 'reporte_id', reporteId);
     } catch (error) {

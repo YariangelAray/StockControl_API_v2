@@ -35,7 +35,7 @@ class RolUsuario extends Modelo {
    * @returns {Promise<Array>} Lista de relaciones rol-usuario del rol
    * @throws {Error} Si ocurre un error en la consulta
    */
-  async getByRolId(rolId) {
+  async getAllByRolId(rolId) {
     try {
       return await super.getByField('roles_usuarios', 'rol_id', rolId);
     } catch (error) {
@@ -49,7 +49,7 @@ class RolUsuario extends Modelo {
    * @returns {Promise<Array>} Lista de relaciones rol-usuario del usuario
    * @throws {Error} Si ocurre un error en la consulta
    */
-  async getByUsuarioId(usuarioId) {
+  async getAllByUsuarioId(usuarioId) {
     try {
       return await super.getByField('roles_usuarios', 'usuario_id', usuarioId);
     } catch (error) {

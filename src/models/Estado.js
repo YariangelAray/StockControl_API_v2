@@ -31,7 +31,7 @@ class Estado extends Modelo {
 
   /**
    * Crea un nuevo estado en la base de datos
-   * @param {Object} estado - Objeto con los datos del tipo {nombre}
+   * @param {Object} estado - Objeto con los datos del estado {nombre}
    * @returns {Promise<Object|null>} El estado creado con su ID, o null si falló
    * @throws {Error} Si ocurre un error en la inserción
    */
@@ -50,7 +50,7 @@ class Estado extends Modelo {
   /**
    * Actualiza un estado existente
    * @param {number} id - ID del estado a actualizar
-   * @param {Object} estado - Objeto con los nuevos datos del tipo
+   * @param {Object} estado - Objeto con los nuevos datos del estado
    * @returns {Promise<Object|null>} El estado actualizado, o null si falló
    * @throws {Error} Si ocurre un error en la actualización
    */

@@ -35,7 +35,7 @@ class Inventario extends Modelo {
    * @returns {Promise<Array>} Lista de inventarios del centro
    * @throws {Error} Si ocurre un error en la consulta
    */
-  async getByUsuarioAdminId(usuarioAdminId) {
+  async getByAllUsuarioAdminId(usuarioAdminId) {
     try {
       return await super.getByField('inventarios', 'usuario_admin_id', usuarioAdminId);
     } catch (error) {
