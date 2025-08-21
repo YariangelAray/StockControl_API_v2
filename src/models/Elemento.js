@@ -1,4 +1,3 @@
-import connection from '../utils/db.js';
 import Modelo from './Modelo.js';
 
 class Elemento extends Modelo {
@@ -12,7 +11,7 @@ class Elemento extends Modelo {
     try {
       return await super.getAll('elementos');
     } catch (error) {
-      throw new Error("Error al obtener todos los elementos");
+      throw new Error(`Error al obtener todos los elementos: ${error.message}`);
     }
   }
 
@@ -24,95 +23,140 @@ class Elemento extends Modelo {
    */
   async getById(id) {
     try {
-      return await super.getById('elementos', id)
+      return await super.getById('elementos', id);
     } catch (error) {
-      throw new Error("Error al obtener el elemento");
+      throw new Error(`Error al obtener el elemento con ID ${id}: ${error.message}`);
+    }
+  }
+  /**
+   * Método para obtener un elemento por su placa
+   *
+   * @param {Number} placa Placa del elemento
+   * @returns {Object} Objeto elemento
+   */
+  async getByPlaca(placa) {
+    try {
+      return (await super.getByField('elementos', 'placa', placa))[0];
+    } catch (error) {
+      throw new Error(`Error al obtener el elemento con placa ${placa}: ${error.message}`);
+    }
+  }
+  /**
+   * Método para obtener un elemento por su serial
+   *
+   * @param {Number} serial Serial del elemento
+   * @returns {Object} Objeto elemento
+   */
+  async getBySerial(serial) {
+    try {
+      return (await super.getByField('elementos', 'serial', serial))[0];
+    } catch (error) {
+      throw new Error(`Error al obtener el elemento con serial ${serial}: ${error.message}`);
     }
   }
 
-  // /**
-  //  * Método para crear un nuevo elemento
-  //  *
-  //  * @returns {Object} Objeto elemento
-  //  */
-  // async create(nombre, descripcion, precio, categoria_id) {
-  //   try {
-  //     const [result] = await connection.query(
-  //       "INSERT INTO elementos (nombre, descripcion, precio, categoria_id) VALUES (?,?,?,?)",
-  //       [nombre, descripcion, precio, categoria_id]
-  //     );
-  //     return {
-  //       id: result.insertId,
-  //       nombre: nombre,
-  //       descripcion: descripcion,
-  //       precio: precio,
-  //       categoria_id: categoria_id,
-  //     };
-  //   } catch (error) {
-  //     throw new Error("Error al crear el elemento");
-  //   }
-  // }
+  /**
+   * Método para obtener elementos por tipo_elemento_id
+   *
+   * @param {Number} tipoElementoId Identificador del tipo de elemento
+   * @returns {Array} Arreglo de elementos
+   */
+  async getAllByTipoElementoId(tipoElementoId) {
+    try {
+      return await this.getByField('elementos', 'tipo_elemento_id', tipoElementoId);
+    } catch (error) {
+      throw new Error(`Error al obtener elementos por tipo_elemento_id ${tipoElementoId}: ${error.message}`);
+    }
+  }
 
-  // /**
-  //  * Método para actualizar un elemento
-  //  *
-  //  * @param {Number} id Identificador del elemento
-  //  * @returns {Object} Objeto elemento actualizado
-  //  */
-  // async update(id, campos) {
-  //   try {
-  //     let query = "UPDATE elementos SET ";
-  //     let params = [];
+  /**
+   * Método para obtener elementos por estado_id
+   *
+   * @param {Number} estadoId Identificador del estado
+   * @returns {Array} Arreglo de elementos
+   */
+  async getAllByEstadoId(estadoId) {
+    try {
+      return await this.getByField('elementos', 'estado_id', estadoId);
+    } catch (error) {
+      throw new Error(`Error al obtener elementos por estado_id ${estadoId}: ${error.message}`);
+    }
+  }
 
-  //     // Construimos dinámicamente la consulta de actualización solo con los campos proporcionados
-  //     for (const [key, value] of Object.entries(campos)) {
-  //       query += `${key} = ?, `;
-  //       params.push(value);
-  //     }
+  /**
+   * Método para obtener elementos por ambiente_id
+   *
+   * @param {Number} ambienteId Identificador del ambiente
+   * @returns {Array} Arreglo de elementos
+   */
+  async getAllByAmbienteId(ambienteId) {
+    try {
+      return await this.getByField('elementos', 'ambiente_id', ambienteId);
+    } catch (error) {
+      throw new Error(`Error al obtener elementos por ambiente_id ${ambienteId}: ${error.message}`);
+    }
+  }
 
-  //     // Eliminamos la última coma y espacio de la consulta
-  //     query = query.slice(0, -2);
+  /**
+   * Método para obtener elementos por inventario_id
+   *
+   * @param {Number} inventarioId Identificador del inventario
+   * @returns {Array} Arreglo de elementos
+   */
+  async getAllByInventarioId(inventarioId) {
+    try {
+      return await this.getByField('elementos', 'inventario_id', inventarioId);
+    } catch (error) {
+      throw new Error(`Error al obtener elementos por inventario_id ${inventarioId}: ${error.message}`);
+    }
+  }
 
-  //     // Añadimos la condición WHERE para seleccionar el elemento por su ID
-  //     query += " WHERE id = ?";
-  //     params.push(id);
-  //     const [result] = await connection.query(query, params);
-  //     return result.affectedRows > 0 ? { id, ...campos } : null;
-  //   } catch (error) {
-  //     throw new Error("Error al actualizar el elemento");
-  //   }
-  // }
+  /**
+   * Método para crear un nuevo elemento
+   *
+   * @returns {Object} Objeto elemento
+   */
+  async create(elemento) {
+    try {
+      const idCreado = await super.create('elementos', elemento);
+      if (idCreado) {
+        return await this.getById(idCreado);
+      }
+      return null;
+    } catch (error) {
+      throw new Error(`Error al crear el elemento: ${error.message}`);
+    }
+  }
 
-  // /**
-  //  * Método para eliminar un elemento
-  //  * @param {Number} id identificador del elemento
-  //  * @returns {String} Mensaje de respuesta
-  //  */
-  // async delete(id) {
-  //   try {
-  //     // Procedemos con la eliminación si no está relacionada
-  //     const [result] = await connection.query(
-  //       "DELETE FROM elementos WHERE id = ?",
-  //       [id]
-  //     );
+  /**
+   * Método para actualizar un elemento
+   *
+   * @param {Number} id Identificador del elemento
+   * @returns {Object} Objeto elemento actualizado
+   */
+  async update(id, elemento) {
+    try {
+      if (await super.update('elementos', id, elemento)) {
+        return await this.getById(id);
+      }
+      return null;
+    } catch (error) {
+      throw new Error(`Error al actualizar el elemento con ID ${id}: ${error.message}`);
+    }
+  }
 
-  //     if (result.affectedRows === 0) {
-  //       return {
-  //         error: true,
-  //         mensaje: "Elemento no encontrado.",
-  //       };
-  //     }
-  //     return {
-  //       error: false,
-  //       mensaje: "Elemento eliminado exitosamente.",
-  //     };
-  //   } catch (error) {
-  //     res.status(500).json({
-  //       error: true,
-  //       mensaje: "Error al eliminar el elemento.",
-  //     });
-  //   }
-  // }
+  /**
+   * Método para eliminar un elemento
+   * @param {Number} id identificador del elemento
+   * @returns {String} Mensaje de respuesta
+   */
+  async delete(id) {
+    try {
+      return await super.delete('elementos', id);
+    } catch (error) {
+      throw new Error(`Error al eliminar el elemento con ID ${id}: ${error.message}`);
+    }
+  }
 }
 
 export default Elemento;

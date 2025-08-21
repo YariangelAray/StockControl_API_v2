@@ -6,7 +6,7 @@ class Modelo {
   async getAll(tabla) {
     try {
       //Obtenemos el resultado de la consulta
-      const [rows] = await connection.query(`SELECT * FROM ${tabla};`);
+      const [rows] = await connection.query(`SELECT * FROM ${tabla} ORDER BY id DESC;`);
       //Retornamos la respuesta al servicio
       return rows;
     } catch (error) {
@@ -17,14 +17,27 @@ class Modelo {
 
   //Metodo para obtener el registro de una tabla por su identificador
   async getById(tabla, id) {
-    try {
+    try {      
       //Obtenemos el resultado de la consulta
-      const [rows] = await connection.query(`select * from ${tabla} where id = ?`, [id]);
+      const [rows] = await connection.query(`SELECT * FROM ${tabla} WHERE id = ?`, [id]);      
       //Retornamos la respuesta al servicio
       return rows[0];
     } catch (error) {
       // Lanza un error personalizado si la operación falla
       throw new Error('Error al obtener por id');
+    }
+  }
+
+  //Metodo para obtener los registros de una tabla por un campo específico
+  async getByField(tabla, campo, valor) {
+    try {      
+      //Obtenemos el resultado de la consulta
+      const [rows] = await connection.query(`SELECT * FROM ${tabla} WHERE ${campo} = ?`, [valor]);
+      //Retornamos la respuesta al servicio
+      return rows;
+    } catch (error) {
+      // Lanza un error personalizado si la operación falla
+      throw new Error('Error al obtener por campo');
     }
   }
 
@@ -57,11 +70,9 @@ class Modelo {
       // Ejecuta la consulta con los parámetros usando el objeto 'connection'
       const [result] = await connection.query(query, params);
 
-      // Devuelve el id insertado y los campos insertados como objeto
-      return {
-        id: result.insertId, // ID del nuevo registro insertado
-        ...campos, // Campos que fueron insertados
-      };
+      // Devuelve el id insertado si hay filas afectadas o null
+      return result.affectedRows > 0 ? result.insertId : null;
+
     } catch (error) {
       // Lanza un error personalizado si la operación falla
       throw new Error(`Error al crear`);
@@ -95,12 +106,8 @@ class Modelo {
       // Ejecuta la consulta SQL con los parámetros preparados
       const [result] = await connection.query(query, params);
 
-      // Si se modificó al menos una fila, devuelve el objeto, de lo contrario, devuelve null
-      if (result.affectedRows > 0) {
-        const elemento = await this.getByID(tabla, id);
-        return elemento;
-      }
-      return null;
+      // Si se modificó al menos una fila, devuelve true, de lo contrario, devuelve false
+      return result.affectedRows > 0;
 
     } catch (error) {
       // Si ocurre un error durante la operación, lanza un mensaje de error personalizado
@@ -114,11 +121,8 @@ class Modelo {
       // Ejecuta una consulta SQL para eliminar un registro en la tabla especificada donde el id coincida
       const [result] = await connection.query(`DELETE FROM ${tabla} WHERE id = ?`, [id]);
 
-      // Si no se eliminó ninguna fila (es decir, no se encontró un registro con ese ID), devuelve false
-      if (result.affectedRows === 0) return false;
-
-      // Si se eliminó al menos una fila, devuelve true
-      return true;
+      // Si se modificó al menos una fila, devuelve true, de lo contrario, devuelve false
+      return result.affectedRows > 0;
 
     } catch (error) {
       // Si ocurre algún error en el proceso, lanza un mensaje de error personalizado

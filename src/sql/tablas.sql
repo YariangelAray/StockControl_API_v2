@@ -135,10 +135,10 @@ CREATE TABLE tipos_elementos (
 CREATE TABLE elementos (
   id INT AUTO_INCREMENT PRIMARY KEY,
   placa BIGINT UNIQUE,
-  serial VARCHAR(50),
+  serial VARCHAR(15) UNIQUE,
   tipo_elemento_id INT,
   fecha_adquisicion DATE,
-  valor_monetario DECIMAL(12,2),
+  valor_monetario DECIMAL(12, 2),
   estado_id INT,
   observaciones TEXT,
   estado_activo BOOLEAN DEFAULT TRUE,
@@ -253,3 +253,5 @@ END;
 //
 
 DELIMITER ;
+
+select * from elementos;	

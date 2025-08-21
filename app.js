@@ -13,13 +13,13 @@ const app = express();
 
 // Habilita CORS
 app.use(cors({
-  origin: 'http://localhost:5173',
+  origin: true,
   credentials: true,
 }));
 
 // Permite que la app acepte datos JSON
-app.use(bodyParser.json());
-// app.use(express.json());
+// app.use(bodyParser.json());
+app.use(express.json());
 
 // Permite el envio de datos de tipo urlencode
 app.use(express.urlencoded({ extended: true }));
@@ -35,5 +35,5 @@ rutas.forEach(({ path, router }) => {
 // Puerto para ejecutar el servidor
 const port = process.env.PORT || 3000;
 app.listen(port, () => {
-  console.log(`Servidor corriendo en http://localhost:${port}`);
+  console.log(`Servidor corriendo en http://localhost:${port}/stockcontrol_api`);
 });
