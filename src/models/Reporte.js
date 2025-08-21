@@ -63,7 +63,7 @@ class Reporte extends Modelo {
      * @returns {Promise<Array>} Lista de reportes del inventario
      * @throws {Error} Si ocurre un error en la consulta
      */
-    async getByInventarioId(inventarioId) {
+    async getAllByInventarioId(inventarioId) {
         try {
             //Obtenemos el resultado de la consulta
             const [rows] = await connection.query("SELECT r.* FROM reportes r JOIN elementos e ON r.elemento_id = e.id WHERE e.inventario_id = ? ORDER BY id DESC", [inventarioId]);
