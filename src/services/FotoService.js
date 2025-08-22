@@ -114,26 +114,26 @@ class FotoService {
     }
   }
 
-  static async getFotosByReporteId(reporteId) {
-    try {
+  // static async getFotosByReporteId(reporteId) {
+  //   try {
 
-      const reporteExistente = this.objReporte.getById(reporteId);
-      if (!reporteExistente)
-        return { error: true, code: 404, message: "El reporte especificado no existe." };
+  //     const reporteExistente = this.objReporte.getById(reporteId);
+  //     if (!reporteExistente)
+  //       return { error: true, code: 404, message: "El reporte especificado no existe." };
 
-      // Llamamos el método para obtener fotos por reporte_id
-      const fotos = await this.objFoto.getAllByReporteId(reporteId);
-      // Validamos si no hay fotos
-      if (!fotos || fotos.length === 0)
-        return { error: true, code: 404, message: "No hay fotos registradas para este reporte" };
+  //     // Llamamos el método para obtener fotos por reporte_id
+  //     const fotos = await this.objFoto.getAllByReporteId(reporteId);
+  //     // Validamos si no hay fotos
+  //     if (!fotos || fotos.length === 0)
+  //       return { error: true, code: 404, message: "No hay fotos registradas para este reporte" };
 
-      // Retornamos las fotos obtenidas
-      return { error: false, code: 200, message: "Fotos obtenidas correctamente", data: fotos };
-    } catch (error) {
-      // Retornamos un error en caso de excepción
-      return { error: true, code: 500, message: `Error al obtener las fotos del reporte con ID ${reporteId}: ${error.message}` };
-    }
-  }
+  //     // Retornamos las fotos obtenidas
+  //     return { error: false, code: 200, message: "Fotos obtenidas correctamente", data: fotos };
+  //   } catch (error) {
+  //     // Retornamos un error en caso de excepción
+  //     return { error: true, code: 500, message: `Error al obtener las fotos del reporte con ID ${reporteId}: ${error.message}` };
+  //   }
+  // }
 }
 
 export default FotoService;

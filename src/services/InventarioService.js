@@ -151,45 +151,76 @@ class InventarioService {
     }
   }
 
-  // static async getInventariosByInventarioId(inventarioId) {
-  //   try {
+  static async getInventariosByUsuarioId(usuarioId) {
+    try {
 
-  //     const inventarioExistente = this.objInventario.getById(inventarioId);
-  //     if (!inventarioExistente)
-  //       return { error: true, code: 404, message: "El inventario especificado no existe." };
+      const usuarioExistente = this.objUsuario.getById(usuarioId);
+      if (!usuarioExistente)
+        return { error: true, code: 404, message: "El usuario especificado no existe." };
 
-  //     // Llamamos el método para obtener inventarios por inventario
-  //     const inventarios = await this.objInventario.getAllByInventarioId(inventarioId);
-  //     // Validamos si no hay inventarios
-  //     if (!inventarios || inventarios.length === 0)
-  //       return { error: true, code: 404, message: "No hay inventarios registrados para este inventario" };
+      // Llamamos el método para obtener inventarios por usuario
+      const inventarios = await this.objInventario.getByAllUsuarioAdminId(usuarioId);
+      // Validamos si no hay inventarios
+      if (!inventarios || inventarios.length === 0)
+        return { error: true, code: 404, message: "No hay inventarios registrados para este usuario" };
 
-  //     // Retornamos los inventarios obtenidas
-  //     return {
-  //       error: false, code: 200, message: "Inventarios obtenidos correctamente",
-  //       data: await this.complementarInventarios(inventarios)
-  //     };
+      // Retornamos los inventarios obtenidas
+      return {
+        error: false, code: 200, message: "Inventarios obtenidos correctamente",
+        data: await this.complementarInventarios(inventarios)
+      };
 
-  //   } catch (error) {
-  //     // Retornamos un error en caso de excepción
-  //     return { error: true, code: 500, message: `Error al obtener los inventarios del inventario con ID ${inventarioId}: ${error.message}` };
-  //   }
-  // }
+    } catch (error) {
+      // Retornamos un error en caso de excepción
+      return { error: true, code: 500, message: `Error al obtener los inventarios del usuario administrativo con ID ${usuarioId}: ${error.message}` };
+    }
+  }
 
-  // static async complementarInventarios(inventarios) {
-  //   return Promise.all(await inventarios.map(async inventario => await this.complementarInventario(inventario)));
-  // }
+  static async getAmbientesByInventarioId(inventarioId) {
+    try {
+
+      // Llamamos el método consultar por ID
+      const inventario = await this.objInventario.getById(inventarioId);
+      // Validamos si no hay inventario
+      if (!inventario) {
+        return { error: true, code: 404, message: "Inventario no encontrado" };
+      }
+
+      // Llamamos el método para obtener los ambientes cubiertos por el inventario
+      const ambientes = await this.objInventario.getAmbientesCubiertos(inventarioId);
+      // Validamos si no hay inventarios
+      if (!ambientes || ambientes.length === 0)
+        return { error: true, code: 404, message: "No hay ambientes cubiertos por este inventario" };
+
+      // Retornamos los inventarios obtenidas
+      return {
+        error: false, code: 200, message: "Ambientes cubiertos obtenidos correctamente",
+        data: ambientes
+      };
+
+    } catch (error) {
+      // Retornamos un error en caso de excepción
+      return { error: true, code: 500, message: `Error al obtener los ambientes cubiertos por el inventario con ID ${inventarioId}: ${error.message}` };
+    }
+  }
+
+  static async complementarInventarios(inventarios) {
+    return Promise.all(await inventarios.map(async inventario => await this.complementarInventario(inventario)));
+  }
   
-  // static async complementarInventario(inventario) {
-  //   const usuario = await this.objUsuario.getById(inventario.usuario_id);
-  //   const elemento = await this.objElemento.getById(inventario.elemento_id);
+  static async complementarInventario(inventario) {
+    const elementos = await this.objElemento.getAllByInventarioId(inventario.id);
+    
+    const totalMonetario = elementos.reduce(
+      (total, { valor_monetario }) => total + valor_monetario, 0
+    );
 
-  //   inventario.usuario = usuario.nombres.split(" ")[0] + " " + usuario.apellidos.split(" ")[0];
-  //   inventario.elemento = { id: elemento.id, placa: elemento.placa };
-  //   inventario.fotos = await this.objFoto.getAllByInventarioId(inventario.id);
+    inventario.valor_monetario = totalMonetario;
+    inventario.cantidad_elementos = (elementos || []).length;
+    inventario.ambientes_cubiertos = (await this.objInventario.getAmbientesCubiertos(inventario.id) || []).length;
 
-  //   return inventario;
-  // }
+    return inventario;
+  }
 }
 
 export default InventarioService;

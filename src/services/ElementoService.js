@@ -80,10 +80,10 @@ class ElementoService {
       }
       
       if (await this.objElemento.getByPlaca(elemento.placa)) 
-        return { error: true, code: 409, message: "El número de placa especificado ya existe." };
+        return { error: true, code: 409, message: "El número de placa especificado ya fue registrado." };
 
       if (elemento.serial && await this.objElemento.getBySerial(elemento.serial)) 
-        return { error: true, code: 409, message: "El número de placa especificado ya existe." };
+        return { error: true, code: 409, message: "El número de serial especificado ya fue registrado." };
         
       
       // Llamamos el método crear
@@ -136,12 +136,12 @@ class ElementoService {
 
       const existentePlaca = await this.objElemento.getByPlaca(elemento.placa);
       if (existentePlaca && elemento.placa != existente.placa) {
-        return { error: true, code: 409, message: "El número de placa especificado ya existe." };    
+        return { error: true, code: 409, message: "El número de placa especificado ya fue registrado." };    
       }
 
       const existenteSerial = await this.objElemento.getBySerial(elemento.serial);
       if (existenteSerial && elemento.serial != existente.serial) {
-        return { error: true, code: 409, message: "El número de placa especificado ya existe." };    
+        return { error: true, code: 409, message: "El número de serial especificado ya fue registrado." };    
       }
 
       // Llamamos el método actualizar

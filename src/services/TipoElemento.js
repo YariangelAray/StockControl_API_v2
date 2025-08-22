@@ -50,7 +50,7 @@ class TipoElementoService {
         try {
 
             if (await this.objTipoElemento.getByConsecutivo(tipoElemento.consecutivo))
-                return { error: true, code: 409, message: "El número de consecutivo especificado ya existe." };
+              return { error: true, code: 409, message: "El número de consecutivo especificado ya fue registrado." };
 
             // Llamamos el método crear
             const tipoElementoCreado = await this.objTipoElemento.create(tipoElemento);
@@ -61,7 +61,7 @@ class TipoElementoService {
             // Retornamos el tipo de elemento creado
             return {
                 error: false, code: 201, message: "Tipo de elemento creada correctamente",
-                data: this.complementarTipoElemento(tipoElementoCreado)
+                data: await this.complementarTipoElemento(tipoElementoCreado)
             };
         } catch (error) {
             // Retornamos un error en caso de excepción
@@ -80,7 +80,7 @@ class TipoElementoService {
 
             const existenteConsecutivo = await this.objTipoElemento.getByConsecutivo(tipoElemento.consecutivo);
             if (existenteConsecutivo && tipoElemento.consecutivo != existenteConsecutivo) {
-                return { error: true, code: 409, message: "El número de consecutivo especificado ya existe." };
+              return { error: true, code: 409, message: "El número de consecutivo especificado ya fue registrado." };
             }
 
             // Llamamos el método actualizar
@@ -92,7 +92,7 @@ class TipoElementoService {
             // Retornamos el tipo de elemento actualizado
             return {
                 error: false, code: 200, message: "Tipo de elemento actualizado correctamente",
-                data: this.complementarTipoElemento(tipoElementoActualizado)
+                data: await this.complementarTipoElemento(tipoElementoActualizado)
             };
         } catch (error) {
             // Retornamos un error en caso de excepción

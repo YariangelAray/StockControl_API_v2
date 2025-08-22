@@ -105,10 +105,10 @@ class CentroService {
         return { error: true, code: 404, message: "Centro no encontrado" };
       }
 
-      const elementosCentro = await this.objAmbiente.getAllByCentroId(id);
-      // Validamos si no hay elementos
-      if (elementosCentro && elementosCentro.length > 0) {
-        return { error: true, code: 409, message: "No se puede eliminar el centro porque tiene elementos asociados" };
+      const ambientesCentro = await this.objAmbiente.getAllByCentroId(id);
+      // Validamos si no hay ambientes
+      if (ambientesCentro && ambientesCentro.length > 0) {
+        return { error: true, code: 409, message: "No se puede eliminar el centro porque tiene ambientes asociados" };
       }
 
       // Llamamos el método eliminar
