@@ -105,7 +105,14 @@ class ElementoService {
 
   static async updateElemento(id, elemento) {
     try {
-
+    
+      // Llamamos el método consultar por ID
+      const existente = await this.objElemento.getById(id);
+      // Validamos si el elemento existe
+      if (!existente) {
+        return {error: true, code: 404, message: "Elemento no encontrado"};
+      }
+      
       if (elemento.tipo_elemento_id) {
         const tipoExistente = this.objTipoElemento.getById(elemento.tipo_elemento_id);
         if (!tipoExistente)
@@ -125,13 +132,6 @@ class ElementoService {
         const inventarioExistente = this.objInventario.getById(elemento.inventario_id);
         if (!inventarioExistente)
           return { error: true, code: 404, message: "El inventario especificado no existe." };
-      }
-
-      // Llamamos el método consultar por ID
-      const existente = await this.objElemento.getById(id);
-      // Validamos si el elemento existe
-      if (!existente) {
-        return {error: true, code: 404, message: "Elemento no encontrado"};
       }
 
       const existentePlaca = await this.objElemento.getByPlaca(elemento.placa);
@@ -210,9 +210,7 @@ class ElementoService {
   }
 
   static async complementarElementos(elementos) {
-    return Promise.all(await elementos.map(async (elemento) => {
-      return await this.complementarElemento(elemento);
-    }))
+    return Promise.all(await elementos.map(async elemento => await this.complementarElemento(elemento)))
   }
 
   static async complementarElemento(elemento) {

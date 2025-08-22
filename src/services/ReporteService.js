@@ -88,6 +88,14 @@ class ReporteService {
 
   static async updateReporte(id, reporte) {
     try {
+      
+      // Llamamos el método consultar por ID
+      const existente = await this.objReporte.getById(id);
+      // Validamos si el reporte existe
+      if (!existente) {
+        return { error: true, code: 404, message: "Reporte no encontrado" };
+      }
+      
       if (reporte.usuario_id) {
         const usuarioExistente = this.objReporte.getById(reporte.usuario_id);
         if (!usuarioExistente)
@@ -98,13 +106,6 @@ class ReporteService {
         const elementoExistente = this.objReporte.getById(reporte.elemento_id);
         if (!elementoExistente)
           return { error: true, code: 404, message: "El elemento especificado no existe." };
-      }
-
-      // Llamamos el método consultar por ID
-      const existente = await this.objReporte.getById(id);
-      // Validamos si el reporte existe
-      if (!existente) {
-        return { error: true, code: 404, message: "Reporte no encontrado" };
       }
 
       // Llamamos el método actualizar
@@ -181,9 +182,7 @@ class ReporteService {
   }
 
   static async complementarReportes(reportes) {
-    return Promise.all(await reportes.map(async(reporte) => {
-      return await this.complementarReporte(reporte);
-    }))
+    return Promise.all(await reportes.map(async reporte => await this.complementarReporte(reporte)));
   }
   
   static async complementarReporte(reporte) {
