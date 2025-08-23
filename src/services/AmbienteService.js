@@ -94,7 +94,7 @@ class AmbienteService {
       // Llamamos el método actualizar
       const ambienteActualizado = await this.objAmbiente.update(id, ambiente);
       // Validamos si no se pudo actualizar el ambiente
-      if (ambienteActualizado === null) {
+      if (!ambienteActualizado) {
         return { error: true, code: 400, message: "Error al actualizar el ambiente" };
       }
       // Retornamos el ambiente actualizado

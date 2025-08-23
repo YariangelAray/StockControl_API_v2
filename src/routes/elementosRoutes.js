@@ -23,4 +23,8 @@ router.patch("/:id", validarElementoParcial, ElementoController.updateElemento);
 // Eliminar un elemento
 router.delete("/:id", ElementoController.deleteElemento);
 
+// Obtener elementos por ID de inventario
+router.get("/inventario/:inventarioId", ElementoController.getElementosByInventarioId);
+
+
 export default router;

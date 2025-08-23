@@ -60,6 +60,9 @@ class FichaService {
           return { error: true, code: 404, message: "El programa especificado no existe." };
       }
 
+      if (await this.objFicha.getByFicha(ficha.ficha)) 
+        return { error: true, code: 409, message: "La ficha especificada ya fue registrada." };
+
       // Llamamos el método crear
       const fichaCreado = await this.objFicha.create(ficha);
       // Validamos si no se pudo crear la ficha
@@ -91,6 +94,11 @@ class FichaService {
         const programaExistente = this.objPrograma.getById(ficha.programa_id);
         if (!programaExistente)
           return { error: true, code: 404, message: "El programa especificado no existe." };
+      }
+
+      const fichaExistente = await this.objFicha.getByFicha(ficha.ficha);
+      if (fichaExistente && ficha.ficha != existente.ficha) {
+        return { error: true, code: 409, message: "La ficha especificada ya fue registrada." };
       }
 
       // Llamamos el método actualizar

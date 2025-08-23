@@ -32,6 +32,10 @@ rutas.forEach(({ path, router }) => {
   app.use('/stockcontrol_api' + path, router);
 });
 
+// Rutas estáticas para las fotos de reportes
+app.use('/fotos_reportes', express.static('public/fotos_reportes'));
+
+
 // Puerto para ejecutar el servidor
 const port = process.env.PORT || 3000;
 app.listen(port, () => {

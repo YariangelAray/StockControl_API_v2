@@ -6,7 +6,7 @@ class TipoDocumentoService {
   static objTipoDocumento = new TipoDocumento();
   static objUsuario = new Usuario();
 
-  static async getAllTipoDocumentos() {
+  static async getAllTiposDocumentos() {
     try {
       // Llamamos el método listar
       const tiposDocumentos = await this.objTipoDocumento.getAll();

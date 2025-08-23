@@ -8,7 +8,7 @@ class PermisoRolService {
   static objPermiso = new Permiso();
   static objRol = new Rol();
   
-  static async getAllPermisoesRoles() {
+  static async getAllPermisosRoles() {
     try {
 
       // Llamamos el método listar

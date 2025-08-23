@@ -1,5 +1,8 @@
 import Foto from "../models/Foto.js";
 import Reporte from "../models/Reporte.js";
+import fs from "fs";
+import path from "path"
+
 class FotoService {
 
   static objFoto = new Foto();
@@ -39,30 +42,46 @@ class FotoService {
     }
   }
 
-  static async createFoto(foto) {
+  static async createFoto(reporteId, archivo) {
     try {
-
-      if (foto.reporte_id) {
-        const reporteExistente = this.objReporte.getById(foto.reporte_id);
+      
+      if (!archivo) {
+        return { error: true, code: 400, message: "No se recibió ninguna foto" };
+      }
+      
+      if (reporteId) {
+        const reporteExistente = this.objReporte.getById(reporteId);
         if (!reporteExistente)
           return { error: true, code: 404, message: "El reporte especificado no existe." };
       }
 
+      // Construimos la URL de la foto
+      const url = `/fotos_reportes/${archivo.filename}`; 
+
       // Llamamos el método crear
-      const fotoCreada = await this.objFoto.create(foto);
+      const fotoCreada = await this.objFoto.create({ url, reporteId });
+
       // Validamos si no se pudo crear la foto
-      if (fotoCreada === null)
+      if (!fotoCreada){
+        // Eliminamos el archivo si hubo error
+        const ruta = path.join("public", "fotos_reportes", archivo.filename);
+        if (fs.existsSync(ruta)) fs.unlinkSync(ruta);
         return { error: true, code: 400, message: "Error al crear la foto" };
+      }
 
       // Retornamos la foto creada
       return { error: false, code: 201, message: "Foto creada correctamente", data: fotoCreada };
     } catch (error) {
+      // Eliminamos el archivo si hubo error
+      const ruta = path.join("public", "fotos_reportes", archivo.filename);
+      if (fs.existsSync(ruta)) fs.unlinkSync(ruta);
+      
       // Retornamos un error en caso de excepción
       return { error: true, code: 500, message: `Error al crear la foto: ${error.message}` };
     }
   }
 
-  static async updateFoto(id, foto) {
+  static async updateFoto(id, foto, archivo) {
     try {
       // Llamamos el método consultar por ID
       const existente = await this.objFoto.getById(id);
@@ -77,15 +96,28 @@ class FotoService {
           return { error: true, code: 404, message: "El reporte especificado no existe." };
       }
 
+
+      let nuevaUrl;
+      if (archivo){
+        nuevaUrl = `/fotos_reportes/${archivo.filename}`;
+      }
+
       // Llamamos el método actualizar
-      const fotoActualizada = await this.objFoto.update(id, foto);
+      const fotoActualizada = await this.objFoto.update(id, { url: nuevaUrl ?? existente.url , reporte_id: foto.reporte_id ?? existente.reporte_id });
       // Validamos si no se pudo actualizar la foto
-      if (fotoActualizada === null)
+      if (!fotoActualizada)
         return { error: true, code: 400, message: "Error al actualizar la foto" };
 
+       // Eliminamos el archivo anterior del disco
+      const rutaAnterior = path.join("public", "fotos_reportes", path.basename(existente.url));
+      if (fs.existsSync(rutaAnterior)) fs.unlinkSync(rutaAnterior);
+      
       // Retornamos la foto actualizada
       return { error: false, code: 200, message: "Foto actualizada correctamente", data: fotoActualizada };
     } catch (error) {
+      // Eliminamos el archivo si hubo error
+      const ruta = path.join("public", "fotos_reportes", archivo.filename);
+      if (fs.existsSync(ruta)) fs.unlinkSync(ruta);
       // Retornamos un error en caso de excepción
       return { error: true, code: 500, message: `Error al actualizar la foto: ${error.message}` };
     }
@@ -105,7 +137,10 @@ class FotoService {
       if (!fotoEliminada)
         return { error: true, code: 400, message: "Error al eliminar la foto" };
 
-
+      // Eliminamos el archivo del disco
+      const ruta = path.join("public", "fotos_reportes", path.basename(foto.url));
+      if (fs.existsSync(ruta)) fs.unlinkSync(ruta);
+      
       // Retornamos la foto eliminada
       return { error: false, code: 200, message: "Foto eliminada correctamente" };
     } catch (error) {

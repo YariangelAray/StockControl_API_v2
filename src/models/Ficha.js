@@ -50,9 +50,9 @@ class Ficha extends Modelo {
    */
   async getByFicha(ficha) {
     try {
-      return await super.getByField('fichas', 'programa_id', ficha);
+      return await super.getByField('fichas', 'ficha', ficha);
     } catch (error) {
-      throw new Error(`Error al obtener la ficha con número ${ficha}: ${error.message}`);
+      throw new Error(`Error al obtener la ficha ${ficha}: ${error.message}`);
     }
   }
 

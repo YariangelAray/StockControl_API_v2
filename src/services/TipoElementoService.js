@@ -6,7 +6,7 @@ class TipoElementoService {
     static objTipoElemento = new TipoElemento();
     static objElemento = new Elemento();
 
-    static async getAllTipoElementos() {
+    static async getAllTiposElementos() {
         try {
             // Llamamos el método listar
             const tiposElementos = await this.objTipoElemento.getAll();
@@ -50,7 +50,7 @@ class TipoElementoService {
         try {
 
             if (await this.objTipoElemento.getByConsecutivo(tipoElemento.consecutivo))
-              return { error: true, code: 409, message: "El número de consecutivo especificado ya fue registrado." };
+                return { error: true, code: 409, message: "El número de consecutivo especificado ya fue registrado." };
 
             // Llamamos el método crear
             const tipoElementoCreado = await this.objTipoElemento.create(tipoElemento);
@@ -60,7 +60,7 @@ class TipoElementoService {
 
             // Retornamos el tipo de elemento creado
             return {
-                error: false, code: 201, message: "Tipo de elemento creada correctamente",
+                error: false, code: 201, message: "Tipo de elemento creado correctamente",
                 data: await this.complementarTipoElemento(tipoElementoCreado)
             };
         } catch (error) {
@@ -80,7 +80,7 @@ class TipoElementoService {
 
             const existenteConsecutivo = await this.objTipoElemento.getByConsecutivo(tipoElemento.consecutivo);
             if (existenteConsecutivo && tipoElemento.consecutivo != existenteConsecutivo) {
-              return { error: true, code: 409, message: "El número de consecutivo especificado ya fue registrado." };
+                return { error: true, code: 409, message: "El número de consecutivo especificado ya fue registrado." };
             }
 
             // Llamamos el método actualizar
@@ -129,12 +129,46 @@ class TipoElementoService {
         }
     }
 
+    static async getTiposElementosByInventarioId(inventarioId) {
+        try {
+
+            const inventarioExistente = this.objInventario.getById(inventarioId);
+            if (!inventarioExistente)
+                return { error: true, code: 404, message: "El inventario especificado no existe." };
+
+            // Llamamos el método listar
+            const tiposElementos = await this.objTipoElemento.getAll();
+
+            // Validamos si no hay tipos de elementos
+            if (!tiposElementos || tiposElementos.length === 0)
+                return { error: true, code: 404, message: "No hay tipos de elementos registradas" };
+
+            // Retornamos las tipos de elementos obtenidas
+            return {
+                error: false, code: 200, message: "Tipos de elementos obtenidas correctamente",
+                data: await this.complementarTiposElementosInventario(tiposElementos, inventarioId)
+            };
+        } catch (error) {
+            // Retornamos un error en caso de excepción
+            console.log(error);
+            return { error: true, code: 500, message: `Error al obtener los tipos de elementos: ${error.message}` };
+        }
+    }
+
     static async complementarTipoElemento(tipoElemento) {
         return tipoElemento.cantidad_elementos = (await this.objElemento.getAllByTipoElementoId(tipoElemento.id) || []).length;
     }
 
     static async complementarTiposElementos(tiposElementos) {
         return Promise.all(await tiposElementos.map(async tipoElemento => await this.complementarTipoElemento(tipoElemento)));
+    }
+
+    static async complementarTiposElementosInventario(tiposElementos, inventarioId) {
+        const elementos = await this.objElemento.getAllByInventarioId(inventarioId);
+        return Promise.all(await tiposElementos.map(async tipoElemento => {            
+            tipoElemento.cantidad_elementos = elementos.filter(e => e.tipo_elemento_id === tipoElemento.id).length;
+            return tipoElemento;
+        }));
     }
 }
 

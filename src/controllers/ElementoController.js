@@ -49,10 +49,10 @@ class ElementoController {
         return ResponseProvider.error(res, response.message, response.code);
       }
       // Retornamos el elemento creado
-      return ResponseProvider.success(res, response.data, "Elemento creado correctamente", 201);
+      return ResponseProvider.success(res, response.data, response.message, 201);
     } catch (error) {
       // Llamamos el provider para centralizar los mensajes de respuesta
-      return ResponseProvider.error(res, "Error interno al crear el elemento", 500);
+      return ResponseProvider.error(res, "Error interno en el servidor", 500);
     }
   };
 
@@ -70,10 +70,10 @@ class ElementoController {
       }      
 
       // Retornamos el elemento actualizado
-      return ResponseProvider.success(res, response.data, "Elemento actualizado correctamente", 200);
+      return ResponseProvider.success(res, response.data, response.message, 200);
     } catch (error) {
       // Llamamos el provider para centralizar los mensajes de respuesta
-      return ResponseProvider.error(res, "Error interno al actualizar el elemento", 500);
+      return ResponseProvider.error(res, "Error interno en el servidor", 500);
     }
   };
 
@@ -92,9 +92,26 @@ class ElementoController {
       return ResponseProvider.success(res, response.data, response.message ,response.code);
     } catch (error) {
       // Llamamos el provider para centralizar los mensajes de respuesta
-      return ResponseProvider.error(res, "Error interno al eliminar el elemento", 500);
+      return ResponseProvider.error(res, "Error interno en el servidor", 500);
     }
   }
+
+  // Obtener todos los elementos por id de inventario
+  static getElementosByInventarioId = async (req, res) => {
+    const { inventarioId } = req.params;
+    try {
+      const response = await ElementoService.getElementosByInventarioId(inventarioId);
+      // Validamos si no hay elementos
+      if (response.error) {
+        // Llamamos el provider para centralizar los mensajes de respuesta
+        return ResponseProvider.error(res, response.message, response.code);
+      }
+      return ResponseProvider.success(res, response.data, response.message, response.code);
+
+    } catch (error) {
+      return ResponseProvider.error(res, "Error interno en el servidor", 500);
+    }
+  };
 }
 
 export default ElementoController;

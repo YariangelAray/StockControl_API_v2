@@ -29,7 +29,7 @@ class UsuarioService {
       // Retornamos los usuarios obtenidos
       return {
         error: false, code: 200, message: "Usuarios obtenidos correctamente",
-        data: await this.complementarUsuarios(usuarios)
+        data: await this.configurarUsuarios(usuarios)
       };
 
     } catch (error) {
@@ -51,7 +51,7 @@ class UsuarioService {
       // Retornamos el usuario obtenido
       return {
         error: false, code: 200, message: "Usuario obtenido correctamente",
-        data: await this.complementarUsuario(usuario)
+        data: await this.configurarUsuario(usuario)
       };
     } catch (error) {
       // Retornamos un error en caso de excepción
@@ -99,7 +99,7 @@ class UsuarioService {
       // Retornamos el usuario creado
       return {
         error: false, code: 201, message: "Usuario creado correctamente",
-        data: await this.complementarUsuario(usuarioCreado)
+        data: await this.configurarUsuario(usuarioCreado)
       };
     } catch (error) {
       // Retornamos un error en caso de excepción
@@ -144,7 +144,7 @@ class UsuarioService {
       }
 
       if (usuario.contrasena) {
-        usuario.contrasena = await bcrypt.hash(usuario.contrasena, saltRounds);
+        return { error: true, code: 409, message: "La contraseña del usuario no se puede actualizar por este método." };        
       }
 
       // Llamamos el método actualizar
@@ -156,7 +156,7 @@ class UsuarioService {
       // Retornamos el usuario actualizado
       return {
         error: false, code: 200, message: "Usuario actualizado correctamente",
-        data: await this.complementarUsuario(usuarioActualizado)
+        data: await this.configurarUsuario(usuarioActualizado)
       };
     } catch (error) {
       // Retornamos un error en caso de excepción
@@ -208,7 +208,7 @@ class UsuarioService {
       // Retornamos los usuarios obtenidos
       return {
         error: false, code: 200, message: `Usuarios administrativos obtenidos correctamente`,
-        data: await this.complementarUsuarios(usuariosAdmin)
+        data: usuariosAdmin.map(usuario => ({id: usuario.id, documento: usuario.documento, nombre: usuario.nombres.split(" ")[0] + " " + usuario.apellidos.split(" ")[0] }))
       };
 
     } catch (error) {
@@ -218,11 +218,37 @@ class UsuarioService {
     }
   }
 
-  static async complementarUsuarios(usuarios) {
-    return Promise.all(await usuarios.map(async usuario => await this.complementarUsuario(usuario)))
+  static async updateContrasena(id, contrasenas){
+    try {
+
+      // Llamamos el método consultar por ID
+      const existente = await this.objUsuario.getById(id);
+      // Validamos si el usuario existe
+      if (!existente) {
+        return { error: true, code: 404, message: "Usuario no encontrado" };
+      }
+
+      if(!await bcrypt.compare(contrasenas.contrasena_actual, existente.contrasena)){
+        return { error: true, code: 401, message: "La contraseña actual es incorrecta." };
+      }
+
+      const nuevaContrasena = await bcrypt.hash(contrasenas.contrasena_nueva, saltRounds);
+      const response = await this.objUsuario.update(id, {contrasena: nuevaContrasena});
+      
+      if (response.error) {
+        return { error: true, code: response.code, message: response.message };
+      }
+      return { error: false, code: 200, message: "Contraseña actualizada correctamente" };
+    } catch (error) {
+      return { error: true, code: 500, message: `Error al actualizar la contraseña del usuario con ID ${id}: ${error.message}` };
+    }
   }
 
-  static async complementarUsuario(usuario) {
+  static async configurarUsuarios(usuarios) {
+    return Promise.all(await usuarios.map(async usuario => await this.configurarUsuario(usuario)))
+  }
+
+  static async configurarUsuario(usuario) {
     const rolesUsuario = await Promise.all(
       (await this.objRolUsuario.getAllByUsuarioId(usuario.id)).map(async rolUsuario => {
         const rol = await this.objRol.getById(rolUsuario.rol_id);
@@ -231,8 +257,24 @@ class UsuarioService {
     );
 
     usuario.roles = rolesUsuario;
+    delete usuario.contrasena;
     return usuario;
   }
+  // static async configurarUsuarios(usuarios) {
+  //   return Promise.all(await usuarios.map(async usuario => await this.configurarUsuario(usuario)))
+  // }
+
+  // static async configurarUsuario(usuario) {
+  //   const rolesUsuario = await Promise.all(
+  //     (await this.objRolUsuario.getAllByUsuarioId(usuario.id)).map(async rolUsuario => {
+  //       const rol = await this.objRol.getById(rolUsuario.rol_id);
+  //       return rol;
+  //     })
+  //   );
+
+  //   usuario.roles = rolesUsuario;
+  //   return usuario;
+  // }
 }
 
 export default UsuarioService;

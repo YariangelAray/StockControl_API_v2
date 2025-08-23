@@ -31,6 +31,18 @@ export const validateFields = (campos) => {
         errors.push({ campo: name, message: `El campo ${name} debe ser un número entero.` });
         continue;
       }
+      if (type === "date") {
+        const regex = /^\d{4}-\d{2}-\d{2}$/;
+        if (!regex.test(value)) {
+          errors.push({ campo: name, message: `El campo ${name} debe tener el formato yyyy-MM-dd.` });
+          continue;
+        }
+        const date = new Date(value);
+        if (isNaN(date.getTime())) {
+          errors.push({ campo: name, message: `El campo ${name} no es una fecha válida.` });
+          continue;
+        }
+      }
     }
 
     if (errors.length > 0) {
