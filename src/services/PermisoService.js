@@ -1,10 +1,10 @@
-import RolUsuario from "../models/RolUsuario.js";
+import PermisoRol from "../models/PermisoRol.js";
 import Permiso from "../models/Permiso.js";
 
 class PermisoService {
 
   static objPermiso = new Permiso();
-  static objRolUsuario = new RolUsuario();
+  static objPermisoRol = new PermisoRol();
 
   static async getAllPermisos() {
     try {
@@ -105,10 +105,10 @@ class PermisoService {
         return { error: true, code: 404, message: "Permiso no encontrado" };
       }
 
-      const rolUsuarioPermiso = await this.objRolUsuario.get(id);
-      // Validamos si no hay ambientes
-      if (ambientesPermiso && ambientesPermiso.length > 0) {
-        return { error: true, code: 409, message: "No se puede eliminar el permiso porque tiene ambientes asociados" };
+      const permisosRolesPermiso = await this.objPermisoRol.getAllByPermisoId(id);
+      // Validamos si no hay permisos relacionados a un rol
+      if (permisosRolesPermiso && permisosRolesPermiso.length > 0) {
+        return { error: true, code: 409, message: "No se puede eliminar el permiso porque tiene roles asociados" };
       }
 
       // Llamamos el método eliminar
