@@ -13,7 +13,7 @@ class GeneroService {
       const generos = await this.objGenero.getAll();
 
       // Validamos si no hay generos
-      if (!generos) {
+      if (!generos || generos.length === 0) {
         return { error: true, code: 404, message: "No hay generos registrados" };
       }
       // Retornamos los generos obtenidos
@@ -25,7 +25,7 @@ class GeneroService {
     } catch (error) {
       // Retornamos un error en caso de excepción
       console.log(error);
-      return { error: true, code: 500, message: `Error al obtener los generos: ${error.message}` };
+      return { error: true, code: 500, message: error.message };
     }
   }
 
@@ -45,7 +45,7 @@ class GeneroService {
       };
     } catch (error) {
       // Retornamos un error en caso de excepción
-      return { error: true, code: 500, message: `Error al obtener el genero: ${error.message}` };
+      return { error: true, code: 500, message: error.message };
     }
   }
 
@@ -64,7 +64,7 @@ class GeneroService {
       };
     } catch (error) {
       // Retornamos un error en caso de excepción
-      return { error: true, code: 500, message: `Error al crear el genero: ${error.message}` };
+      return { error: true, code: 500, message:error.message };
     }
   }
 
@@ -91,7 +91,7 @@ class GeneroService {
       };
     } catch (error) {
       // Retornamos un error en caso de excepción
-      return { error: true, code: 500, message: `Error al actualizar el genero: ${error.message}` };
+      return { error: true, code: 500, message: error.message };
     }
   }
 
@@ -122,7 +122,7 @@ class GeneroService {
       return { error: false, code: 200, message: "Genero eliminado correctamente" };
     } catch (error) {
       // Retornamos un error en caso de excepción
-      return { error: true, code: 500, message: `Error al eliminar el genero: ${error.message}` };
+      return { error: true, code: 500, message: error.message };
     }
   }
 }

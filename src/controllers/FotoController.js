@@ -57,10 +57,11 @@ class FotoController {
 
   static updateFoto = async (req, res) => {
     const { id } = req.params;
+    const { reporte_id } = req.body;
     const archivo = req.file;
 
     try {
-      const response = await FotoService.updateFoto(id, req.body, archivo);
+      const response = await FotoService.updateFoto(id, reporte_id, archivo);
 
       if (response.error) {
         return ResponseProvider.error(res, response.message, response.code);

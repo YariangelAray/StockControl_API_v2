@@ -13,7 +13,7 @@ class EstadoService {
       const estados = await this.objEstado.getAll();
 
       // Validamos si no hay estados
-      if (!estados) {
+      if (!estados || estados.length === 0) {
         return { error: true, code: 404, message: "No hay estados registrados" };
       }
       // Retornamos los estados obtenidos
@@ -25,7 +25,7 @@ class EstadoService {
     } catch (error) {
       // Retornamos un error en caso de excepción
       console.log(error);
-      return { error: true, code: 500, message: `Error al obtener los estados: ${error.message}` };
+      return { error: true, code: 500, message: error.message };
     }
   }
 
@@ -45,7 +45,7 @@ class EstadoService {
       };
     } catch (error) {
       // Retornamos un error en caso de excepción
-      return { error: true, code: 500, message: `Error al obtener el estado: ${error.message}` };
+      return { error: true, code: 500, message:error.message };
     }
   }
 
@@ -64,7 +64,7 @@ class EstadoService {
       };
     } catch (error) {
       // Retornamos un error en caso de excepción
-      return { error: true, code: 500, message: `Error al crear el estado: ${error.message}` };
+      return { error: true, code: 500, message: error.message };
     }
   }
 
@@ -91,7 +91,7 @@ class EstadoService {
       };
     } catch (error) {
       // Retornamos un error en caso de excepción
-      return { error: true, code: 500, message: `Error al actualizar el estado: ${error.message}` };
+      return { error: true, code: 500, message: error.message };
     }
   }
 
@@ -122,7 +122,7 @@ class EstadoService {
       return { error: false, code: 200, message: "Estado eliminado correctamente" };
     } catch (error) {
       // Retornamos un error en caso de excepción
-      return { error: true, code: 500, message: `Error al eliminar el estado: ${error.message}` };
+      return { error: true, code: 500, message: error.message };
     }
   }
 }

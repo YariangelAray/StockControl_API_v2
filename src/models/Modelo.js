@@ -11,7 +11,7 @@ class Modelo {
       return rows;
     } catch (error) {
       // Lanza un error personalizado si la operación falla
-      throw new Error('Error al listar');
+      throw new Error(error);
     }
   }
 
@@ -24,7 +24,7 @@ class Modelo {
       return rows[0];
     } catch (error) {
       // Lanza un error personalizado si la operación falla
-      throw new Error('Error al obtener por id');
+      throw new Error(error);
     }
   }
 
@@ -37,7 +37,7 @@ class Modelo {
       return rows;
     } catch (error) {
       // Lanza un error personalizado si la operación falla
-      throw new Error('Error al obtener por campo');
+      throw new Error(error);
     }
   }
 
@@ -75,7 +75,7 @@ class Modelo {
 
     } catch (error) {
       // Lanza un error personalizado si la operación falla
-      throw new Error(`Error al crear`);
+      throw new Error(error);
     }
   }
 
@@ -111,7 +111,7 @@ class Modelo {
 
     } catch (error) {
       // Si ocurre un error durante la operación, lanza un mensaje de error personalizado
-      throw new Error(`Error al actualizar`);
+      throw new Error(error);
     }
   }
 
@@ -126,7 +126,7 @@ class Modelo {
 
     } catch (error) {
       // Si ocurre algún error en el proceso, lanza un mensaje de error personalizado
-      throw new Error(`Error al eliminar`);
+      throw new Error(error);
     }
   }
 }

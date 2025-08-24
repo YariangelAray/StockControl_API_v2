@@ -98,7 +98,7 @@ class UsuarioController {
 
   // Obtener todos los usuarios administrativos
   static getUsuariosAdministrativos = async (req, res) => {    
-    try {
+    try {      
       const response = await UsuarioService.getUsuariosAdministrativos();
       // Validamos si no hay usuarios
       if (response.error) {

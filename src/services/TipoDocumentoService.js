@@ -17,13 +17,13 @@ class TipoDocumentoService {
 
       // Retornamos las tipos de documentos obtenidas
       return {
-        error: false, code: 200, message: "Tipos de documentos obtenidas correctamente",
+        error: false, code: 200, message: "Tipos de documentos obtenidos correctamente",
         data: tiposDocumentos
       };
     } catch (error) {
       // Retornamos un error en caso de excepción
       console.log(error);
-      return { error: true, code: 500, message: `Error al obtener los tipos de documentos: ${error.message}` };
+      return { error: true, code: 500, message: error.message };
     }
   }
 
@@ -33,24 +33,21 @@ class TipoDocumentoService {
       const tipoDocumento = await this.objTipoDocumento.getById(id);
       // Validamos si no hay tipoDocumento
       if (!tipoDocumento)
-        return { error: true, code: 404, message: "Tipo de documento no encontrada" };
+        return { error: true, code: 404, message: "Tipo de documento no encontrado" };
 
       // Retornamos la tipoDocumento obtenida
       return {
-        error: false, code: 200, message: "Tipo de documento obtenida correctamente",
+        error: false, code: 200, message: "Tipo de documento obtenido correctamente",
         data: tipoDocumento
       };
     } catch (error) {
       // Retornamos un error en caso de excepción
-      return { error: true, code: 500, message: `Error al obtener el tipo de documento: ${error.message}` };
+      return { error: true, code: 500, message: error.message };
     }
   }
 
   static async createTipoDocumento(tipoDocumento) {
     try {
-
-      if (await this.objTipoDocumento.getByConsecutivo(tipoDocumento.consecutivo))
-        return { error: true, code: 409, message: "El número de consecutivo especificado ya fue registrado." };
 
       // Llamamos el método crear
       const tipoDocumentoCreado = await this.objTipoDocumento.create(tipoDocumento);
@@ -60,12 +57,12 @@ class TipoDocumentoService {
 
       // Retornamos el tipo de documento creado
       return {
-        error: false, code: 201, message: "Tipo de documento creada correctamente",
+        error: false, code: 201, message: "Tipo de documento creado correctamente",
         data: tipoDocumentoCreado
       };
     } catch (error) {
       // Retornamos un error en caso de excepción
-      return { error: true, code: 500, message: `Error al crear el tipo de documento: ${error.message}` };
+      return { error: true, code: 500, message: error.message };
     }
   }
 
@@ -76,11 +73,6 @@ class TipoDocumentoService {
       // Validamos si el tipo de documento existe
       if (!existente) {
         return { error: true, code: 404, message: "Tipo de documento no encontrado" };
-      }
-
-      const existenteConsecutivo = await this.objTipoDocumento.getByConsecutivo(tipoDocumento.consecutivo);
-      if (existenteConsecutivo && tipoDocumento.consecutivo != existenteConsecutivo) {
-        return { error: true, code: 409, message: "El número de consecutivo especificado ya fue registrado." };
       }
 
       // Llamamos el método actualizar
@@ -96,7 +88,7 @@ class TipoDocumentoService {
       };
     } catch (error) {
       // Retornamos un error en caso de excepción
-      return { error: true, code: 500, message: `Error al actualizar el tipo de documento: ${error.message}` };
+      return { error: true, code: 500, message: error.message };
     }
   }
 
@@ -125,7 +117,7 @@ class TipoDocumentoService {
       return { error: false, code: 200, message: "Tipo de documento eliminado correctamente" };
     } catch (error) {
       // Retornamos un error en caso de excepción
-      return { error: true, code: 500, message: `Error al eliminar el tipo de documento: ${error.message}` };
+      return { error: true, code: 500, message:error.message };
     }
   }
 }

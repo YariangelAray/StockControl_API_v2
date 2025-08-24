@@ -61,11 +61,11 @@ class Usuario extends Modelo {
    * @param {Number} usuarioDocumentoId Identificador del usuario de usuario
    * @returns {Array} Arreglo de usuarios
    */
-  async getAllByTipoDocumentoId(usuarioDocumentoId) {
+  async getAllByTipoDocumentoId(tipoDocumentoId) {
     try {
-      return await this.getByField('usuarios', 'usuario_documento_id', usuarioDocumentoId);
+      return await this.getByField('usuarios', 'tipo_documento_id', tipoDocumentoId);
     } catch (error) {
-      throw new Error(`Error al obtener usuarios por usuario_documento_id ${usuarioDocumentoId}: ${error.message}`);
+      throw new Error(`Error al obtener usuarios por tipo_documento_id ${tipoDocumentoId}: ${error.message}`);
     }
   }
 

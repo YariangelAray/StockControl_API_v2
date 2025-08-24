@@ -19,19 +19,19 @@ class ReporteService {
       const reportes = await this.objReporte.getAll();
 
       // Validamos si no hay reportes
-      if (!reportes) {
+      if (!reportes || reportes.length === 0) {
         return { error: true, code: 404, message: "No hay reportes registrados" };
       }
       // Retornamos los reportes obtenidos
       return {
         error: false, code: 200, message: "Reportes obtenidos correctamente",
-        data: await this.complementarReportes(reportes)
+        data: await this.#complementarReportes(reportes)
       };
 
     } catch (error) {
       // Retornamos un error en caso de excepción
       console.log(error);
-      return { error: true, code: 500, message: `Error al obtener los reportes: ${error.message}` };
+      return { error: true, code: 500, message: error.message };
     }
   }
 
@@ -47,27 +47,18 @@ class ReporteService {
       // Retornamos el reporte obtenido
       return {
         error: false, code: 200, message: "Reporte obtenido correctamente",
-        data: await this.complementarReporte(reporte)
+        data: await this.#complementarReporte(reporte)
       };
     } catch (error) {
       // Retornamos un error en caso de excepción
-      return { error: true, code: 500, message: `Error al obtener el reporte: ${error.message}` };
+      return { error: true, code: 500, message: error.message };
     }
   }
 
   static async createReporte(reporte) {
     try {
-      if (reporte.usuario_id) {
-        const usuarioExistente = this.objReporte.getById(reporte.usuario_id);
-        if (!usuarioExistente)
-          return { error: true, code: 404, message: "El usuario especificado no existe." };
-      }
-
-      if (reporte.elemento_id) {
-        const elementoExistente = this.objReporte.getById(reporte.elemento_id);
-        if (!elementoExistente)
-          return { error: true, code: 404, message: "El elemento especificado no existe." };
-      }
+      const error = await this.#validarForaneas(reporte);
+      if (error) return error;
 
       // Llamamos el método crear
       const reporteCreado = await this.objReporte.create(reporte);
@@ -78,11 +69,11 @@ class ReporteService {
       // Retornamos el reporte creado
       return {
         error: false, code: 201, message: "Reporte creado correctamente",
-        data: await this.complementarReporte(reporteCreado)
+        data: await this.#complementarReporte(reporteCreado)
       };
     } catch (error) {
       // Retornamos un error en caso de excepción
-      return { error: true, code: 500, message: `Error al crear el reporte: ${error.message}` };
+      return { error: true, code: 500, message:error.message };
     }
   }
 
@@ -95,18 +86,9 @@ class ReporteService {
       if (!existente) {
         return { error: true, code: 404, message: "Reporte no encontrado" };
       }
-      
-      if (reporte.usuario_id) {
-        const usuarioExistente = this.objReporte.getById(reporte.usuario_id);
-        if (!usuarioExistente)
-          return { error: true, code: 404, message: "El usuario especificado no existe." };
-      }
 
-      if (reporte.elemento_id) {
-        const elementoExistente = this.objReporte.getById(reporte.elemento_id);
-        if (!elementoExistente)
-          return { error: true, code: 404, message: "El elemento especificado no existe." };
-      }
+      const error = await this.#validarForaneas(reporte);
+      if (error) return error;
 
       // Llamamos el método actualizar
       const reporteActualizado = await this.objReporte.update(id, reporte);
@@ -117,11 +99,11 @@ class ReporteService {
       // Retornamos el reporte actualizado
       return {
         error: false, code: 200, message: "Reporte actualizado correctamente",
-        data: await this.complementarReporte(reporteActualizado)
+        data: await this.#complementarReporte(reporteActualizado)
       };
     } catch (error) {
       // Retornamos un error en caso de excepción
-      return { error: true, code: 500, message: `Error al actualizar el reporte: ${error.message}` };
+      return { error: true, code: 500, message: error.message };
     }
   }
 
@@ -152,7 +134,7 @@ class ReporteService {
       return { error: false, code: 200, message: "Reporte eliminado correctamente" };
     } catch (error) {
       // Retornamos un error en caso de excepción
-      return { error: true, code: 500, message: `Error al eliminar el reporte: ${error.message}` };
+      return { error: true, code: 500, message: error.message };
     }
   }
 
@@ -172,20 +154,20 @@ class ReporteService {
       // Retornamos los reportes obtenidas
       return {
         error: false, code: 200, message: "Reportes obtenidos correctamente",
-        data: await this.complementarReportes(reportes)
+        data: await this.#complementarReportes(reportes)
       };
 
     } catch (error) {
       // Retornamos un error en caso de excepción
-      return { error: true, code: 500, message: `Error al obtener los reportes del inventario con ID ${inventarioId}: ${error.message}` };
+      return { error: true, code: 500, message: error.message };
     }
   }
 
-  static async complementarReportes(reportes) {
-    return Promise.all(await reportes.map(async reporte => await this.complementarReporte(reporte)));
+  static async #complementarReportes(reportes) {
+    return Promise.all(await reportes.map(async reporte => await this.#complementarReporte(reporte)));
   }
   
-  static async complementarReporte(reporte) {
+  static async #complementarReporte(reporte) {
     const usuario = await this.objUsuario.getById(reporte.usuario_id);
     const elemento = await this.objElemento.getById(reporte.elemento_id);
 
@@ -194,6 +176,22 @@ class ReporteService {
     reporte.fotos = await this.objFoto.getAllByReporteId(reporte.id);
 
     return reporte;
+  }
+
+  static async #validarForaneas({usuario_id, elemento_id}) {
+    if (usuario_id) {
+      const usuarioExistente = await this.objUsuario.getById(usuario_id);
+      if (!usuarioExistente)
+        return { error: true, code: 404, message: "El usuario especificado no existe." };
+    }
+
+    if (elemento_id) {
+      const elementoExistente = await this.objElemento.getById(elemento_id);
+      if (!elementoExistente)
+        return { error: true, code: 404, message: "El elemento especificado no existe." };
+    }
+
+    return null;
   }
 }
 

@@ -13,19 +13,19 @@ class ProgramaFormacionService {
       const programas = await this.objPrograma.getAll();
 
       // Validamos si no hay programas de formación
-      if (!programas) {
+      if (!programas || programas.length === 0) {
         return { error: true, code: 404, message: "No hay programas de formación registrados" };
       }
       // Retornamos los programas de formación obtenidos
       return {
         error: false, code: 200, message: "Programas de formación obtenidos correctamente",
-        data: await this.complementarProgramas(programas)
+        data: await this.#complementarProgramas(programas)
       };
 
     } catch (error) {
       // Retornamos un error en caso de excepción
       console.log(error);
-      return { error: true, code: 500, message: `Error al obtener los programas de formación: ${error.message}` };
+      return { error: true, code: 500, message: error.message };
     }
   }
 
@@ -41,11 +41,11 @@ class ProgramaFormacionService {
       // Retornamos el programa de formación obtenido
       return {
         error: false, code: 200, message: "Programa de formación obtenido correctamente",
-        data: await this.complementarPrograma(programa)
+        data: await this.#complementarPrograma(programa)
       };
     } catch (error) {
       // Retornamos un error en caso de excepción
-      return { error: true, code: 500, message: `Error al obtener el programa de formación: ${error.message}` };
+      return { error: true, code: 500, message: error.message };
     }
   }
 
@@ -61,7 +61,7 @@ class ProgramaFormacionService {
       // Retornamos el programa de formación creado
       return {
         error: false, code: 201, message: "Programa de formación creado correctamente",
-        data: await this.complementarPrograma(programaCreado)
+        data: await this.#complementarPrograma(programaCreado)
       };
     } catch (error) {
       // Retornamos un error en caso de excepción
@@ -88,11 +88,11 @@ class ProgramaFormacionService {
       // Retornamos el programa de formación actualizado
       return {
         error: false, code: 200, message: "Programa de formación actualizado correctamente",
-        data: await this.complementarPrograma(programaActualizado)
+        data: await this.#complementarPrograma(programaActualizado)
       };
     } catch (error) {
       // Retornamos un error en caso de excepción
-      return { error: true, code: 500, message: `Error al actualizar el programa de formación: ${error.message}` };
+      return { error: true, code: 500, message: error.message};
     }
   }
 
@@ -123,15 +123,15 @@ class ProgramaFormacionService {
       return { error: false, code: 200, message: "Programa de formación eliminado correctamente" };
     } catch (error) {
       // Retornamos un error en caso de excepción
-      return { error: true, code: 500, message: `Error al eliminar el programa de formación: ${error.message}` };
+      return { error: true, code: 500, message:error.message };
     }
   }
 
-  static async complementarProgramas(programas) {
-    return Promise.all(await programas.map(async programa => await this.complementarPrograma(programa)));
+  static async #complementarProgramas(programas) {
+    return Promise.all(await programas.map(async programa => await this.#complementarPrograma(programa)));
   }
 
-  static async complementarPrograma(programa) {
+  static async #complementarPrograma(programa) {
     programa.fichas = await this.objFicha.getAllByProgramaId(programa.id);
     return programa;
   }

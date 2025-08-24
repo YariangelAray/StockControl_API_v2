@@ -13,7 +13,7 @@ class CentroService {
       const centros = await this.objCentro.getAll();
 
       // Validamos si no hay centros
-      if (!centros) {
+      if (!centros || centros.length === 0) {
         return { error: true, code: 404, message: "No hay centros registrados" };
       }
       // Retornamos los centros obtenidos
@@ -25,7 +25,7 @@ class CentroService {
     } catch (error) {
       // Retornamos un error en caso de excepción
       console.log(error);
-      return { error: true, code: 500, message: `Error al obtener los centros: ${error.message}` };
+      return { error: true, code: 500, message: error.message };
     }
   }
 
@@ -45,7 +45,7 @@ class CentroService {
       };
     } catch (error) {
       // Retornamos un error en caso de excepción
-      return { error: true, code: 500, message: `Error al obtener el centro: ${error.message}` };
+      return { error: true, code: 500, message: error.message };
     }
   }
 
@@ -64,7 +64,7 @@ class CentroService {
       };
     } catch (error) {
       // Retornamos un error en caso de excepción
-      return { error: true, code: 500, message: `Error al crear el centro: ${error.message}` };
+      return { error: true, code: 500, message:error.message };
     }
   }
 
@@ -91,7 +91,7 @@ class CentroService {
       };
     } catch (error) {
       // Retornamos un error en caso de excepción
-      return { error: true, code: 500, message: `Error al actualizar el centro: ${error.message}` };
+      return { error: true, code: 500, message: error.message };
     }
   }
 
@@ -122,7 +122,7 @@ class CentroService {
       return { error: false, code: 200, message: "Centro eliminado correctamente" };
     } catch (error) {
       // Retornamos un error en caso de excepción
-      return { error: true, code: 500, message: `Error al eliminar el centro: ${error.message}` };
+      return { error: true, code: 500, message: error.message };
     }
   }
 }

@@ -1,10 +1,12 @@
 import TipoElemento from "../models/TipoElemento.js";
 import Elemento from "../models/Elemento.js";
+import Inventario from "../models/Inventario.js";
 
 class TipoElementoService {
 
     static objTipoElemento = new TipoElemento();
     static objElemento = new Elemento();
+    static objInventario = new Inventario();
 
     static async getAllTiposElementos() {
         try {
@@ -18,12 +20,12 @@ class TipoElementoService {
             // Retornamos las tipos de elementos obtenidas
             return {
                 error: false, code: 200, message: "Tipos de elementos obtenidas correctamente",
-                data: await this.complementarTiposElementos(tiposElementos)
+                data: await this.#complementarTiposElementos(tiposElementos)
             };
         } catch (error) {
             // Retornamos un error en caso de excepción
             console.log(error);
-            return { error: true, code: 500, message: `Error al obtener los tipos de elementos: ${error.message}` };
+            return { error: true, code: 500, message: error.message };
         }
     }
 
@@ -38,11 +40,11 @@ class TipoElementoService {
             // Retornamos la tipoElemento obtenida
             return {
                 error: false, code: 200, message: "Tipo de elemento obtenida correctamente",
-                data: await this.complementarTipoElemento(tipoElemento)
+                data: await this.#complementarTipoElemento(tipoElemento)
             };
         } catch (error) {
             // Retornamos un error en caso de excepción
-            return { error: true, code: 500, message: `Error al obtener el tipo de elemento: ${error.message}` };
+            return { error: true, code: 500, message: error.message };
         }
     }
 
@@ -61,11 +63,11 @@ class TipoElementoService {
             // Retornamos el tipo de elemento creado
             return {
                 error: false, code: 201, message: "Tipo de elemento creado correctamente",
-                data: await this.complementarTipoElemento(tipoElementoCreado)
+                data: await this.#complementarTipoElemento(tipoElementoCreado)
             };
         } catch (error) {
             // Retornamos un error en caso de excepción
-            return { error: true, code: 500, message: `Error al crear el tipo de elemento: ${error.message}` };
+            return { error: true, code: 500, message: error.message };
         }
     }
 
@@ -79,7 +81,7 @@ class TipoElementoService {
             }
 
             const existenteConsecutivo = await this.objTipoElemento.getByConsecutivo(tipoElemento.consecutivo);
-            if (existenteConsecutivo && tipoElemento.consecutivo != existenteConsecutivo) {
+            if (existenteConsecutivo && tipoElemento.consecutivo != existente.consecutivo) {
                 return { error: true, code: 409, message: "El número de consecutivo especificado ya fue registrado." };
             }
 
@@ -92,11 +94,11 @@ class TipoElementoService {
             // Retornamos el tipo de elemento actualizado
             return {
                 error: false, code: 200, message: "Tipo de elemento actualizado correctamente",
-                data: await this.complementarTipoElemento(tipoElementoActualizado)
+                data: await this.#complementarTipoElemento(tipoElementoActualizado)
             };
         } catch (error) {
             // Retornamos un error en caso de excepción
-            return { error: true, code: 500, message: `Error al actualizar el tipo de elemento: ${error.message}` };
+            return { error: true, code: 500, message: error.message };
         }
     }
 
@@ -125,7 +127,7 @@ class TipoElementoService {
             return { error: false, code: 200, message: "Tipo de elemento eliminado correctamente" };
         } catch (error) {
             // Retornamos un error en caso de excepción
-            return { error: true, code: 500, message: `Error al eliminar el tipo de elemento: ${error.message}` };
+            return { error: true, code: 500, message: error.message };
         }
     }
 
@@ -146,7 +148,7 @@ class TipoElementoService {
             // Retornamos las tipos de elementos obtenidas
             return {
                 error: false, code: 200, message: "Tipos de elementos obtenidas correctamente",
-                data: await this.complementarTiposElementosInventario(tiposElementos, inventarioId)
+                data: await this.#complementarTiposElementosInventario(tiposElementos, inventarioId)
             };
         } catch (error) {
             // Retornamos un error en caso de excepción
@@ -155,15 +157,16 @@ class TipoElementoService {
         }
     }
 
-    static async complementarTipoElemento(tipoElemento) {
-        return tipoElemento.cantidad_elementos = (await this.objElemento.getAllByTipoElementoId(tipoElemento.id) || []).length;
+    static async #complementarTipoElemento(tipoElemento) {
+        tipoElemento.cantidad_elementos = (await this.objElemento.getAllByTipoElementoId(tipoElemento.id) || []).length;
+        return tipoElemento;
     }
 
-    static async complementarTiposElementos(tiposElementos) {
-        return Promise.all(await tiposElementos.map(async tipoElemento => await this.complementarTipoElemento(tipoElemento)));
+    static async #complementarTiposElementos(tiposElementos) {
+        return Promise.all(await tiposElementos.map(async tipoElemento => await this.#complementarTipoElemento(tipoElemento)));
     }
 
-    static async complementarTiposElementosInventario(tiposElementos, inventarioId) {
+    static async #complementarTiposElementosInventario(tiposElementos, inventarioId) {
         const elementos = await this.objElemento.getAllByInventarioId(inventarioId);
         return Promise.all(await tiposElementos.map(async tipoElemento => {            
             tipoElemento.cantidad_elementos = elementos.filter(e => e.tipo_elemento_id === tipoElemento.id).length;

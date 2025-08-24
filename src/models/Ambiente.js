@@ -53,6 +53,7 @@ class Ambiente extends Modelo {
     try {
       const idCreado = await super.create('ambientes', ambiente);
       if (idCreado) {
+        console.log(idCreado)
         return await this.getById(idCreado);
       }
       return null;

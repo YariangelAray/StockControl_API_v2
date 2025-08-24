@@ -5,6 +5,9 @@ import { validarContrasena, validarUsuario, validarUsuarioParcial } from "../mid
 
 const router = express.Router();
 
+// Obtener usuarios administrativos
+router.get("/administrativos", UsuarioController.getUsuariosAdministrativos);
+
 // Obtener todos los usuarios
 router.get("/", UsuarioController.getAllUsuarios);
 
@@ -22,9 +25,6 @@ router.patch("/:id", validarUsuarioParcial, UsuarioController.updateUsuario);
 
 // Eliminar un usuario
 router.delete("/:id", UsuarioController.deleteUsuario);
-
-// Obtener usuarios por ID de inventario
-router.get("/administrativos", UsuarioController.getUsuariosAdministrativos);
 
 // Actualizar la contraseña de un usuario
 router.put("/:id/contrasena", validarContrasena, UsuarioController.updateContrasena);

@@ -16,16 +16,16 @@ class PermisoRol extends Modelo {
   }
 
   /**
-   * Obtiene una relacion permiso-rol específica por su ID
-   * @param {number} id - ID de la relacion permiso-rol
-   * @returns {Promise<Object|null>} La relacion permiso-rol encontrada o null si no existe
+   * Obtiene una relación permiso-rol específica por su ID
+   * @param {number} id - ID de la relación permiso-rol
+   * @returns {Promise<Object|null>} La relación permiso-rol encontrada o null si no existe
    * @throws {Error} Si ocurre un error en la consulta
    */
   async getById(id) {
     try {
       return await super.getById('permisos_roles', id);
     } catch (error) {
-      throw new Error(`Error al obtener la relacion permiso-rol con ID ${id}: ${error.message}`);
+      throw new Error(`Error al obtener la relación permiso-rol con ID ${id}: ${error.message}`);
     }
   }
   
@@ -58,9 +58,9 @@ class PermisoRol extends Modelo {
   }
 
   /**
-   * Crea una nueva relacion permiso-rol en la base de datos
-   * @param {Object} permisoRol - Objeto con los datos de la relacion {rol_id, permiso_id}
-   * @returns {Promise<Object|null>} La relacion creada con su ID, o null si falló
+   * Crea una nueva relación permiso-rol en la base de datos
+   * @param {Object} permisoRol - Objeto con los datos de la relación {rol_id, permiso_id}
+   * @returns {Promise<Object|null>} La relación creada con su ID, o null si falló
    * @throws {Error} Si ocurre un error en la inserción
    */
   async create(permisoRol) {
@@ -71,15 +71,15 @@ class PermisoRol extends Modelo {
       }
       return null;
     } catch (error) {
-      throw new Error(`Error al crear la relacion permiso-rol: ${error.message}`);
+      throw new Error(`Error al crear la relación permiso-rol: ${error.message}`);
     }
   }
 
   /**
-   * Actualiza una relacion existente
-   * @param {number} id - ID de la relacion a actualizar
-   * @param {Object} permisoRol - Objeto con los nuevos datos de la relacion
-   * @returns {Promise<Object|null>} La relacion actualizada, o null si falló
+   * Actualiza una relación existente
+   * @param {number} id - ID de la relación a actualizar
+   * @param {Object} permisoRol - Objeto con los nuevos datos de la relación
+   * @returns {Promise<Object|null>} La relación actualizada, o null si falló
    * @throws {Error} Si ocurre un error en la actualización
    */
   async update(id, permisoRol) {
@@ -89,7 +89,7 @@ class PermisoRol extends Modelo {
       }
       return null;
     } catch (error) {
-      throw new Error(`Error al actualizar la relacion permiso-rol con ID ${id}: ${error.message}`);
+      throw new Error(`Error al actualizar la relación permiso-rol con ID ${id}: ${error.message}`);
     }
   }
 

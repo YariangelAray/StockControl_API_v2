@@ -24,7 +24,7 @@ class ProgramaFormacionController {
     const { id } = req.params;
     try {
       // Llamamos al servicio para obtener el programa de formación por su ID
-      const response = await ProgramaFormacionService.getProgramaFormacionById(id);
+      const response = await ProgramaFormacionService.getProgramaById(id);
       // Validamos si no hay programa de formación
       if (response.error) {
         // Llamamos el provider para centralizar los mensajes de respuesta
@@ -42,7 +42,7 @@ class ProgramaFormacionController {
     const programa = req.body;
     try {
       // Llamamos el método crear del modelo
-      const response = await ProgramaFormacionService.createProgramaFormacion(programa);
+      const response = await ProgramaFormacionService.createPrograma(programa);
       // Validamos que la respuesta no tenga error
       if (response.error) {
         // Llamamos el provider para centralizar los mensajes de respuesta
@@ -62,7 +62,7 @@ class ProgramaFormacionController {
     const programa = req.body;
     try {            
       // Llamamos al método actualizar del modelo
-      const response = await ProgramaFormacionService.updateProgramaFormacion(id, programa);
+      const response = await ProgramaFormacionService.updatePrograma(id, programa);
       // Validamos que la respuesta no tenga error
       if (response.error) {
         // Llamamos el provider para centralizar los mensajes de respuesta
@@ -82,7 +82,7 @@ class ProgramaFormacionController {
     const { id } = req.params;
     try {
       // Llamamos al servicio para eliminar el programa de formación por su ID
-      const response = await ProgramaFormacionService.deleteProgramaFormacion(id);
+      const response = await ProgramaFormacionService.deletePrograma(id);
       // Validamos si no se pudo eliminar el programa de formación
       if (response.error) {
         // Llamamos el provider para centralizar los mensajes de respuesta

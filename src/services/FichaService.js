@@ -15,7 +15,7 @@ class FichaService {
       const fichas = await this.objFicha.getAll();
 
       // Validamos si no hay fichas
-      if (!fichas) {
+      if (!fichas || fichas.length === 0) {
         return { error: true, code: 404, message: "No hay fichas registradas" };
       }
       // Retornamos las fichas obtenidas
@@ -27,7 +27,7 @@ class FichaService {
     } catch (error) {
       // Retornamos un error en caso de excepción
       console.log(error);
-      return { error: true, code: 500, message: `Error al obtener las fichas: ${error.message}` };
+      return { error: true, code: 500, message: error.message };
     }
   }
 
@@ -47,20 +47,17 @@ class FichaService {
       };
     } catch (error) {
       // Retornamos un error en caso de excepción
-      return { error: true, code: 500, message: `Error al obtener la ficha: ${error.message}` };
+      return { error: true, code: 500, message:error.message };
     }
   }
 
   static async createFicha(ficha) {
     try {
 
-      if (ficha.programa_id) {
-        const programaExistente = this.objPrograma.getById(ficha.programa_id);
-        if (!programaExistente)
-          return { error: true, code: 404, message: "El programa especificado no existe." };
-      }
-
-      if (await this.objFicha.getByFicha(ficha.ficha)) 
+      const error = await this.#validarForaneas(ficha);
+      if (error) return error;
+      
+      if ((await this.objFicha.getByFicha(ficha.ficha)).length > 0) 
         return { error: true, code: 409, message: "La ficha especificada ya fue registrada." };
 
       // Llamamos el método crear
@@ -76,7 +73,7 @@ class FichaService {
       };
     } catch (error) {
       // Retornamos un error en caso de excepción
-      return { error: true, code: 500, message: `Error al crear la ficha: ${error.message}` };
+      return { error: true, code: 500, message: error.message };
     }
   }
 
@@ -90,14 +87,11 @@ class FichaService {
         return { error: true, code: 404, message: "Ficha no encontrada" };
       }
 
-      if (ficha.programa_id) {
-        const programaExistente = this.objPrograma.getById(ficha.programa_id);
-        if (!programaExistente)
-          return { error: true, code: 404, message: "El programa especificado no existe." };
-      }
+      const error = await this.#validarForaneas(ficha);
+      if (error) return error;
 
       const fichaExistente = await this.objFicha.getByFicha(ficha.ficha);
-      if (fichaExistente && ficha.ficha != existente.ficha) {
+      if (fichaExistente.length > 0 && ficha.ficha != existente.ficha) {
         return { error: true, code: 409, message: "La ficha especificada ya fue registrada." };
       }
 
@@ -114,7 +108,7 @@ class FichaService {
       };
     } catch (error) {
       // Retornamos un error en caso de excepción
-      return { error: true, code: 500, message: `Error al actualizar la ficha: ${error.message}` };
+      return { error: true, code: 500, message: error.message };
     }
   }
 
@@ -145,8 +139,19 @@ class FichaService {
       return { error: false, code: 200, message: "Ficha eliminada correctamente" };
     } catch (error) {
       // Retornamos un error en caso de excepción
-      return { error: true, code: 500, message: `Error al eliminar la ficha: ${error.message}` };
+      return { error: true, code: 500, message: error.message };
     }
+  }
+
+  static async #validarForaneas({ programa_id }) {
+    if (programa_id) {
+      const programaExistente = await this.objPrograma.getById(programa_id);
+      if (!programaExistente) {
+        return { error: true, code: 404, message: "El programa especificado no existe." };
+      }
+    }
+
+    return null; // No hay errores
   }
 }
 

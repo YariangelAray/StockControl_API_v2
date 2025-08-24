@@ -15,7 +15,7 @@ class PermisoRolService {
       const permisosRoles = await this.objPermisoRol.getAll();
 
       // Validamos si no hay relaciones
-      if (!permisosRoles) {
+      if (!permisosRoles || permisosRoles.length === 0) {
         return { error: true, code: 404, message: "No hay relaciones permiso-rol registradas" };
       }
 
@@ -28,7 +28,7 @@ class PermisoRolService {
     } catch (error) {
 
       // Retornamos un error en caso de excepción
-      return { error: true, code: 500, message: `Error al obtener las relaciones permiso-rol: ${error.message}` };
+      return { error: true, code: 500, message: error.message };
     }
   }
 
@@ -48,23 +48,18 @@ class PermisoRolService {
       };
     } catch (error) {
       // Retornamos un error en caso de excepción
-      return { error: true, code: 500, message: `Error al obtener la relación permiso-rol: ${error.message}` };
+      return { error: true, code: 500, message: error.message };
     }
   }
 
   static async createPermisoRol(permisoRol) {
     try {
 
-      if (permisoRol.permiso_id) {
-        const permisoExistente = this.objPermiso.getById(permisoRol.permiso_id);
-        if (!permisoExistente)
-          return { error: true, code: 404, message: "El permiso especificado no existe." };
-      }
-      if (permisoRol.rol_id) {
-        const rolExistente = this.objRol.getById(permisoRol.rol_id);
-        if (!rolExistente)
-          return { error: true, code: 404, message: "El rol especificado no existe." };
-      }
+      const error = await this.#validarForaneas(permisoRol);
+      if (error) return error;
+
+      const errorDuplicado = await this.#validarDuplicado(permisoRol);            
+      if (errorDuplicado) return errorDuplicado;
 
       // Llamamos el método crear
       const permisoRolCreado = await this.objPermisoRol.create(permisoRol);
@@ -79,7 +74,7 @@ class PermisoRolService {
       };
     } catch (error) {
       // Retornamos un error en caso de excepción
-      return { error: true, code: 500, message: `Error al crear la relación permiso-rol: ${error.message}` };
+      return { error: true, code: 500, message: error.message };
     }
   }
 
@@ -93,16 +88,11 @@ class PermisoRolService {
         return { error: true, code: 404, message: "Relación permiso-rol no encontrada" };
       }
 
-      if (permisoRol.permiso_id) {
-        const permisoExistente = this.objPermiso.getById(permisoRol.permiso_id);
-        if (!permisoExistente)
-          return { error: true, code: 404, message: "El permiso especificado no existe." };
-      }
-      if (permisoRol.rol_id) {
-        const rolExistente = this.objRol.getById(permisoRol.rol_id);
-        if (!rolExistente)
-          return { error: true, code: 404, message: "El rol especificado no existe." };
-      }
+      const error = await this.#validarForaneas(permisoRol);
+      if (error) return error;
+
+      const errorDuplicado = await this.#validarDuplicado(permisoRol, id);
+      if (errorDuplicado) return errorDuplicado;
 
       // Llamamos el método actualizar
       const permisoRolActualizado = await this.objPermisoRol.update(id, permisoRol);
@@ -117,7 +107,7 @@ class PermisoRolService {
       };
     } catch (error) {
       // Retornamos un error en caso de excepción
-      return { error: true, code: 500, message: `Error al actualizar la relación permiso-rol: ${error.message}` };
+      return { error: true, code: 500, message: error.message };
     }
   }
 
@@ -142,8 +132,39 @@ class PermisoRolService {
       return { error: false, code: 200, message: "Relación permiso-rol eliminada correctamente" };
     } catch (error) {
       // Retornamos un error en caso de excepción
-      return { error: true, code: 500, message: `Error al eliminar la relación: ${error.message}` };
+      return { error: true, code: 500, message: error.message };
     }
+  }
+
+  static async #validarForaneas({ permiso_id, rol_id }) {
+    if (permiso_id) {
+      const permisoExistente = await this.objPermiso.getById(permiso_id);
+      if (!permisoExistente) {
+        return { error: true, code: 404, message: "El permiso especificado no existe." };
+      }
+    }
+
+    if (rol_id) {
+      const rolExistente = await this.objRol.getById(rol_id);
+      if (!rolExistente) {
+        return { error: true, code: 404, message: "El rol especificado no existe." };
+      }
+    }
+
+    return null; // si no hay error
+  }
+
+  
+  static async #validarDuplicado(permisoRol, excludeId = null) {
+    const relacionesRol = await this.objPermisoRol.getAllByRolId(permisoRol.rol_id);    
+    
+    const existe = relacionesRol.some(rel => rel.permiso_id == permisoRol.permiso_id &&
+      (excludeId ? rel.id != excludeId : true)); // excluye el mismo ID si estamos en update
+
+    if (existe) {
+      return { error: true, code: 409, message: "El rol ya tiene asignado este permiso." };
+    }
+    return null;
   }
 }
 

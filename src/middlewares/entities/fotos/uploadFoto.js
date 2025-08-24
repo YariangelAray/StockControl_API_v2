@@ -10,7 +10,7 @@ const storage = multer.diskStorage({
    * Define la carpeta donde se guardarán las fotos
    */
   destination: (req, file, cb) => {
-    const dir = "public/fotos_reportes";
+    const dir = "public/img/reportes";
     fs.mkdirSync(dir, { recursive: true }); // Crea la carpeta si no existe
     cb(null, dir); // Usa esa carpeta como destino
   },

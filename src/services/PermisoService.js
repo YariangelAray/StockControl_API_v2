@@ -13,7 +13,7 @@ class PermisoService {
       const permisos = await this.objPermiso.getAll();
 
       // Validamos si no hay permisos
-      if (!permisos) {
+      if (!permisos || permisos.length === 0) {
         return { error: true, code: 404, message: "No hay permisos registrados" };
       }
       // Retornamos los permisos obtenidos
@@ -25,7 +25,7 @@ class PermisoService {
     } catch (error) {
       // Retornamos un error en caso de excepción
       console.log(error);
-      return { error: true, code: 500, message: `Error al obtener los permisos: ${error.message}` };
+      return { error: true, code: 500, message: error.message };
     }
   }
 
@@ -45,7 +45,7 @@ class PermisoService {
       };
     } catch (error) {
       // Retornamos un error en caso de excepción
-      return { error: true, code: 500, message: `Error al obtener el permiso: ${error.message}` };
+      return { error: true, code: 500, message:error.message };
     }
   }
 
@@ -64,7 +64,7 @@ class PermisoService {
       };
     } catch (error) {
       // Retornamos un error en caso de excepción
-      return { error: true, code: 500, message: `Error al crear el permiso: ${error.message}` };
+      return { error: true, code: 500, message: error.message };
     }
   }
 
@@ -91,7 +91,7 @@ class PermisoService {
       };
     } catch (error) {
       // Retornamos un error en caso de excepción
-      return { error: true, code: 500, message: `Error al actualizar el permiso: ${error.message}` };
+      return { error: true, code: 500, message: error.message };
     }
   }
 
@@ -122,7 +122,7 @@ class PermisoService {
       return { error: false, code: 200, message: "Permiso eliminado correctamente" };
     } catch (error) {
       // Retornamos un error en caso de excepción
-      return { error: true, code: 500, message: `Error al eliminar el permiso: ${error.message}` };
+      return { error: true, code: 500, message: error.message};
     }
   }
 }

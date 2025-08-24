@@ -5,6 +5,7 @@ import bodyParser from "body-parser";
 import cookieParser from "cookie-parser";
 
 import rutas from './src/routes/index.js';
+import { ResponseProvider } from "./src/providers/ResponseProvider.js";
 
 dotenv.config();
 
@@ -32,8 +33,21 @@ rutas.forEach(({ path, router }) => {
   app.use('/stockcontrol_api' + path, router);
 });
 
+app.use(express.static('public'));
+
+app.get('/stockcontrol_api', (req, res) => {
+  res.sendFile('endpoints.html', { root: './public' });
+});
+
 // Rutas estáticas para las fotos de reportes
-app.use('/fotos_reportes', express.static('public/fotos_reportes'));
+app.use('/fotos_reportes', express.static('public/img/reportes'));
+
+// Este middleware debe ir al final de todas tus rutas
+app.use((req, res, next) => {
+  const mensaje = `Recurso no encontrado: [${req.method}] ${req.originalUrl}`;
+  return ResponseProvider.error(res, mensaje, 404);
+});
+
 
 
 // Puerto para ejecutar el servidor

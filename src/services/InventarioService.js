@@ -17,19 +17,19 @@ class InventarioService {
       const inventarios = await this.objInventario.getAll();
 
       // Validamos si no hay inventarios
-      if (!inventarios) {
+      if (!inventarios || inventarios.length === 0) {
         return { error: true, code: 404, message: "No hay inventarios registrados" };
       }
       // Retornamos los inventarios obtenidos
       return {
         error: false, code: 200, message: "Inventarios obtenidos correctamente",
-        data: await this.complementarInventarios(inventarios)
+        data: await this.#complementarInventarios(inventarios)
       };
 
     } catch (error) {
       // Retornamos un error en caso de excepción
       console.log(error);
-      return { error: true, code: 500, message: `Error al obtener los inventarios: ${error.message}` };
+      return { error: true, code: 500, message: error.message };
     }
   }
 
@@ -45,26 +45,19 @@ class InventarioService {
       // Retornamos el inventario obtenido
       return {
         error: false, code: 200, message: "Inventario obtenido correctamente",
-        data: await this.complementarInventario(inventario)
+        data: await this.#complementarInventario(inventario)
       };
     } catch (error) {
       // Retornamos un error en caso de excepción
-      return { error: true, code: 500, message: `Error al obtener el inventario: ${error.message}` };
+      return { error: true, code: 500, message: error.message };
     }
   }
 
   static async createInventario(inventario) {
     try {
 
-      if (inventario.usuario_admin_id) {
-        const usuarioExistente = this.objUsuario.getById(inventario.usuario_admin_id);
-        if (!usuarioExistente)
-          return { error: true, code: 404, message: "El usuario especificado no existe." };
-
-        const rolUsuario = this.objRolUsuario.getAllByUsuarioId(inventario.usuario_admin_id);
-        if (!(await rolUsuario).some(ru => ru.rol_id === 2))
-          return { error: true, code: 404, message: "El usuario especificado no tiene el rol administrativo. Solo un usuario administrativo puede estar asociado a un inventario." };
-      }
+      const error = await this.#validarForaneas(inventario);
+      if (error) return error;
 
       // Llamamos el método crear
       const inventarioCreado = await this.objInventario.create(inventario);
@@ -75,11 +68,11 @@ class InventarioService {
       // Retornamos el inventario creado
       return {
         error: false, code: 201, message: "Inventario creado correctamente",
-        data: await this.complementarInventario(inventarioCreado)
+        data: await this.#complementarInventario(inventarioCreado)
       };
     } catch (error) {
       // Retornamos un error en caso de excepción
-      return { error: true, code: 500, message: `Error al crear el inventario: ${error.message}` };
+      return { error: true, code: 500, message:error.message };
     }
   }
 
@@ -93,15 +86,8 @@ class InventarioService {
         return { error: true, code: 404, message: "Inventario no encontrado" };
       }
 
-      if (inventario.usuario_admin_id) {
-        const usuarioExistente = this.objUsuario.getById(inventario.usuario_admin_id);
-        if (!usuarioExistente)
-          return { error: true, code: 404, message: "El usuario especificado no existe." };
-
-        const rolUsuario = this.objRolUsuario.getAllByUsuarioId(inventario.usuario_admin_id);
-        if (!(await rolUsuario).some(ru => ru.rol_id === 2))
-          return { error: true, code: 404, message: "El usuario especificado no tiene el rol administrativo. Solo un usuario administrativo puede estar asociado a un inventario." };
-      }
+      const error = await this.#validarForaneas(inventario);
+      if (error) return error;
 
       // Llamamos el método actualizar
       const inventarioActualizado = await this.objInventario.update(id, inventario);
@@ -112,11 +98,11 @@ class InventarioService {
       // Retornamos el inventario actualizado
       return {
         error: false, code: 200, message: "Inventario actualizado correctamente",
-        data: await this.complementarInventario(inventarioActualizado)
+        data: await this.#complementarInventario(inventarioActualizado)
       };
     } catch (error) {
       // Retornamos un error en caso de excepción
-      return { error: true, code: 500, message: `Error al actualizar el inventario: ${error.message}` };
+      return { error: true, code: 500, message:error.message};
     }
   }
 
@@ -147,7 +133,7 @@ class InventarioService {
       return { error: false, code: 200, message: "Inventario eliminado correctamente" };
     } catch (error) {
       // Retornamos un error en caso de excepción
-      return { error: true, code: 500, message: `Error al eliminar el inventario: ${error.message}` };
+      return { error: true, code: 500, message: error.message};
     }
   }
 
@@ -158,25 +144,31 @@ class InventarioService {
       if (!usuarioExistente)
         return { error: true, code: 404, message: "El usuario especificado no existe." };
 
+      const rolesUsuario = await this.objRolUsuario.getAllByUsuarioId(usuarioId);
+
+      if (!rolesUsuario.some(rel => rel.rol_id === 2)) {
+        return { error: true, code: 404, message: "El usuario especificado no tiene el rol administrativo. Solo los usuarios con rol administrativo tienen inventarios asociados." };
+      }
+
       // Llamamos el método para obtener inventarios por usuario
       const inventarios = await this.objInventario.getByAllUsuarioAdminId(usuarioId);
       // Validamos si no hay inventarios
       if (!inventarios || inventarios.length === 0)
-        return { error: true, code: 404, message: "No hay inventarios registrados para este usuario" };
+        return { error: true, code: 404, message: "No hay inventarios registrados para este usuario administrativo" };
 
       // Retornamos los inventarios obtenidas
       return {
         error: false, code: 200, message: "Inventarios obtenidos correctamente",
-        data: await this.complementarInventarios(inventarios)
+        data: await this.#complementarInventarios(inventarios)
       };
 
     } catch (error) {
       // Retornamos un error en caso de excepción
-      return { error: true, code: 500, message: `Error al obtener los inventarios del usuario administrativo con ID ${usuarioId}: ${error.message}` };
+      return { error: true, code: 500, message:error.message };
     }
   }
 
-  static async getAmbientesByInventarioId(inventarioId) {
+  static async getAmbientesCubiertos(inventarioId) {
     try {
 
       // Llamamos el método consultar por ID
@@ -200,26 +192,40 @@ class InventarioService {
 
     } catch (error) {
       // Retornamos un error en caso de excepción
-      return { error: true, code: 500, message: `Error al obtener los ambientes cubiertos por el inventario con ID ${inventarioId}: ${error.message}` };
+      return { error: true, code: 500, message: error.message};
     }
   }
 
-  static async complementarInventarios(inventarios) {
-    return Promise.all(await inventarios.map(async inventario => await this.complementarInventario(inventario)));
+  static async #complementarInventarios(inventarios) {
+    return Promise.all(await inventarios.map(async inventario => await this.#complementarInventario(inventario)));
   }
   
-  static async complementarInventario(inventario) {
+  static async #complementarInventario(inventario) {
     const elementos = await this.objElemento.getAllByInventarioId(inventario.id);
     
     const totalMonetario = elementos.reduce(
-      (total, { valor_monetario }) => total + valor_monetario, 0
+      (total, { valor_monetario }) => total + parseFloat(valor_monetario), 0
     );
 
-    inventario.valor_monetario = totalMonetario;
+    inventario.valor_monetario = parseFloat(totalMonetario.toFixed(2));
     inventario.cantidad_elementos = (elementos || []).length;
     inventario.ambientes_cubiertos = (await this.objInventario.getAmbientesCubiertos(inventario.id) || []).length;
 
     return inventario;
+  }
+
+  static async #validarForaneas({ usuario_admin_id }) {
+    if (usuario_admin_id) {
+      const usuarioExistente = await this.objUsuario.getById(usuario_admin_id);
+      if (!usuarioExistente) {
+        return { error: true, code: 404, message: "El usuario especificado no existe." };
+      }
+      const rolUsuario = this.objRolUsuario.getAllByUsuarioId(usuario_admin_id);
+      if (!(await rolUsuario).some(ru => ru.rol_id === 2))
+        return { error: true, code: 403, message: "El usuario especificado no tiene el rol administrativo. Solo un usuario administrativo puede estar asociado a un inventario." };
+    }
+
+    return null; // No hay errores
   }
 }
 

@@ -1,4 +1,5 @@
 import PermisoRol from "../models/PermisoRol.js";
+import RolUsuario from "../models/RolUsuario.js";
 import Rol from "../models/Rol.js";
 import Permiso from "../models/Permiso.js";
 
@@ -7,6 +8,7 @@ class RolService {
   static objRol = new Rol();
   static objPermiso = new Permiso();
   static objPermisoRol = new PermisoRol();
+  static objRolUsuario = new RolUsuario();
 
   static async getAllRoles() {
     try {
@@ -15,19 +17,19 @@ class RolService {
       const roles = await this.objRol.getAll();
 
       // Validamos si no hay roles
-      if (!roles) {
+      if (!roles || roles.length === 0) {
         return { error: true, code: 404, message: "No hay roles registrados" };
       }
       // Retornamos los roles obtenidos
       return {
         error: false, code: 200, message: "Roles obtenidos correctamente",
-        data: await this.complementarRoles(roles)
+        data: await this.#complementarRoles(roles)
       };
 
     } catch (error) {
       // Retornamos un error en caso de excepción
       console.log(error);
-      return { error: true, code: 500, message: `Error al obtener los roles: ${error.message}` };
+      return { error: true, code: 500, message: error.message };
     }
   }
 
@@ -43,11 +45,11 @@ class RolService {
       // Retornamos el rol obtenido
       return {
         error: false, code: 200, message: "Rol obtenido correctamente",
-        data: await this.complementarRol(rol)
+        data: await this.#complementarRol(rol)
       };
     } catch (error) {
       // Retornamos un error en caso de excepción
-      return { error: true, code: 500, message: `Error al obtener el rol: ${error.message}` };
+      return { error: true, code: 500, message: error.message };
     }
   }
 
@@ -62,11 +64,11 @@ class RolService {
       // Retornamos el rol creado
       return {
         error: false, code: 201, message: "Rol creado correctamente",
-        data: await this.complementarRol(rolCreado)
+        data: await this.#complementarRol(rolCreado)
       };
     } catch (error) {
       // Retornamos un error en caso de excepción
-      return { error: true, code: 500, message: `Error al crear el rol: ${error.message}` };
+      return { error: true, code: 500, message: error.message};
     }
   }
 
@@ -89,11 +91,11 @@ class RolService {
       // Retornamos el rol actualizado
       return {
         error: false, code: 200, message: "Rol actualizado correctamente",
-        data: await this.complementarRol(rolActualizado)
+        data: await this.#complementarRol(rolActualizado)
       };
     } catch (error) {
       // Retornamos un error en caso de excepción
-      return { error: true, code: 500, message: `Error al actualizar el rol: ${error.message}` };
+      return { error: true, code: 500, message: error.message};
     }
   }
 
@@ -112,6 +114,11 @@ class RolService {
       if (rolesPermisoRol && rolesPermisoRol.length > 0) {
         return { error: true, code: 409, message: "No se puede eliminar el rol porque tiene permisos asociados" };
       }
+      const rolesRolUsuario = await this.objRolUsuario.getAllByRolId(id);
+      // Validamos si no hay roles relacionados a un rol
+      if (rolesRolUsuario && rolesRolUsuario.length > 0) {
+        return { error: true, code: 409, message: "No se puede eliminar el rol porque tiene usuarios asociados" };
+      }
 
       // Llamamos el método eliminar
       const rolEliminado = await this.objRol.delete(id);
@@ -124,15 +131,15 @@ class RolService {
       return { error: false, code: 200, message: "Rol eliminado correctamente" };
     } catch (error) {
       // Retornamos un error en caso de excepción
-      return { error: true, code: 500, message: `Error al eliminar el rol: ${error.message}` };
+      return { error: true, code: 500, message: error.message};
     }
   }
 
-  static async complementarRoles(roles) {
-    return Promise.all(await roles.map(async rol => await this.complementarRol(rol)))
+  static async #complementarRoles(roles) {
+    return Promise.all(await roles.map(async rol => await this.#complementarRol(rol)))
   }
 
-  static async complementarRol(rol) {
+  static async #complementarRol(rol) {
     const permisosRol = await Promise.all(
       (await this.objPermisoRol.getAllByRolId(rol.id)).map(async permisoRol => {
         const permiso = await this.objPermiso.getById(permisoRol.permiso_id);

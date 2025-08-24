@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/style.css">
+    <title>📘 Endpoints StockControl API</title>    
+</head>
+
+<body>
+    <h1>📘 Endpoints disponibles</h1>
+    <p>Estos son los endpoints REST disponibles en <code>/stockcontrol_api</code>:</p>
+
+    <ul>
+        <li class="endpoint-group">
+            <strong>/usuarios</strong>
+            <ul>
+                <li><span class="method GET">GET</span> <code>/usuarios</code> Lista todos los usuarios</li>
+                <li><span class="method GET">GET</span> <code>/usuarios/:id</code> Consulta un usuario por ID</li>
+                <li><span class="method POST">POST</span> <code>/usuarios</code> Crea un nuevo usuario</li>
+                <li><span class="method PUT">PUT</span> <code>/usuarios/:id</code> Actualiza un usuario existente</li>
+                <li><span class="method PATCH">PATCH</span> <code>/usuarios/:id</code> Actualiza parcialmente un usuario
+                </li>
+                <li><span class="method DELETE">DELETE</span> <code>/usuarios/:id</code> Elimina un usuario por ID</li>
+                <li><span class="method PUT">PUT</span> <code>/usuarios/:id/contrasena</code> Actualiza la contraseña
+                    validando la anterior</li>
+            </ul>
+        </li>
+
+        <li class="endpoint-group">
+            <strong>/roles-usuarios</strong>
+            <ul>
+                <li><span class="method GET">GET</span> <code>/roles-usuarios</code> Lista todas las relaciones
+                    rol-usuario</li>
+                <li><span class="method GET">GET</span> <code>/roles-usuarios/:id</code> Consulta una relación
+                    específica</li>
+                <li><span class="method POST">POST</span> <code>/roles-usuarios</code> Asigna un rol a un usuario</li>
+                <li><span class="method PUT">PUT</span> <code>/roles-usuarios/:id</code> Actualiza una relación
+                    existente</li>
+                <li><span class="method PATCH">PATCH</span> <code>/roles-usuarios/:id</code> Actualiza parcialmente una
+                    relación</li>
+                <li><span class="method DELETE">DELETE</span> <code>/roles-usuarios/:id</code> Elimina una relación
+                    rol-usuario</li>
+            </ul>
+        </li>
+
+        <li class="endpoint-group">
+            <strong>/roles</strong>
+            <ul>
+                <li><strong class="method GET">GET</strong> <code>/roles</code> Lista todos los roles definidos</li>
+                <li><strong class="method GET">GET</strong> <code>/roles/:id</code> Consulta un rol por ID</li>
+                <li><strong class="method POST">POST</strong> <code>/roles</code> Crea un nuevo rol</li>
+                <li><strong class="method PUT">PUT</strong> <code>/roles/:id</code> Actualiza un rol existente</li>
+                <li><strong class="method PATCH">PATCH</strong> <code>/roles/:id</code> Actualiza parcialmente un rol
+                </li>
+                <li><strong class="method DELETE">DELETE</strong> <code>/roles/:id</code> Elimina un rol por ID</li>
+            </ul>
+        </li>
+
+        <li class="endpoint-group">
+            <strong>/permisos-roles</strong>
+            <ul>
+                <li><strong class="method GET">GET</strong> <code>/permisos-roles</code> Lista todas las relaciones
+                    entre permisos y roles</li>
+                <li><strong class="method GET">GET</strong> <code>/permisos-roles/:id</code> Consulta una relación
+                    específica</li>
+                <li><strong class="method POST">POST</strong> <code>/permisos-roles</code> Asocia un permiso a un rol
+                </li>
+                <li><strong class="method PUT">PUT</strong> <code>/permisos-roles/:id</code> Actualiza una relación
+                    existente</li>
+                <li><strong class="method PATCH">PATCH</strong> <code>/permisos-roles/:id</code> Actualiza parcialmente
+                    una relación</li>
+                <li><strong class="method DELETE">DELETE</strong> <code>/permisos-roles/:id</code> Elimina una relación
+                    entre permiso y rol</li>
+            </ul>
+        </li>
+
+        <li class="endpoint-group">
+            <strong>/permisos</strong>
+            <ul>
+                <li><strong class="method GET">GET</strong> <code>/permisos</code> Lista todos los permisos disponibles
+                </li>
+                <li><strong class="method GET">GET</strong> <code>/permisos/:id</code> Consulta un permiso por ID</li>
+                <li><strong class="method POST">POST</strong> <code>/permisos</code> Crea un nuevo permiso</li>
+                <li><strong class="method PUT">PUT</strong> <code>/permisos/:id</code> Actualiza un permiso existente
+                </li>
+                <li><strong class="method PATCH">PATCH</strong> <code>/permisos/:id</code> Actualiza parcialmente un
+                    permiso</li>
+                <li><strong class="method DELETE">DELETE</strong> <code>/permisos/:id</code> Elimina un permiso por ID
+                </li>
+            </ul>
+        </li>
+
+        <li class="endpoint-group">
+            <strong>/inventarios</strong>
+            <ul>
+                <li><strong class="method GET">GET</strong> <code>/inventarios</code> Lista todos los inventarios</li>
+                <li><strong class="method GET">GET</strong> <code>/inventarios/:id</code> Consulta un inventario por ID
+                </li>
+                <li><strong class="method POST">POST</strong> <code>/inventarios</code> Crea un nuevo inventario</li>
+                <li><strong class="method PUT">PUT</strong> <code>/inventarios/:id</code> Actualiza un inventario
+                    existente</li>
+                <li><strong class="method PATCH">PATCH</strong> <code>/inventarios/:id</code> Actualiza parcialmente un
+                    inventario</li>
+                <li><strong class="method DELETE">DELETE</strong> <code>/inventarios/:id</code> Elimina un inventario
+                    por ID</li>
+                <li><strong class="method GET">GET</strong> <code>/inventarios/usuario/:usuarioId</code> Lista los
+                    inventarios de un usuario administrativo</li>
+                <li><strong class="method GET">GET</strong> <code>/inventarios/:id/ambientes</code> Lista los ambientes
+                    cubiertos por un inventario</li>
+            </ul>
+        </li>
+
+        <li class="endpoint-group">
+            <strong>/elementos</strong>
+            <ul>
+                <li><strong class="method GET">GET</strong> <code>/elementos</code> Lista todos los elementos
+                    registrados</li>
+                <li><strong class="method GET">GET</strong> <code>/elementos/:id</code> Consulta un elemento por ID</li>
+                <li><strong class="method POST">POST</strong> <code>/elementos</code> Crea un nuevo elemento</li>
+                <li><strong class="method PUT">PUT</strong> <code>/elementos/:id</code> Actualiza un elemento existente
+                </li>
+                <li><strong class="method PATCH">PATCH</strong> <code>/elementos/:id</code> Actualiza parcialmente un
+                    elemento</li>
+                <li><strong class="method DELETE">DELETE</strong> <code>/elementos/:id</code> Elimina un elemento por ID
+                </li>
+                <li><strong class="method GET">GET</strong> <code>/elementos/inventario/:inventarioId</code> Lista los
+                    elementos de un inventario específico</li>
+            </ul>
+        </li>
+
+        <li class="endpoint-group">
+            <strong>/tipos-elementos</strong>
+            <ul>
+                <li><strong class="method GET">GET</strong> <code>/tipos-elementos</code> Lista todos los tipos de
+                    elementos</li>
+                <li><strong class="method GET">GET</strong> <code>/tipos-elementos/:id</code> Consulta un tipo de
+                    elemento por ID</li>
+                <li><strong class="method POST">POST</strong> <code>/tipos-elementos</code> Crea un nuevo tipo de
+                    elemento</li>
+                <li><strong class="method PUT">PUT</strong> <code>/tipos-elementos/:id</code> Actualiza un tipo de
+                    elemento existente</li>
+                <li><strong class="method PATCH">PATCH</strong> <code>/tipos-elementos/:id</code> Actualiza parcialmente
+                    un tipo de elemento</li>
+                <li><strong class="method DELETE">DELETE</strong> <code>/tipos-elementos/:id</code> Elimina un tipo de
+                    elemento por ID</li>
+                <li><strong class="method GET">GET</strong> <code>/tipos-elementos/inventario/:inventarioId</code> Lista
+                    los tipos de elementos asociados a un inventario</li>
+            </ul>
+        </li>
+
+        <li class="endpoint-group">
+            <strong>/reportes</strong>
+            <ul>
+                <li><strong class="method GET">GET</strong> <code>/reportes</code> Lista todos los reportes</li>
+                <li><strong class="method GET">GET</strong> <code>/reportes/:id</code> Consulta un reporte por ID</li>
+                <li><strong class="method POST">POST</strong> <code>/reportes</code> Crea un nuevo reporte</li>
+                <li><strong class="method PUT">PUT</strong> <code>/reportes/:id</code> Actualiza un reporte existente
+                </li>
+                <li><strong class="method PATCH">PATCH</strong> <code>/reportes/:id</code> Actualiza parcialmente un
+                    reporte</li>
+                <li><strong class="method DELETE">DELETE</strong> <code>/reportes/:id</code> Elimina un reporte por ID
+                </li>
+                <li><strong class="method GET">GET</strong> <code>/reportes/inventario/:inventarioId</code> Obtiene los
+                    reportes asociados a un inventario</li>
+            </ul>
+        </li>
+
+        <li class="endpoint-group">
+            <strong>/fotos</strong>
+            <ul>
+                <li><strong class="method GET">GET</strong> <code>/fotos</code> Obtiene todas las fotos registradas</li>
+                <li><strong class="method GET">GET</strong> <code>/fotos/:id</code> Obtiene una foto específica por ID
+                </li>
+                <li><strong class="method POST">POST</strong> <code>/fotos</code> Sube una nueva foto asociada a un
+                    reporte</li>
+                <li><strong class="method PUT">PUT</strong> <code>/fotos/:id</code> Actualiza una foto existente</li>
+                <li><strong class="method PATCH">PATCH</strong> <code>/fotos/:id</code> Actualiza parcialmente los datos
+                    de una foto</li>
+                <li><strong class="method DELETE">DELETE</strong> <code>/fotos/:id</code> Elimina una foto por ID</li>
+            </ul>
+        </li>
+
+        <li class="endpoint-group">
+            <strong>/estados</strong>
+            <ul>
+                <li><strong class="method GET">GET</strong> <code>/estados</code> Lista todos los estados disponibles
+                </li>
+                <li><strong class="method GET">GET</strong> <code>/estados/:id</code> Consulta un estado por ID</li>
+                <li><strong class="method POST">POST</strong> <code>/estados</code> Crea un nuevo estado</li>
+                <li><strong class="method PUT">PUT</strong> <code>/estados/:id</code> Actualiza un estado existente</li>
+                <li><strong class="method PATCH">PATCH</strong> <code>/estados/:id</code> Actualiza parcialmente un
+                    estado</li>
+                <li><strong class="method DELETE">DELETE</strong> <code>/estados/:id</code> Elimina un estado por ID
+                </li>
+            </ul>
+        </li>
+
+        <li class="endpoint-group">
+            <strong>/ambientes</strong>
+            <ul>
+                <li><strong class="method GET">GET</strong> <code>/ambientes</code> Lista todos los ambientes</li>
+                <li><strong class="method GET">GET</strong> <code>/ambientes/:id</code> Consulta un ambiente por ID</li>
+                <li><strong class="method POST">POST</strong> <code>/ambientes</code> Crea un nuevo ambiente</li>
+                <li><strong class="method PUT">PUT</strong> <code>/ambientes/:id</code> Actualiza un ambiente existente
+                </li>
+                <li><strong class="method PATCH">PATCH</strong> <code>/ambientes/:id</code> Actualiza parcialmente un
+                    ambiente</li>
+                <li><strong class="method DELETE">DELETE</strong> <code>/ambientes/:id</code> Elimina un ambiente por ID
+                </li>
+            </ul>
+        </li>
+
+        <li class="endpoint-group">
+            <strong>/centros</strong>
+            <ul>
+                <li><strong class="method GET">GET</strong> <code>/centros</code> Lista todos los centros</li>
+                <li><strong class="method GET">GET</strong> <code>/centros/:id</code> Consulta un centro por ID</li>
+                <li><strong class="method POST">POST</strong> <code>/centros</code> Crea un nuevo centro</li>
+                <li><strong class="method PUT">PUT</strong> <code>/centros/:id</code> Actualiza un centro existente</li>
+                <li><strong class="method PATCH">PATCH</strong> <code>/centros/:id</code> Actualiza parcialmente un
+                    centro</li>
+                <li><strong class="method DELETE">DELETE</strong> <code>/centros/:id</code> Elimina un centro por ID
+                </li>
+            </ul>
+        </li>
+
+        <li class="endpoint-group">
+            <strong>/fichas</strong>
+            <ul>
+                <li><strong class="method GET">GET</strong> <code>/fichas</code> Lista todas las fichas</li>
+                <li><strong class="method GET">GET</strong> <code>/fichas/:id</code> Consulta una ficha por ID</li>
+                <li><strong class="method POST">POST</strong> <code>/fichas</code> Crea una nueva ficha</li>
+                <li><strong class="method PUT">PUT</strong> <code>/fichas/:id</code> Actualiza una ficha existente</li>
+                <li><strong class="method PATCH">PATCH</strong> <code>/fichas/:id</code> Actualiza parcialmente una
+                    ficha</li>
+                <li><strong class="method DELETE">DELETE</strong> <code>/fichas/:id</code> Elimina una ficha por ID</li>
+            </ul>
+        </li>
+
+        <li class="endpoint-group">
+            <strong>/programas-formacion</strong>
+            <ul>
+                <li><strong class="method GET">GET</strong> <code>/programas-formacion</code> Lista todos los programas
+                    de formación</li>
+                <li><strong class="method GET">GET</strong> <code>/programas-formacion/:id</code> Consulta un programa
+                    por ID</li>
+                <li><strong class="method POST">POST</strong> <code>/programas-formacion</code> Crea un nuevo programa
+                    de formación</li>
+                <li><strong class="method PUT">PUT</strong> <code>/programas-formacion/:id</code> Actualiza un programa
+                    existente</li>
+                <li><strong class="method PATCH">PATCH</strong> <code>/programas-formacion/:id</code> Actualiza
+                    parcialmente un programa</li>
+                <li><strong class="method DELETE">DELETE</strong> <code>/programas-formacion/:id</code> Elimina un
+                    programa por ID</li>
+            </ul>
+        </li>
+
+        <li class="endpoint-group">
+            <strong>/generos</strong>
+            <ul>
+                <li><strong class="method GET">GET</strong> <code>/generos</code> Lista todos los géneros</li>
+                <li><strong class="method GET">GET</strong> <code>/generos/:id</code> Consulta un género por ID</li>
+                <li><strong class="method POST">POST</strong> <code>/generos</code> Crea un nuevo género</li>
+                <li><strong class="method PUT">PUT</strong> <code>/generos/:id</code> Actualiza un género existente</li>
+                <li><strong class="method PATCH">PATCH</strong> <code>/generos/:id</code> Actualiza parcialmente un
+                    género</li>
+                <li><strong class="method DELETE">DELETE</strong> <code>/generos/:id</code> Elimina un género por ID
+                </li>
+            </ul>
+        </li>
+
+        <li class="endpoint-group">
+            <strong>/tipos-documentos</strong>
+            <ul>
+                <li><strong class="method GET">GET</strong> <code>/tipos-documentos</code> Lista todos los tipos de
+                    documentos</li>
+                <li><strong class="method GET">GET</strong> <code>/tipos-documentos/:id</code> Consulta un tipo de
+                    documento por ID</li>
+                <li><strong class="method POST">POST</strong> <code>/tipos-documentos</code> Crea un nuevo tipo de
+                    documento</li>
+                <li><strong class="method PUT">PUT</strong> <code>/tipos-documentos/:id</code> Actualiza un tipo de
+                    documento existente</li>
+                <li><strong class="method PATCH">PATCH</strong> <code>/tipos-documentos/:id</code> Actualiza
+                    parcialmente un tipo de documento</li>
+                <li><strong class="method DELETE">DELETE</strong> <code>/tipos-documentos/:id</code> Elimina un tipo de
+                    documento por ID</li>
+            </ul>
+        </li>
+    </ul>
+
+    <footer>
+        <p>Desarrollado por <strong>Yariangel Aray</strong> Backend con <code>Node.js</code></p>
+    </footer>
+</body>
+
+</html>

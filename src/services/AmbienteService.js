@@ -1,10 +1,12 @@
 import Elemento from "../models/Elemento.js";
 import Ambiente from "../models/Ambiente.js";
+import Centro from "../models/Centro.js";
 
 class AmbienteService {
 
   static objAmbiente = new Ambiente();
   static objElemento = new Elemento();
+  static objCentro = new Centro();
 
   static async getAllAmbientes() {
     try {
@@ -13,7 +15,7 @@ class AmbienteService {
       const ambientes = await this.objAmbiente.getAll();
 
       // Validamos si no hay ambientes
-      if (!ambientes) {
+      if (!ambientes || ambientes.length === 0) {
         return { error: true, code: 404, message: "No hay ambientes registrados" };
       }
       // Retornamos los ambientes obtenidos
@@ -25,7 +27,7 @@ class AmbienteService {
     } catch (error) {
       // Retornamos un error en caso de excepción
       console.log(error);
-      return { error: true, code: 500, message: `Error al obtener los ambientes: ${error.message}` };
+      return { error: true, code: 500, message: error.message };
     }
   }
 
@@ -45,18 +47,15 @@ class AmbienteService {
       };
     } catch (error) {
       // Retornamos un error en caso de excepción
-      return { error: true, code: 500, message: `Error al obtener el ambiente: ${error.message}` };
+      return { error: true, code: 500, message: error.message };
     }
   }
 
   static async createAmbiente(ambiente) {
     try {
 
-      if (ambiente.centro_id) {
-        const centroExistente = this.objCentro.getById(ambiente.centro_id);
-        if (!centroExistente)
-          return { error: true, code: 404, message: "El centro especificado no existe." };
-      }
+      const error = await this.#validarForaneas(ambiente);
+      if (error) return error;
 
       // Llamamos el método crear
       const ambienteCreado = await this.objAmbiente.create(ambiente);
@@ -71,7 +70,7 @@ class AmbienteService {
       };
     } catch (error) {
       // Retornamos un error en caso de excepción
-      return { error: true, code: 500, message: `Error al crear el ambiente: ${error.message}` };
+      return { error: true, code: 500, message: error.message };
     }
   }
 
@@ -85,11 +84,8 @@ class AmbienteService {
         return { error: true, code: 404, message: "Ambiente no encontrado" };
       }
 
-      if (ambiente.centro_id) {
-        const centroExistente = this.objCentro.getById(ambiente.centro_id);
-        if (!centroExistente)
-          return { error: true, code: 404, message: "El centro especificado no existe." };
-      }
+      const error = await this.#validarForaneas(ambiente);
+      if (error) return error;
 
       // Llamamos el método actualizar
       const ambienteActualizado = await this.objAmbiente.update(id, ambiente);
@@ -104,7 +100,7 @@ class AmbienteService {
       };
     } catch (error) {
       // Retornamos un error en caso de excepción
-      return { error: true, code: 500, message: `Error al actualizar el ambiente: ${error.message}` };
+      return { error: true, code: 500, message: error.message };
     }
   }
 
@@ -135,8 +131,20 @@ class AmbienteService {
       return { error: false, code: 200, message: "Ambiente eliminado correctamente" };
     } catch (error) {
       // Retornamos un error en caso de excepción
-      return { error: true, code: 500, message: `Error al eliminar el ambiente: ${error.message}` };
+      return { error: true, code: 500, message: error.message };
     }
+  }
+
+  static async #validarForaneas({ centro_id }) {
+
+    if (centro_id) {
+        const centroExistente = await this.objCentro.getById(centro_id);
+        if (!centroExistente) {
+          return { error: true, code: 404, message: "El centro especificado no existe." };
+        }
+      }
+
+    return null; // si no hay error
   }
 }
 
