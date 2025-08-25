@@ -1,4 +1,5 @@
 import ResponseProvider from "../../providers/ResponseProvider.js";
+import { getPermisos } from "../../utils/getPermisos.js";
 
 /**
  * Middleware para verificar si el usuario tiene los permisos necesarios para acceder a una ruta.
@@ -13,9 +14,9 @@ import ResponseProvider from "../../providers/ResponseProvider.js";
  * router.post("/usuarios", authenticate, authorize("usuario.crear"), controlador);
  */
 const authorize = (...permisosRequeridos) => {
-    return (req, res, next) => {
+    return async (req, res, next) => {
         // Extrae los permisos del usuario desde el token decodificado
-        const permisosUsuario = req.user.permisos || [];
+        const permisosUsuario = await getPermisos(req.user.id);
 
         // Verifica que el usuario tenga todos los permisos requeridos
         // Verifica si el usuario tiene todos los permisos requeridos

@@ -5,12 +5,12 @@ INSERT INTO permisos (nombre, descripcion) VALUES
 ('usuario.update', 'Actualizar usuarios'),
 ('usuario.delete', 'Eliminar usuarios'),
 ('usuario.assign-role', 'Asignar roles a usuarios'),
-('usuario.deactivate', 'Desactivar usuarios'),
+('usuario.disable', 'Desactivar usuarios'),
 
 ('user.view-own', 'Ver su propio perfil'),
 ('user.update-own', 'Actualizar su propio perfil'),
 ('user.change-password-own', 'Cambiar su propia contraseña'),
-('user.deactivate-own', 'Desactivar su propia cuenta'),
+('user.disable-own', 'Desactivar su propia cuenta'),
 
 -- Roles
 ('rol.create', 'Crear roles'),
@@ -32,8 +32,6 @@ INSERT INTO permisos (nombre, descripcion) VALUES
 ('inventario.view', 'Ver inventarios'),
 ('inventario.update', 'Actualizar inventarios'),
 ('inventario.delete', 'Eliminar inventarios'),
-('inventario.access-code', 'Acceso a inventario mediante código temporal'),
-('inventario.manage-admin', 'Cambiar administrador de inventario'),
 
 ('inventario.view-own', 'Ver sus propios inventarios'),
 
@@ -43,6 +41,20 @@ INSERT INTO permisos (nombre, descripcion) VALUES
 ('centro.update', 'Actualizar centros'),
 ('centro.delete', 'Eliminar centros'),
 ('centro.*', 'Acceso total a todas las acciones relacionadas con centros'),
+
+-- Ficha
+('ficha.create', 'Crear fichas'),
+('ficha.view', 'Ver fichas'),
+('ficha.update', 'Actualizar fichas'),
+('ficha.delete', 'Eliminar fichas'),
+('ficha.*', 'Acceso total a todas las acciones relacionadas con fichas'),
+
+-- Programas de formación
+('programa-formacion.create', 'Crear programas de formación'),
+('programa-formacion.view', 'Ver programas de formación'),
+('programa-formacion.update', 'Actualizar programas de formación'),
+('programa-formacion.delete', 'Eliminar programas de formación'),
+('programa-formacion.*', 'Acceso total a todas las acciones relacionadas con programas de formación'),
 
 -- Ambientes
 ('ambiente.create', 'Crear ambientes'),
@@ -56,7 +68,7 @@ INSERT INTO permisos (nombre, descripcion) VALUES
 ('tipo-elemento.view', 'Ver tipos de elementos'),
 ('tipo-elemento.update', 'Actualizar tipos de elementos'),
 ('tipo-elemento.delete', 'Eliminar tipos de elementos'),
-('tipo-elemento.view-inventory', 'Ver los tipos de elementos asociados a un inventario específico'),
+('tipo-elemento.view-own', 'Ver los tipos de elementos asociados a un inventario específico propio'),
 ('tipo-elemento.*', 'Acceso total a todas las acciones relacionadas con tipos de elementos'),
 
 -- Estados
@@ -67,21 +79,38 @@ INSERT INTO permisos (nombre, descripcion) VALUES
 ('estado.*', 'Acceso total a todas las acciones relacionadas con estados'),
 
 -- Elementos
+
+('elemento.view-inventory-own', 'Ver los elementos asociados a un inventario específico propio'),
+('elemento.create-inventory-own', 'Crear elementos asociados a un inventario específico propio'),
+('elemento.update-inventory-own', 'Actualizar los elementos asociados a un inventario específico propio'),
+('elemento.update-patch-inventory-access', 'Actualizar parcialmente los elementos asociados a un inventario específico propio'),
+('elemento.change-status-inventory-own', 'Cambiar los estados de elementos asociados a un inventario específico propio'),
+
 ('elemento.create', 'Crear elementos'),
 ('elemento.view', 'Ver elementos'),
 ('elemento.update', 'Actualizar elementos'),
 ('elemento.delete', 'Eliminar elementos'),
+('elemento.change-status', 'Cambiar los estados de los elementos'),
 
-('elemento.view-inventory', 'Ver los elementos asociados a un inventario específico'),
+('elemento.*', 'Acceso total a todas las acciones relacionadas con elementos'),
 
 -- Reportes y fotos
+('reporte.view-inventory-own', 'Ver los reportes asociados a un inventario específico propio'),
+('reporte.view-own', 'Ver los reportes específico propios'),
 ('reporte.create', 'Crear reportes'),
 ('reporte.view', 'Ver reportes'),
 ('reporte.update', 'Actualizar reportes'),
 ('reporte.delete', 'Eliminar reportes'),
-('reporte.add-photo', 'Agregar fotos a un reporte'),
 
-('reporte.view-inventory', 'Ver los reportes asociados a un inventario específico'),
+-- Fotos de reportes
+('foto.view', 'Ver fotos de reportes'),
+('foto.create', 'Ver fotos de reportes'),
+('foto.update', 'Actualizar fotos de reportes'),
+('foto.delete', 'Eliminar fotos de reportes'),
+('foto.*', 'Acceso total a todas las acciones relacionadas con fotos'),
+
+('foto.view-inventory-own', 'Ver fotos de reportes de un inventario propio'),
+('foto.create-inventory-own', 'Crear fotos a un reporte de un inventario propio'),
 
 -- Códigos de acceso
 ('access-code.create', 'Crear códigos de acceso'),

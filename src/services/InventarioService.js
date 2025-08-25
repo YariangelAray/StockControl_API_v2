@@ -4,7 +4,7 @@ import Usuario from "../models/Usuario.js";
 import RolUsuario from "../models/RolUsuario.js";
 
 class InventarioService {
-  
+
   static objInventario = new Inventario();
   static objUsuario = new Usuario();
   static objElemento = new Elemento();
@@ -33,11 +33,16 @@ class InventarioService {
     }
   }
 
-  static async getInventarioById(id) {
+  static async getInventarioById(id, userId = null) {
     try {
 
       // Llamamos el método consultar por ID
       const inventario = await this.objInventario.getById(id);
+
+      if (userId) {
+        
+      }
+
       // Validamos si no hay inventario
       if (!inventario) {
         return { error: true, code: 404, message: "Inventario no encontrado" };
@@ -72,7 +77,7 @@ class InventarioService {
       };
     } catch (error) {
       // Retornamos un error en caso de excepción
-      return { error: true, code: 500, message:error.message };
+      return { error: true, code: 500, message: error.message };
     }
   }
 
@@ -102,7 +107,7 @@ class InventarioService {
       };
     } catch (error) {
       // Retornamos un error en caso de excepción
-      return { error: true, code: 500, message:error.message};
+      return { error: true, code: 500, message: error.message };
     }
   }
 
@@ -133,7 +138,7 @@ class InventarioService {
       return { error: false, code: 200, message: "Inventario eliminado correctamente" };
     } catch (error) {
       // Retornamos un error en caso de excepción
-      return { error: true, code: 500, message: error.message};
+      return { error: true, code: 500, message: error.message };
     }
   }
 
@@ -151,7 +156,7 @@ class InventarioService {
       }
 
       // Llamamos el método para obtener inventarios por usuario
-      const inventarios = await this.objInventario.getByAllUsuarioAdminId(usuarioId);
+      const inventarios = await this.objInventario.getAllByUsuarioAdminId(usuarioId);
       // Validamos si no hay inventarios
       if (!inventarios || inventarios.length === 0)
         return { error: true, code: 404, message: "No hay inventarios registrados para este usuario administrativo" };
@@ -164,11 +169,11 @@ class InventarioService {
 
     } catch (error) {
       // Retornamos un error en caso de excepción
-      return { error: true, code: 500, message:error.message };
+      return { error: true, code: 500, message: error.message };
     }
   }
 
-  static async getAmbientesCubiertos(inventarioId) {
+  static async getAmbientesCubiertos(inventarioId, userId = null) {
     try {
 
       // Llamamos el método consultar por ID
@@ -192,17 +197,17 @@ class InventarioService {
 
     } catch (error) {
       // Retornamos un error en caso de excepción
-      return { error: true, code: 500, message: error.message};
+      return { error: true, code: 500, message: error.message };
     }
   }
 
   static async #complementarInventarios(inventarios) {
     return Promise.all(await inventarios.map(async inventario => await this.#complementarInventario(inventario)));
   }
-  
+
   static async #complementarInventario(inventario) {
     const elementos = await this.objElemento.getAllByInventarioId(inventario.id);
-    
+
     const totalMonetario = elementos.reduce(
       (total, { valor_monetario }) => total + parseFloat(valor_monetario), 0
     );
@@ -226,6 +231,13 @@ class InventarioService {
     }
 
     return null; // No hay errores
+  }
+
+  static async #getInventariosDelUsuario(idUSer) {
+    if (!idUSer) return [];
+
+    const inventarios = await this.objInventario.getAllByUsuarioAdminId(idUSer);
+    return inventarios.map(inv => inv.id);
   }
 }
 

@@ -2,25 +2,27 @@ import express from "express";
 
 import FichaController from "../controllers/FichaController.js";
 import { validarFicha, validarFichaParcial } from "../middlewares/entities/fichas/fichaValidator.js";
+import authenticate from "../middlewares/auth/authenticate.js";
+import authorize from "../middlewares/auth/authorize.js";
 
 const router = express.Router();
 
 // Obtener todas las fichas
-router.get("/", FichaController.getAllFichas);
+router.get("/", authenticate, authorize('ficha.view'), FichaController.getAllFichas);
 
 // Obtener una ficha por ID
-router.get("/:id", FichaController.getFichaById);
+router.get("/:id", authenticate, authorize('ficha.view'), FichaController.getFichaById);
 
 // Crear una nueva ficha
-router.post("/", validarFicha, FichaController.createFicha);
+router.post("/", authenticate, authorize('ficha.create'), validarFicha, FichaController.createFicha);
 
 // Actualizar una ficha
-router.put("/:id", validarFicha, FichaController.updateFicha);
+router.put("/:id", authenticate, authorize('ficha.update'), validarFicha, FichaController.updateFicha);
 
 // Actualizar una ficha parcialmente
-router.patch("/:id", validarFichaParcial, FichaController.updateFicha);
+router.patch("/:id", authenticate, authorize('ficha.update'), validarFichaParcial, FichaController.updateFicha);
 
 // Eliminar una ficha
-router.delete("/:id", FichaController.deleteFicha);
+router.delete("/:id", authenticate, authorize('ficha.delete'), FichaController.deleteFicha);
 
 export default router;

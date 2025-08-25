@@ -20,7 +20,7 @@ const secretKey = process.env.ACCESS_TOKEN_SECRET;
  * @example
  * router.get("/protected", authenticate, controlador);
  */
-export const authenticate = (req, res, next) => {
+const authenticate = (req, res, next) => {
   const token = req.cookies.token;
 
   // Si no hay token, se bloquea el acceso
@@ -44,3 +44,5 @@ export const authenticate = (req, res, next) => {
     return ResponseProvider.authError(res, 'Token inválido', 401, 'TOKEN_INVALID');
   }
 };
+
+export default authenticate;

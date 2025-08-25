@@ -9,10 +9,21 @@ class FotoService {
   static objReporte = new Reporte();
   static urlBase = "fotos_reportes/";
 
-  static async getAllFotos() {
+  static async getAllFotos(userId = null) {
     try {
       // Llamamos el método listar
-      const fotos = await this.objFoto.getAll();
+      let fotos = await this.objFoto.getAll();
+
+      if (userId) {
+        const inventariosPermitidos = await this.#getInventariosDelUsuario(userId);
+        // Obtener todos los reportes permitidos del usuario
+        let reportesPermitidos = Promise.all(inventariosPermitidos.map(async (inventarioId) => {
+          return (await this.objReporte.getAllByInventarioId(inventarioId)).map(({id}) => id);
+        }));
+        // Filtrar las fotos que pertenecen a esos reportes
+        fotos = fotos.filter(f => reportesPermitidos.includes(f.reporte_id));
+      }
+
 
       // Validamos si no hay fotos
       if (!fotos || fotos.length === 0)
@@ -27,13 +38,21 @@ class FotoService {
     }
   }
 
-  static async getFotoById(id) {
+  static async getFotoById(id, userId = null) {
     try {
       // Llamamos el método consultar por ID
       const foto = await this.objFoto.getById(id);
       // Validamos si no hay foto
       if (!foto)
         return { error: true, code: 404, message: "Foto no encontrada" };
+
+      if (userId) {
+        const reporte = await this.objReporte.getById(foto.reporte_id);
+        const inventariosPermitidos = await this.#getInventariosDelUsuario(userId);
+        if (!inventariosPermitidos.includes(reporte.inventario_id)) {
+          return { error: true, code: 403, message: "No tienes acceso a esta foto" };
+        }
+      }
 
       // Retornamos la foto obtenida
       return { error: false, code: 200, message: "Foto obtenida correctamente", data: foto };
@@ -43,15 +62,19 @@ class FotoService {
     }
   }
 
-  static async createFoto(reporteId, archivo) {
+  static async createFoto(reporteId, archivo, userId = null) {
     try {
-      
-      if (!archivo) {
-        return { error: true, code: 400, message: "No se recibió ninguna foto" };
-      }
 
       const error = await this.#validarForaneas({ reporte_id: reporteId });
       if (error) return error;
+
+      if (userId) {
+        const reporte = await this.objReporte.getById(reporteId);
+        const inventariosPermitidos = await this.#getInventariosDelUsuario(userId);
+        if (!inventariosPermitidos.includes(reporte.inventario_id)) {
+          return { error: true, code: 403, message: "No puedes agregar fotos a este reporte" };
+        }
+      }
 
       // Construimos la URL de la foto
       const url = `${this.urlBase}${archivo.filename}`;
@@ -152,6 +175,13 @@ class FotoService {
     }
 
     return null; // No hay errores
+  }
+
+  static async #getInventariosDelUsuario(idUSer) {
+    if (!idUSer) return [];
+
+    const inventarios = await this.objInventario.getAllByUsuarioAdminId(idUSer);
+    return inventarios.map(inv => inv.id);
   }
 
   // static async getFotosByReporteId(reporteId) {

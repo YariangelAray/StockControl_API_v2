@@ -2,7 +2,7 @@ import express from "express";
 
 import PermisoController from "../controllers/PermisoController.js";
 import { validarPermiso, validarPermisoParcial } from "../middlewares/entities/permisos/permisoValidator.js";
-import { authenticate } from "../middlewares/auth/authenticate.js";
+import authenticate from "../middlewares/auth/authenticate.js";
 import authorize from "../middlewares/auth/authorize.js";
 
 const router = express.Router();

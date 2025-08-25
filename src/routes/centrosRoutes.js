@@ -2,7 +2,7 @@ import express from "express";
 
 import CentroController from "../controllers/CentroController.js";
 import { validarCentro, validarCentroParcial } from "../middlewares/entities/centros/centroValidator.js";
-import { authenticate } from "../middlewares/auth/authenticate.js";
+import authenticate from "../middlewares/auth/authenticate.js";
 import authorize from "../middlewares/auth/authorize.js";
 
 const router = express.Router();

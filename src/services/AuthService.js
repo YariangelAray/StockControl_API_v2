@@ -90,11 +90,11 @@ class AuthService {
             if (responseRolUsuario.error) return responseRolUsuario;
 
             // Configura los datos del usuario para el token y frontend
-            const usuarioCookie = await this.#configurarUsuario(usuarioCreado);
+            const usuarioCookie = await this.configurarUsuario(usuarioCreado);
 
             // Genera tokens de autenticación
-            const token = await this.#genToken(usuarioCookie);
-            const refreshToken = await this.#genRefreshToken(usuarioCookie);
+          const token = await this.#genToken(usuarioCreado.id);
+          const refreshToken = await this.#genRefreshToken(usuarioCreado.id);
 
             // Retorna tokens y datos del usuario
             return {
@@ -133,11 +133,11 @@ class AuthService {
             }
 
             // Configura los datos del usuario para el token y frontend
-            const usuarioCookie = await this.#configurarUsuario(existente);
+            const usuarioCookie = await this.configurarUsuario(existente);
 
             // Genera tokens de autenticación
-            const token = await this.#genToken(usuarioCookie);
-            const refreshToken = await this.#genRefreshToken(usuarioCookie);
+          const token = await this.#genToken(existente.id);
+          const refreshToken = await this.#genRefreshToken(existente.id);
 
             // Retorna tokens y datos del usuario
             return {
@@ -159,17 +159,17 @@ class AuthService {
     // Genera un access token con los datos del usuario
     static async #genToken(userId) {
         const expiration = String(this.tokenExpiration).trim();
-        return await jwt.sign({ sub: userId }, this.secretKey, { expiresIn: expiration });
+        return await jwt.sign({ id: userId }, this.secretKey, { expiresIn: expiration });
     }
 
     // Genera un refresh token con los datos del usuario
     static async #genRefreshToken(userId) {
         const expiration = String(this.refreshExpiration).trim();
-        return await jwt.sign({ sub: userId }, this.refreshSecretKey, { expiresIn: expiration });
+        return await jwt.sign({ id: userId }, this.refreshSecretKey, { expiresIn: expiration });
     }
 
     // Configura los datos del usuario para incluir roles y permisos
-    static async #configurarUsuario(usuario) {
+    static async configurarUsuario(usuario) {
         const usuarioToken = {};
 
         // Construye nombre corto para mostrar en frontend

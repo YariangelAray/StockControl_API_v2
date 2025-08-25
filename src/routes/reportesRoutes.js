@@ -2,7 +2,7 @@ import express from "express";
 
 import ReporteController from "../controllers/ReporteController.js";
 import { validarReporte, validarReporteParcial } from "../middlewares/entities/reportes/reporteValidator.js";
-import { authenticate } from "../middlewares/auth/authenticate.js";
+import authenticate from "../middlewares/auth/authenticate.js";
 import authorize from "../middlewares/auth/authorize.js";
 
 const router = express.Router();

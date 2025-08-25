@@ -2,7 +2,7 @@ import express from "express";
 
 import RolController from "../controllers/RolController.js";
 import { validarRol, validarRolParcial } from "../middlewares/entities/roles/rolValidator.js";
-import { authenticate } from "../middlewares/auth/authenticate.js";
+import authenticate from "../middlewares/auth/authenticate.js";
 import authorize from "../middlewares/auth/authorize.js";
 
 const router = express.Router();

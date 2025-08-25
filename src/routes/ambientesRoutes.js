@@ -3,7 +3,7 @@ import express from "express";
 import AmbienteController from "../controllers/AmbienteController.js";
 import { validarAmbiente, validarAmbienteParcial } from "../middlewares/entities/ambientes/ambienteValidator.js";
 import authorize from "../middlewares/auth/authorize.js";
-import { authenticate } from "../middlewares/auth/authenticate.js";
+import authenticate from "../middlewares/auth/authenticate.js";
 
 const router = express.Router();
 

@@ -2,7 +2,7 @@ import express from "express";
 
 import GeneroController from "../controllers/GeneroController.js";
 import { validarGenero, validarGeneroParcial } from "../middlewares/entities/generos/generoValidator.js";
-import { authenticate } from "../middlewares/auth/authenticate.js";
+import authenticate from "../middlewares/auth/authenticate.js";
 import authorize from "../middlewares/auth/authorize.js";
 
 const router = express.Router();

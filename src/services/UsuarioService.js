@@ -154,19 +154,19 @@ class UsuarioService {
 
       const roles = (await this.objRolUsuario.getAllByUsuarioId(id)).map(rolUsuario => rolUsuario.rol_id);
 
-      const inventariosUsuario = await this.objInventario.getByAllUsuarioAdminId(id);
+      const inventariosUsuario = await this.objInventario.getAllByUsuarioAdminId(id);
       // Validamos si no hay inventarios 
       if (inventariosUsuario && inventariosUsuario.length > 0 && roles.includes(2)) {
-          return { error: true, code: 409, message: "No se puede eliminar al usuario administrativo porque tiene inventarios asociados" };
+        return { error: true, code: 409, message: "No se puede eliminar al usuario administrativo porque tiene inventarios asociados" };
       }
       const reportesUsuario = await this.objReporte.getAllByUsuarioId(id);
       // Validamos si no hay reportes
       if (reportesUsuario && reportesUsuario.length > 0 && roles.includes(3)) {
-          return { error: true, code: 409, message: "No se puede eliminar al usuario corriente porque tiene reportes asociados" };
+        return { error: true, code: 409, message: "No se puede eliminar al usuario corriente porque tiene reportes asociados" };
       }
       // Validamos si no sea el superadministrador
       if (roles.includes(1)) {
-          return { error: true, code: 409, message: "No se puede eliminar al superadministrador" };
+        return { error: true, code: 409, message: "No se puede eliminar al superadministrador" };
       }
 
       // Llamamos el método eliminar
@@ -196,19 +196,19 @@ class UsuarioService {
 
       const usuariosAdmin = (await Promise.all(
         usuarios.map(async (usuario) => {
-          const rolesUsuario = await this.objRolUsuario.getAllByUsuarioId(usuario.id);          
+          const rolesUsuario = await this.objRolUsuario.getAllByUsuarioId(usuario.id);
           return rolesUsuario.some((rolUsuario) => rolUsuario.rol_id === 2) ? usuario : null;
         })
       )).filter(usuario => usuario);
-            
+
 
       // Retornamos los usuarios obtenidos
       return {
         error: false, code: 200, message: `Usuarios administrativos obtenidos correctamente`,
-        data: usuariosAdmin.map(usuario => ({ 
-          id: usuario.id, 
-          documento: usuario.documento, 
-          nombre: usuario.nombres.split(" ")[0] + " " + usuario.apellidos.split(" ")[0] 
+        data: usuariosAdmin.map(usuario => ({
+          id: usuario.id,
+          documento: usuario.documento,
+          nombre: usuario.nombres.split(" ")[0] + " " + usuario.apellidos.split(" ")[0]
         }))
       };
 

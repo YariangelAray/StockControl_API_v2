@@ -3,7 +3,7 @@ import AuthController from "../controllers/AuthController.js"; // Importa el con
 import { validarLogin, validarRegistro } from "../middlewares/auth/validateAuthFields.js"; // Importa middlewares para validar campos en login y registro
 import { verifyRefreshToken } from "../middlewares/auth/verifyRefreshToken.js"; // Middleware para verificar la validez del refresh token
 import ResponseProvider from "../providers/ResponseProvider.js"; // Proveedor de respuestas estandarizadas
-import { authenticate } from "../middlewares/auth/authenticate.js"; // Middleware para verificar el access token (autenticación)
+import authenticate from "../middlewares/auth/authenticate.js"; // Middleware para verificar el access token (autenticación)
 
 
 const router = express.Router(); // Crea una instancia del router de Express
