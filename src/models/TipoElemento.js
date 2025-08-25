@@ -2,6 +2,9 @@ import connection from '../utils/db.js';
 import Modelo from './Modelo.js';
 
 class TipoElemento extends Modelo {
+
+  #nameTable = 'tipos_Elementos';
+
   /**
    * Obtiene todos los tipos de elemento de la base de datos
    * @returns {Promise<Array>} Lista de todos los tipos de elemento
@@ -9,7 +12,7 @@ class TipoElemento extends Modelo {
    */
   async getAll() {
     try {
-      return await super.getAll('tipos_elementos');
+      return await super.getAll(this.#nameTable);
     } catch (error) {
       throw new Error(`Error al obtener todos los tipos de elemento: ${error.message}`);
     }
@@ -23,7 +26,7 @@ class TipoElemento extends Modelo {
    */
   async getById(id) {
     try {
-      return await super.getById('tipos_elementos', id);
+      return await super.getById(this.#nameTable, id);
     } catch (error) {
       throw new Error(`Error al obtener el tipo de elemento con ID ${id}: ${error.message}`);
     }
@@ -37,7 +40,7 @@ class TipoElemento extends Modelo {
    */
   async getByConsecutivo(consecutivo) {
     try {
-      return (await super.getByField('tipos_elementos', 'consecutivo', consecutivo))[0];
+      return (await super.getByField(this.#nameTable, 'consecutivo', consecutivo))[0];
     } catch (error) {
       throw new Error(`Error al obtener el tipo de elemento por consecutivo ${consecutivo}: ${error.message}`);
     }
@@ -51,7 +54,7 @@ class TipoElemento extends Modelo {
    */
   async create(tipoElemento) {
     try {
-      const idCreado = await super.create('tipos_elementos', tipoElemento);
+      const idCreado = await super.create(this.#nameTable, tipoElemento);
       if (idCreado) {
         return await this.getById(idCreado);
       }
@@ -70,7 +73,7 @@ class TipoElemento extends Modelo {
    */
   async update(id, tipoElemento) {
     try {
-      if (await super.update('tipos_elementos', id, tipoElemento)) {
+      if (await super.update(this.#nameTable, id, tipoElemento)) {
         return await this.getById(id);
       }
       return null;
@@ -87,7 +90,7 @@ class TipoElemento extends Modelo {
    */
   async delete(id) {
     try {
-      return await super.delete('tipos_elementos', id);
+      return await super.delete(this.#nameTable, id);
     } catch (error) {
       throw new Error(`Error al eliminar el tipo de elemento con ID ${id}: ${error.message}`);
     }

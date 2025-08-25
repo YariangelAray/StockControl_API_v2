@@ -2,6 +2,9 @@ import connection from '../utils/db.js';
 import Modelo from './Modelo.js';
 
 class RolUsuario extends Modelo {
+
+  #nameTable = 'roles_usuarios';
+
   /**
    * Obtiene todas las relaciones rol-usuario de la base de datos
    * @returns {Promise<Array>} Lista de todas las relaciones rol-usuario
@@ -9,7 +12,7 @@ class RolUsuario extends Modelo {
    */
   async getAll() {
     try {
-      return await super.getAll('roles_usuarios');
+      return await super.getAll(this.#nameTable);
     } catch (error) {
       throw new Error(`Error al obtener las relaciones rol-usuario: ${error.message}`);
     }
@@ -23,7 +26,7 @@ class RolUsuario extends Modelo {
    */
   async getById(id) {
     try {
-      return await super.getById('roles_usuarios', id);
+      return await super.getById(this.#nameTable, id);
     } catch (error) {
       throw new Error(`Error al obtener la relacion rol-usuario con ID ${id}: ${error.message}`);
     }
@@ -37,7 +40,7 @@ class RolUsuario extends Modelo {
    */
   async getAllByRolId(rolId) {
     try {
-      return await super.getByField('roles_usuarios', 'rol_id', rolId);
+      return await super.getByField(this.#nameTable, 'rol_id', rolId);
     } catch (error) {
       throw new Error(`Error al obtener la relaciones rol-usuario por rol_id ${rolId}: ${error.message}`);
     }
@@ -51,7 +54,7 @@ class RolUsuario extends Modelo {
    */
   async getAllByUsuarioId(usuarioId) {
     try {
-      return await super.getByField('roles_usuarios', 'usuario_id', usuarioId);
+      return await super.getByField(this.#nameTable, 'usuario_id', usuarioId);
     } catch (error) {
       throw new Error(`Error al obtener la relaciones rol-usuario por usuario_id ${usuarioId}: ${error.message}`);
     }
@@ -65,7 +68,7 @@ class RolUsuario extends Modelo {
    */
   async create(rolUsuario) {
     try {
-      const idCreado = await super.create('roles_usuarios', rolUsuario);
+      const idCreado = await super.create(this.#nameTable, rolUsuario);
       if (idCreado) {
         return await this.getById(idCreado);
       }
@@ -84,7 +87,7 @@ class RolUsuario extends Modelo {
    */
   async update(id, rolUsuario) {
     try {
-      if (await super.update('roles_usuarios', id, rolUsuario)) {
+      if (await super.update(this.#nameTable, id, rolUsuario)) {
         return await this.getById(id);
       }
       return null;
@@ -101,7 +104,7 @@ class RolUsuario extends Modelo {
    */
   async delete(id) {
     try {
-      return await super.delete('roles_usuarios', id);
+      return await super.delete(this.#nameTable, id);
     } catch (error) {
       throw new Error(`Error al eliminar la relacion rol-usuario con ID ${id}: ${error.message}`);
     }

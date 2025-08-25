@@ -1,4 +1,4 @@
-import { ResponseProvider } from "../providers/ResponseProvider.js";
+import ResponseProvider from "../providers/ResponseProvider.js";
 import AmbienteService from "../services/AmbienteService.js";
 
 class AmbienteController {

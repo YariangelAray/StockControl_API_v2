@@ -2,6 +2,9 @@ import connection from '../utils/db.js';
 import Modelo from './Modelo.js';
 
 class Permiso extends Modelo {
+
+  #nameTable = 'permisos';
+
   /**
    * Obtiene todos los permisos de la base de datos
    * @returns {Promise<Array>} Lista de todos los permisos
@@ -9,7 +12,7 @@ class Permiso extends Modelo {
    */
   async getAll() {
     try {
-      return await super.getAll('permisos');
+      return await super.getAll(this.#nameTable);
     } catch (error) {
       throw new Error(`Error al obtener todos los permisos: ${error.message}`);
     }
@@ -23,7 +26,7 @@ class Permiso extends Modelo {
    */
   async getById(id) {
     try {
-      return await super.getById('permisos', id);
+      return await super.getById(this.#nameTable, id);
     } catch (error) {
       throw new Error(`Error al obtener el permiso con ID ${id}: ${error.message}`);
     }
@@ -37,7 +40,7 @@ class Permiso extends Modelo {
    */
   async create(permiso) {
     try {
-      const idCreado = await super.create('permisos', permiso);
+      const idCreado = await super.create(this.#nameTable, permiso);
       if (idCreado) {
         return await this.getById(idCreado);
       }
@@ -56,7 +59,7 @@ class Permiso extends Modelo {
    */
   async update(id, permiso) {
     try {
-      if (await super.update('permisos', id, permiso)) {
+      if (await super.update(this.#nameTable, id, permiso)) {
         return await this.getById(id);
       }
       return null;
@@ -73,7 +76,7 @@ class Permiso extends Modelo {
    */
   async delete(id) {
     try {
-      return await super.delete('permisos', id);
+      return await super.delete(this.#nameTable, id);
     } catch (error) {
       throw new Error(`Error al eliminar el permiso con ID ${id}: ${error.message}`);
     }

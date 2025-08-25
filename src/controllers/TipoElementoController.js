@@ -1,4 +1,4 @@
-import { ResponseProvider } from "../providers/ResponseProvider.js";
+import ResponseProvider from "../providers/ResponseProvider.js";
 import TipoElementoService from "../services/TipoElementoService.js";
 
 class TipoElementoController {

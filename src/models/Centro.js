@@ -2,6 +2,8 @@ import connection from '../utils/db.js';
 import Modelo from './Modelo.js';
 
 class Centro extends Modelo {
+
+  #nameTable = 'centros';
   /**
    * Obtiene todos los centros de la base de datos
    * @returns {Promise<Array>} Lista de todos los centros
@@ -9,7 +11,7 @@ class Centro extends Modelo {
    */
   async getAll() {
     try {
-      return await super.getAll('centros');
+      return await super.getAll(this.#nameTable);
     } catch (error) {
       throw new Error(`Error al obtener todos los centros: ${error.message}`);
     }
@@ -23,7 +25,7 @@ class Centro extends Modelo {
    */
   async getById(id) {
     try {
-      return await super.getById('centros', id);
+      return await super.getById(this.#nameTable, id);
     } catch (error) {
       throw new Error(`Error al obtener el centro con ID ${id}: ${error.message}`);
     }
@@ -37,7 +39,7 @@ class Centro extends Modelo {
    */
   async create(centro) {
     try {
-      const idCreado = await super.create('centros', centro);
+      const idCreado = await super.create(this.#nameTable, centro);
       if (idCreado) {
         return await this.getById(idCreado);
       }
@@ -56,7 +58,7 @@ class Centro extends Modelo {
    */
   async update(id, centro) {
     try {
-      if (await super.update('centros', id, centro)) {
+      if (await super.update(this.#nameTable, id, centro)) {
         return await this.getById(id);
       }
       return null;
@@ -73,7 +75,7 @@ class Centro extends Modelo {
    */
   async delete(id) {
     try {
-      return await super.delete('centros', id);
+      return await super.delete(this.#nameTable, id);
     } catch (error) {
       throw new Error(`Error al eliminar el centro con ID ${id}: ${error.message}`);
     }

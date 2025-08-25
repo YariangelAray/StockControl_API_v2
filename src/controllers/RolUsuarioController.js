@@ -1,4 +1,4 @@
-import { ResponseProvider } from "../providers/ResponseProvider.js";
+import ResponseProvider from "../providers/ResponseProvider.js";
 import RolUsuarioService from "../services/RolUsuarioService.js";
 
 class RolUsuarioController {

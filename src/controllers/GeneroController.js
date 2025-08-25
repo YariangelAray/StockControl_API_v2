@@ -1,4 +1,4 @@
-import { ResponseProvider } from "../providers/ResponseProvider.js";
+import ResponseProvider from "../providers/ResponseProvider.js";
 import GeneroService from "../services/GeneroService.js";
 
 class GeneroController {

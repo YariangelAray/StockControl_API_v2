@@ -2,7 +2,7 @@ import express from "express"; // Importa Express para crear el router
 import AuthController from "../controllers/AuthController.js"; // Importa el controlador con la lógica de autenticación
 import { validarLogin, validarRegistro } from "../middlewares/auth/validateAuthFields.js"; // Importa middlewares para validar campos en login y registro
 import { verifyRefreshToken } from "../middlewares/auth/verifyRefreshToken.js"; // Middleware para verificar la validez del refresh token
-import { ResponseProvider } from "../providers/ResponseProvider.js"; // Proveedor de respuestas estandarizadas
+import ResponseProvider from "../providers/ResponseProvider.js"; // Proveedor de respuestas estandarizadas
 import { authenticate } from "../middlewares/auth/authenticate.js"; // Middleware para verificar el access token (autenticación)
 
 

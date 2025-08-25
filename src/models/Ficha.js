@@ -1,6 +1,8 @@
 import Modelo from './Modelo.js';
 
 class Ficha extends Modelo {
+
+  #nameTable = 'fichas';
   /**
    * Método para obtener todas las fichas almacenadas en la base de datos
    * @returns {Promise<Array>} Array de fichas obtenidas de la base de datos
@@ -8,7 +10,7 @@ class Ficha extends Modelo {
    */
   async getAll() {
     try {
-      return await super.getAll('fichas');
+      return await super.getAll(this.#nameTable);
     } catch (error) {
       throw new Error(`Error al obtener todas las fichas: ${error.message}`);
     }
@@ -22,7 +24,7 @@ class Ficha extends Modelo {
    */
   async getById(id) {
     try {
-      return await super.getById('fichas', id);
+      return await super.getById(this.#nameTable, id);
     } catch (error) {
       throw new Error(`Error al obtener la ficha con ID ${id}: ${error.message}`);
     }
@@ -36,7 +38,7 @@ class Ficha extends Modelo {
    */
   async getAllByProgramaId(programaId) {
     try {
-      return await super.getByField('fichas', 'programa_id', programaId);
+      return await super.getByField(this.#nameTable, 'programa_id', programaId);
     } catch (error) {
       throw new Error(`Error al obtener fichas por programa_id ${programaId}: ${error.message}`);
     }
@@ -50,7 +52,7 @@ class Ficha extends Modelo {
    */
   async getByFicha(ficha) {
     try {
-      return await super.getByField('fichas', 'ficha', ficha);
+      return await super.getByField(this.#nameTable, 'ficha', ficha);
     } catch (error) {
       throw new Error(`Error al obtener la ficha ${ficha}: ${error.message}`);
     }
@@ -64,7 +66,7 @@ class Ficha extends Modelo {
    */
   async create(ficha) {
     try {
-      const idCreado = await super.create('fichas', ficha);
+      const idCreado = await super.create(this.#nameTable, ficha);
       if (idCreado) {
         return await this.getById(idCreado);
       }
@@ -83,7 +85,7 @@ class Ficha extends Modelo {
    */
   async update(id, ficha) {
     try {
-      if (await super.update('fichas', id, ficha)) {
+      if (await super.update(this.#nameTable, id, ficha)) {
         return await this.getById(id);
       }
       return null;
@@ -100,7 +102,7 @@ class Ficha extends Modelo {
    */
   async delete(id) {
     try {
-      return await super.delete('fichas', id);
+      return await super.delete(this.#nameTable, id);
     } catch (error) {
       throw new Error(`Error al eliminar la ficha con ID ${id}: ${error.message}`);
     }

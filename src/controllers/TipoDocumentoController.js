@@ -1,4 +1,4 @@
-import { ResponseProvider } from "../providers/ResponseProvider.js";
+import ResponseProvider from "../providers/ResponseProvider.js";
 import TipoDocumentoService from "../services/TipoDocumentoService.js";
 
 class TipoDocumentoController {

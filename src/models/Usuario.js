@@ -2,6 +2,8 @@ import Modelo from './Modelo.js';
 
 class Usuario extends Modelo {
 
+  #nameTable = 'usuarios';
+
   /**
    * Método para obtener los usuarios almacenados en la base de datos
    *
@@ -9,7 +11,7 @@ class Usuario extends Modelo {
    */
   async getAll() {
     try {
-      return await super.getAll('usuarios');
+      return await super.getAll(this.#nameTable);
     } catch (error) {
       throw new Error(`Error al obtener todos los usuarios: ${error.message}`);
     }
@@ -23,7 +25,7 @@ class Usuario extends Modelo {
    */
   async getById(id) {
     try {
-      return await super.getById('usuarios', id);
+      return await super.getById(this.#nameTable, id);
     } catch (error) {
       throw new Error(`Error al obtener el usuario con ID ${id}: ${error.message}`);
     }
@@ -36,7 +38,7 @@ class Usuario extends Modelo {
    */
   async getByDocumento(documento) {
     try {
-      return (await super.getByField('usuarios', 'documento', documento))[0];
+      return (await super.getByField(this.#nameTable, 'documento', documento))[0];
     } catch (error) {
       throw new Error(`Error al obtener el usuario con documento ${documento}: ${error.message}`);
     }
@@ -49,7 +51,7 @@ class Usuario extends Modelo {
    */
   async getByCorreo(correo) {
     try {
-      return (await super.getByField('usuarios', 'correo', correo))[0];
+      return (await super.getByField(this.#nameTable, 'correo', correo))[0];
     } catch (error) {
       throw new Error(`Error al obtener el usuario con correo ${correo}: ${error.message}`);
     }
@@ -63,7 +65,7 @@ class Usuario extends Modelo {
    */
   async getAllByTipoDocumentoId(tipoDocumentoId) {
     try {
-      return await this.getByField('usuarios', 'tipo_documento_id', tipoDocumentoId);
+      return await this.getByField(this.#nameTable, 'tipo_documento_id', tipoDocumentoId);
     } catch (error) {
       throw new Error(`Error al obtener usuarios por tipo_documento_id ${tipoDocumentoId}: ${error.message}`);
     }
@@ -77,7 +79,7 @@ class Usuario extends Modelo {
    */
   async getAllByGeneroId(generoId) {
     try {
-      return await this.getByField('usuarios', 'genero_id', generoId);
+      return await this.getByField(this.#nameTable, 'genero_id', generoId);
     } catch (error) {
       throw new Error(`Error al obtener usuarios por genero_id ${generoId}: ${error.message}`);
     }
@@ -91,7 +93,7 @@ class Usuario extends Modelo {
    */
   async getAllByFichaId(fichaId) {
     try {
-      return await this.getByField('usuarios', 'ficha_id', fichaId);
+      return await this.getByField(this.#nameTable, 'ficha_id', fichaId);
     } catch (error) {
       throw new Error(`Error al obtener usuarios por ficha_id ${fichaId}: ${error.message}`);
     }
@@ -105,7 +107,7 @@ class Usuario extends Modelo {
    */
   async create(usuario) {
     try {
-      const idCreado = await super.create('usuarios', usuario);
+      const idCreado = await super.create(this.#nameTable, usuario);
       if (idCreado) {
         return await this.getById(idCreado);
       }
@@ -124,7 +126,7 @@ class Usuario extends Modelo {
    */
   async update(id, usuario) {
     try {
-      if (await super.update('usuarios', id, usuario)) {
+      if (await super.update(this.#nameTable, id, usuario)) {
         return await this.getById(id);
       }
       return null;
@@ -141,7 +143,7 @@ class Usuario extends Modelo {
    */
   async delete(id) {
     try {
-      return await super.delete('usuarios', id);
+      return await super.delete(this.#nameTable, id);
     } catch (error) {
       throw new Error(`Error al eliminar el usuario con ID ${id}: ${error.message}`);
     }

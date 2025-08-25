@@ -1,7 +1,7 @@
 import { campos, camposContrasena } from "./campos.js";
 import { validateFields } from "../../validators/validateFields.js";
 import { validatePartialFields } from "../../validators/validatePartialFields.js";
-import { ResponseProvider } from "../../../providers/ResponseProvider.js";
+import ResponseProvider from "../../../providers/ResponseProvider.js";
 
 export const validarUsuario = validateFields(campos);          // Para POST/PUT
 export const validarUsuarioParcial = validatePartialFields(campos); // Para PATCH

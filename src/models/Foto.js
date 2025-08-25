@@ -1,6 +1,8 @@
 import Modelo from './Modelo.js';
 
 class Foto extends Modelo {
+
+  #nameTable = 'fotos';
   /**
    * Método para obtener todas las fotos almacenadas en la base de datos
    * @returns {Promise<Array>} Array de fotos obtenidas de la base de datos
@@ -8,7 +10,7 @@ class Foto extends Modelo {
    */
   async getAll() {
     try {
-      return await super.getAll('fotos');
+      return await super.getAll(this.#nameTable);
     } catch (error) {
       throw new Error(`Error al obtener todas las fotos: ${error.message}`);
     }
@@ -22,7 +24,7 @@ class Foto extends Modelo {
    */
   async getById(id) {
     try {
-      return await super.getById('fotos', id);
+      return await super.getById(this.#nameTable, id);
     } catch (error) {
       throw new Error(`Error al obtener la foto con ID ${id}: ${error.message}`);
     }
@@ -36,7 +38,7 @@ class Foto extends Modelo {
    */
   async getAllByReporteId(reporteId) {
     try {
-      return await super.getByField('fotos', 'reporte_id', reporteId);
+      return await super.getByField(this.#nameTable, 'reporte_id', reporteId);
     } catch (error) {
       throw new Error(`Error al obtener fotos por reporte_id ${reporteId}: ${error.message}`);
     }
@@ -50,7 +52,7 @@ class Foto extends Modelo {
    */
   async create(foto) {
     try {
-      const idCreado = await super.create('fotos', foto);
+      const idCreado = await super.create(this.#nameTable, foto);
       if (idCreado) {
         return await this.getById(idCreado);
       }
@@ -69,7 +71,7 @@ class Foto extends Modelo {
    */
   async update(id, foto) {
     try {
-      if (await super.update('fotos', id, foto)) {
+      if (await super.update(this.#nameTable, id, foto)) {
         return await this.getById(id);
       }
       return null;
@@ -86,7 +88,7 @@ class Foto extends Modelo {
    */
   async delete(id) {
     try {
-      return await super.delete('fotos', id);
+      return await super.delete(this.#nameTable, id);
     } catch (error) {
       throw new Error(`Error al eliminar la foto con ID ${id}: ${error.message}`);
     }

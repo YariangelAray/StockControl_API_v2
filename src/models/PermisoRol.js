@@ -2,6 +2,9 @@ import connection from '../utils/db.js';
 import Modelo from './Modelo.js';
 
 class PermisoRol extends Modelo {
+
+  #nameTable = 'permisos_roles';
+
   /**
    * Obtiene todas las relaciones permiso-rol de la base de datos
    * @returns {Promise<Array>} Lista de todas las relaciones permiso-rol
@@ -9,7 +12,7 @@ class PermisoRol extends Modelo {
    */
   async getAll() {
     try {
-      return await super.getAll('permisos_roles');
+      return await super.getAll(this.#nameTable);
     } catch (error) {
       throw new Error(`Error al obtener las relaciones permiso-rol: ${error.message}`);
     }
@@ -23,7 +26,7 @@ class PermisoRol extends Modelo {
    */
   async getById(id) {
     try {
-      return await super.getById('permisos_roles', id);
+      return await super.getById(this.#nameTable, id);
     } catch (error) {
       throw new Error(`Error al obtener la relación permiso-rol con ID ${id}: ${error.message}`);
     }
@@ -37,7 +40,7 @@ class PermisoRol extends Modelo {
    */
   async getAllByPermisoId(permisoId) {
     try {
-      return await super.getByField('permisos_roles', 'permiso_id', permisoId);
+      return await super.getByField(this.#nameTable, 'permiso_id', permisoId);
     } catch (error) {
       throw new Error(`Error al obtener la relaciones permiso-rol por permiso_id ${permisoId}: ${error.message}`);
     }
@@ -51,7 +54,7 @@ class PermisoRol extends Modelo {
    */
   async getAllByRolId(rolId) {
     try {
-      return await super.getByField('permisos_roles', 'rol_id', rolId);
+      return await super.getByField(this.#nameTable, 'rol_id', rolId);
     } catch (error) {
       throw new Error(`Error al obtener la relaciones permiso-rol por rol_id ${rolId}: ${error.message}`);
     }
@@ -65,7 +68,7 @@ class PermisoRol extends Modelo {
    */
   async create(permisoRol) {
     try {
-      const idCreado = await super.create('permisos_roles', permisoRol);
+      const idCreado = await super.create(this.#nameTable, permisoRol);
       if (idCreado) {
         return await this.getById(idCreado);
       }
@@ -84,7 +87,7 @@ class PermisoRol extends Modelo {
    */
   async update(id, permisoRol) {
     try {
-      if (await super.update('permisos_roles', id, permisoRol)) {
+      if (await super.update(this.#nameTable, id, permisoRol)) {
         return await this.getById(id);
       }
       return null;
@@ -101,7 +104,7 @@ class PermisoRol extends Modelo {
    */
   async delete(id) {
     try {
-      return await super.delete('permisos_roles', id);
+      return await super.delete(this.#nameTable, id);
     } catch (error) {
       throw new Error(`Error al eliminar la relacion permiso-rol con ID ${id}: ${error.message}`);
     }

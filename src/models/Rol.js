@@ -2,6 +2,9 @@ import connection from '../utils/db.js';
 import Modelo from './Modelo.js';
 
 class Rol extends Modelo {
+
+  #nameTable = 'roles';
+
   /**
    * Obtiene todos los roles de la base de datos
    * @returns {Promise<Array>} Lista de todos los roles
@@ -9,7 +12,7 @@ class Rol extends Modelo {
    */
   async getAll() {
     try {
-      return await super.getAll('roles');
+      return await super.getAll(this.#nameTable);
     } catch (error) {
       throw new Error(`Error al obtener todos los roles: ${error.message}`);
     }
@@ -23,7 +26,7 @@ class Rol extends Modelo {
    */
   async getById(id) {
     try {
-      return await super.getById('roles', id);
+      return await super.getById(this.#nameTable, id);
     } catch (error) {
       throw new Error(`Error al obtener el rol con ID ${id}: ${error.message}`);
     }
@@ -37,7 +40,7 @@ class Rol extends Modelo {
    */
   async create(rol) {
     try {
-      const idCreado = await super.create('roles', rol);
+      const idCreado = await super.create(this.#nameTable, rol);
       if (idCreado) {
         return await this.getById(idCreado);
       }
@@ -56,7 +59,7 @@ class Rol extends Modelo {
    */
   async update(id, rol) {
     try {
-      if (await super.update('roles', id, rol)) {
+      if (await super.update(this.#nameTable, id, rol)) {
         return await this.getById(id);
       }
       return null;
@@ -73,7 +76,7 @@ class Rol extends Modelo {
    */
   async delete(id) {
     try {
-      return await super.delete('roles', id);
+      return await super.delete(this.#nameTable, id);
     } catch (error) {
       throw new Error(`Error al eliminar el rol con ID ${id}: ${error.message}`);
     }

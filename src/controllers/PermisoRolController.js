@@ -1,4 +1,4 @@
-import { ResponseProvider } from "../providers/ResponseProvider.js";
+import ResponseProvider from "../providers/ResponseProvider.js";
 import PermisoRolService from "../services/PermisoRolService.js";
 
 class PermisoRolController {

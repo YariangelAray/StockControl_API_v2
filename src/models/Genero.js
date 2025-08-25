@@ -2,6 +2,8 @@ import connection from '../utils/db.js';
 import Modelo from './Modelo.js';
 
 class Genero extends Modelo {
+
+  #nameTable = 'generos';
   /**
    * Obtiene todos los generos de la base de datos
    * @returns {Promise<Array>} Lista de todos los generos
@@ -9,7 +11,7 @@ class Genero extends Modelo {
    */
   async getAll() {
     try {
-      return await super.getAll('generos');
+      return await super.getAll(this.#nameTable);
     } catch (error) {
       throw new Error(`Error al obtener todos los generos: ${error.message}`);
     }
@@ -23,7 +25,7 @@ class Genero extends Modelo {
    */
   async getById(id) {
     try {
-      return await super.getById('generos', id);
+      return await super.getById(this.#nameTable, id);
     } catch (error) {
       throw new Error(`Error al obtener el genero con ID ${id}: ${error.message}`);
     }
@@ -37,7 +39,7 @@ class Genero extends Modelo {
    */
   async create(genero) {
     try {
-      const idCreado = await super.create('generos', genero);
+      const idCreado = await super.create(this.#nameTable, genero);
       if (idCreado) {
         return await this.getById(idCreado);
       }
@@ -56,7 +58,7 @@ class Genero extends Modelo {
    */
   async update(id, genero) {
     try {
-      if (await super.update('generos', id, genero)) {
+      if (await super.update(this.#nameTable, id, genero)) {
         return await this.getById(id);
       }
       return null;
@@ -73,7 +75,7 @@ class Genero extends Modelo {
    */
   async delete(id) {
     try {
-      return await super.delete('generos', id);
+      return await super.delete(this.#nameTable, id);
     } catch (error) {
       throw new Error(`Error al eliminar el genero con ID ${id}: ${error.message}`);
     }

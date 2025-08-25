@@ -2,6 +2,9 @@ import connection from '../utils/db.js';
 import Modelo from './Modelo.js';
 
 class Estado extends Modelo {
+
+  #nameTable = 'estados';
+
   /**
    * Obtiene todos los estados de la base de datos
    * @returns {Promise<Array>} Lista de todos los estados
@@ -9,7 +12,7 @@ class Estado extends Modelo {
    */
   async getAll() {
     try {
-      return await super.getAll('estados');
+      return await super.getAll(this.#nameTable);
     } catch (error) {
       throw new Error(`Error al obtener todos los estados: ${error.message}`);
     }
@@ -23,7 +26,7 @@ class Estado extends Modelo {
    */
   async getById(id) {
     try {
-      return await super.getById('estados', id);
+      return await super.getById(this.#nameTable, id);
     } catch (error) {
       throw new Error(`Error al obtener el estado con ID ${id}: ${error.message}`);
     }
@@ -37,7 +40,7 @@ class Estado extends Modelo {
    */
   async create(estado) {
     try {
-      const idCreado = await super.create('estados', estado);
+      const idCreado = await super.create(this.#nameTable, estado);
       if (idCreado) {
         return await this.getById(idCreado);
       }
@@ -56,7 +59,7 @@ class Estado extends Modelo {
    */
   async update(id, estado) {
     try {
-      if (await super.update('estados', id, estado)) {
+      if (await super.update(this.#nameTable, id, estado)) {
         return await this.getById(id);
       }
       return null;
@@ -73,7 +76,7 @@ class Estado extends Modelo {
    */
   async delete(id) {
     try {
-      return await super.delete('estados', id);
+      return await super.delete(this.#nameTable, id);
     } catch (error) {
       throw new Error(`Error al eliminar el estado con ID ${id}: ${error.message}`);
     }

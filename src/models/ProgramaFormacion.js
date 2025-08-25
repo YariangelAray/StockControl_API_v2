@@ -2,6 +2,9 @@ import connection from '../utils/db.js';
 import Modelo from './Modelo.js';
 
 class ProgramaFormacion extends Modelo {
+
+  #nameTable = 'programas_formacion';
+
   /**
    * Obtiene todos los programas de formación de la base de datos
    * @returns {Promise<Array>} Lista de todos los programas de formación
@@ -9,7 +12,7 @@ class ProgramaFormacion extends Modelo {
    */
   async getAll() {
     try {
-      return await super.getAll('programas_formacion');
+      return await super.getAll(this.#nameTable);
     } catch (error) {
       throw new Error(`Error al obtener todos los programas de formación: ${error.message}`);
     }
@@ -23,7 +26,7 @@ class ProgramaFormacion extends Modelo {
    */
   async getById(id) {
     try {
-      return await super.getById('programas_formacion', id);
+      return await super.getById(this.#nameTable, id);
     } catch (error) {
       throw new Error(`Error al obtener el programa de formación con ID ${id}: ${error.message}`);
     }
@@ -37,7 +40,7 @@ class ProgramaFormacion extends Modelo {
    */
   async create(programaFormacion) {
     try {
-      const idCreado = await super.create('programas_formacion', programaFormacion);
+      const idCreado = await super.create(this.#nameTable, programaFormacion);
       if (idCreado) {
         return await this.getById(idCreado);
       }
@@ -56,7 +59,7 @@ class ProgramaFormacion extends Modelo {
    */
   async update(id, programaFormacion) {
     try {
-      if (await super.update('programas_formacion', id, programaFormacion)) {
+      if (await super.update(this.#nameTable, id, programaFormacion)) {
         return await this.getById(id);
       }
       return null;
@@ -73,7 +76,7 @@ class ProgramaFormacion extends Modelo {
    */
   async delete(id) {
     try {
-      return await super.delete('programas_formacion', id);
+      return await super.delete(this.#nameTable, id);
     } catch (error) {
       throw new Error(`Error al eliminar el programa de formación con ID ${id}: ${error.message}`);
     }

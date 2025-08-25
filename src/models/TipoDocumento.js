@@ -2,6 +2,9 @@ import connection from '../utils/db.js';
 import Modelo from './Modelo.js';
 
 class TipoDocumento extends Modelo {
+
+  #nameTable = 'tipos_documento';
+
   /**
    * Obtiene todos los tipos de documentos de la base de datos
    * @returns {Promise<Array>} Lista de todos los tipos de documentos
@@ -9,7 +12,7 @@ class TipoDocumento extends Modelo {
    */
   async getAll() {
     try {
-      return await super.getAll('tipos_documento');
+      return await super.getAll(this.#nameTable);
     } catch (error) {
       throw new Error(`Error al obtener todos los tipos de documentos: ${error.message}`);
     }
@@ -23,7 +26,7 @@ class TipoDocumento extends Modelo {
    */
   async getById(id) {
     try {
-      return await super.getById('tipos_documento', id);
+      return await super.getById(this.#nameTable, id);
     } catch (error) {
       throw new Error(`Error al obtener el tipo de documento con ID ${id}: ${error.message}`);
     }
@@ -37,7 +40,7 @@ class TipoDocumento extends Modelo {
    */
   async create(tipoDocumento) {
     try {
-      const idCreado = await super.create('tipos_documento', tipoDocumento);
+      const idCreado = await super.create(this.#nameTable, tipoDocumento);
       if (idCreado) {
         return await this.getById(idCreado);
       }
@@ -56,7 +59,7 @@ class TipoDocumento extends Modelo {
    */
   async update(id, tipoDocumento) {
     try {
-      if (await super.update('tipos_documento', id, tipoDocumento)) {
+      if (await super.update(this.#nameTable, id, tipoDocumento)) {
         return await this.getById(id);
       }
       return null;
@@ -73,7 +76,7 @@ class TipoDocumento extends Modelo {
    */
   async delete(id) {
     try {
-      return await super.delete('tipos_documento', id);
+      return await super.delete(this.#nameTable, id);
     } catch (error) {
       throw new Error(`Error al eliminar el tipo de documento con ID ${id}: ${error.message}`);
     }

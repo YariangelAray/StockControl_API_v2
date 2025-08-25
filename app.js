@@ -4,7 +4,7 @@ import cors from "cors"; // Importa cors para habilitar CORS en la aplicación
 import cookieParser from "cookie-parser"; // Importa cookie-parser para manejar cookies
 
 import rutas from './src/routes/index.js'; // Importa las rutas definidas en el archivo de rutas
-import { ResponseProvider } from "./src/providers/ResponseProvider.js"; // Importa el proveedor de respuestas para manejar respuestas de la API
+import ResponseProvider from "./src/providers/ResponseProvider.js"; // Importa el proveedor de respuestas para manejar respuestas de la API
 
 dotenv.config(); // Carga las variables de entorno desde el archivo .env
 

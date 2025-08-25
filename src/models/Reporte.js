@@ -2,6 +2,9 @@ import connection from '../utils/db.js';
 import Modelo from './Modelo.js';
 
 class Reporte extends Modelo {
+
+    #nameTable = 'reportes';
+
     /**
      * Obtiene todos los reportes de la base de datos
      * @returns {Promise<Array>} Lista de todos los reportes
@@ -9,7 +12,7 @@ class Reporte extends Modelo {
      */
     async getAll() {
         try {
-            return await super.getAll('reportes');
+            return await super.getAll(this.#nameTable);
         } catch (error) {
             throw new Error(`Error al obtener todos los reportes: ${error.message}`);
         }
@@ -23,7 +26,7 @@ class Reporte extends Modelo {
      */
     async getById(id) {
         try {
-            return await super.getById('reportes', id);
+            return await super.getById(this.#nameTable, id);
         } catch (error) {
             throw new Error(`Error al obtener el reporte con ID ${id}: ${error.message}`);
         }
@@ -37,7 +40,7 @@ class Reporte extends Modelo {
      */
     async getAllByUsuarioId(usuarioId) {
         try {
-            return await super.getByField('reportes', 'usuario_id', usuarioId);
+            return await super.getByField(this.#nameTable, 'usuario_id', usuarioId);
         } catch (error) {
             throw new Error(`Error al obtener reportes por usuario_id ${usuarioId}: ${error.message}`);
         }
@@ -51,7 +54,7 @@ class Reporte extends Modelo {
      */
     async getAllByElementoId(elementoId) {
         try {
-            return await super.getByField('reportes', 'elemento_id', elementoId);
+            return await super.getByField(this.#nameTable, 'elemento_id', elementoId);
         } catch (error) {
             throw new Error(`Error al obtener reportes por elemento_id ${elementoId}: ${error.message}`);
         }
@@ -83,7 +86,7 @@ class Reporte extends Modelo {
      */
     async create(reporte) {
         try {
-            const idCreado = await super.create('reportes', reporte);
+            const idCreado = await super.create(this.#nameTable, reporte);
             if (idCreado) {
                 return await this.getById(idCreado);
             }
@@ -102,7 +105,7 @@ class Reporte extends Modelo {
      */
     async update(id, reporte) {
         try {
-            if (await super.update('reportes', id, reporte)) {
+            if (await super.update(this.#nameTable, id, reporte)) {
                 return await this.getById(id);
             }
             return null;
@@ -119,7 +122,7 @@ class Reporte extends Modelo {
      */
     async delete(id) {
         try {
-            return await super.delete('reportes', id);
+            return await super.delete(this.#nameTable, id);
         } catch (error) {
             throw new Error(`Error al eliminar el reporte con ID ${id}: ${error.message}`);
         }

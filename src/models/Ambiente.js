@@ -2,6 +2,9 @@ import connection from '../utils/db.js';
 import Modelo from './Modelo.js';
 
 class Ambiente extends Modelo {
+  
+  #nameTable = 'ambientes';
+
   /**
    * Obtiene todos los ambientes de la base de datos
    * @returns {Promise<Array>} Lista de todos los ambientes
@@ -9,7 +12,7 @@ class Ambiente extends Modelo {
    */
   async getAll() {
     try {
-      return await super.getAll('ambientes');
+      return await super.getAll(this.#nameTable);
     } catch (error) {
       throw new Error(`Error al obtener todos los ambientes: ${error.message}`);
     }
@@ -23,7 +26,7 @@ class Ambiente extends Modelo {
    */
   async getById(id) {
     try {
-      return await super.getById('ambientes', id);
+      return await super.getById(this.#nameTable, id);
     } catch (error) {
       throw new Error(`Error al obtener el ambiente con ID ${id}: ${error.message}`);
     }
@@ -37,7 +40,7 @@ class Ambiente extends Modelo {
    */
   async getAllByCentroId(centroId) {
     try {
-      return await super.getByField('ambientes', 'centro_id', centroId);
+      return await super.getByField(this.#nameTable, 'centro_id', centroId);
     } catch (error) {
       throw new Error(`Error al obtener ambientes por centro_id ${centroId}: ${error.message}`);
     }
@@ -51,7 +54,7 @@ class Ambiente extends Modelo {
    */
   async create(ambiente) {
     try {
-      const idCreado = await super.create('ambientes', ambiente);
+      const idCreado = await super.create(this.#nameTable, ambiente);
       if (idCreado) {
         console.log(idCreado)
         return await this.getById(idCreado);
@@ -71,7 +74,7 @@ class Ambiente extends Modelo {
    */
   async update(id, ambiente) {
     try {
-      if (await super.update('ambientes', id, ambiente)) {
+      if (await super.update(this.#nameTable, id, ambiente)) {
         return await this.getById(id);
       }
       return null;
@@ -88,7 +91,7 @@ class Ambiente extends Modelo {
    */
   async delete(id) {
     try {
-      return await super.delete('ambientes', id);
+      return await super.delete(this.#nameTable, id);
     } catch (error) {
       throw new Error(`Error al eliminar el ambiente con ID ${id}: ${error.message}`);
     }

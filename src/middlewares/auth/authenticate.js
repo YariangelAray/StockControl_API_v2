@@ -1,5 +1,5 @@
 import dotenv from 'dotenv';
-import { ResponseProvider } from "../../providers/ResponseProvider.js";
+import ResponseProvider from "../../providers/ResponseProvider.js";
 import jwt from 'jsonwebtoken';
 
 dotenv.config();

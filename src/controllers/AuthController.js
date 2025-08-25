@@ -1,5 +1,5 @@
 // Importa el proveedor de respuestas estandarizadas para manejar respuestas HTTP
-import { ResponseProvider } from "../providers/ResponseProvider.js";
+import ResponseProvider from "../providers/ResponseProvider.js";
 
 // Importa el servicio de autenticación que contiene la lógica de negocio
 import AuthService from "../services/AuthService.js";

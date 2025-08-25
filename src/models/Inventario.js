@@ -2,6 +2,8 @@ import connection from '../utils/db.js';
 import Modelo from './Modelo.js';
 
 class Inventario extends Modelo {
+
+  #nameTable = 'inventarios';
   /**
    * Obtiene todos los inventarios de la base de datos
    * @returns {Promise<Array>} Lista de todos los inventarios
@@ -9,7 +11,7 @@ class Inventario extends Modelo {
    */
   async getAll() {
     try {
-      return await super.getAll('inventarios');
+      return await super.getAll(this.#nameTable);
     } catch (error) {
       throw new Error(`Error al obtener todos los inventarios: ${error.message}`);
     }
@@ -23,7 +25,7 @@ class Inventario extends Modelo {
    */
   async getById(id) {
     try {
-      return await super.getById('inventarios', id);
+      return await super.getById(this.#nameTable, id);
     } catch (error) {
       throw new Error(`Error al obtener el inventario con ID ${id}: ${error.message}`);
     }
@@ -37,7 +39,7 @@ class Inventario extends Modelo {
    */
   async getByAllUsuarioAdminId(usuarioAdminId) {
     try {
-      return await super.getByField('inventarios', 'usuario_admin_id', usuarioAdminId);
+      return await super.getByField(this.#nameTable, 'usuario_admin_id', usuarioAdminId);
     } catch (error) {
       throw new Error(`Error al obtener inventarios por usuario_admin_id ${usuarioAdminId}: ${error.message}`);
     }
@@ -69,7 +71,7 @@ class Inventario extends Modelo {
    */
   async create(inventario) {
     try {
-      const idCreado = await super.create('inventarios', inventario);
+      const idCreado = await super.create(this.#nameTable, inventario);
       if (idCreado) {
         return await this.getById(idCreado);
       }
@@ -88,7 +90,7 @@ class Inventario extends Modelo {
    */
   async update(id, inventario) {
     try {
-      if (await super.update('inventarios', id, inventario)) {
+      if (await super.update(this.#nameTable, id, inventario)) {
         return await this.getById(id);
       }
       return null;
@@ -105,7 +107,7 @@ class Inventario extends Modelo {
    */
   async delete(id) {
     try {
-      return await super.delete('inventarios', id);
+      return await super.delete(this.#nameTable, id);
     } catch (error) {
       throw new Error(`Error al eliminar el inventario con ID ${id}: ${error.message}`);
     }

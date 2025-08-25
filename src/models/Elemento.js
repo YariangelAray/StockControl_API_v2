@@ -2,6 +2,8 @@ import Modelo from './Modelo.js';
 
 class Elemento extends Modelo {
 
+  #nameTable = 'elementos';
+
   /**
    * Método para obtener los elementos almacenados en la base de datos
    *
@@ -9,7 +11,7 @@ class Elemento extends Modelo {
    */
   async getAll() {
     try {
-      return await super.getAll('elementos');
+      return await super.getAll(this.#nameTable);
     } catch (error) {
       throw new Error(`Error al obtener todos los elementos: ${error.message}`);
     }
@@ -23,7 +25,7 @@ class Elemento extends Modelo {
    */
   async getById(id) {
     try {
-      return await super.getById('elementos', id);
+      return await super.getById(this.#nameTable, id);
     } catch (error) {
       throw new Error(`Error al obtener el elemento con ID ${id}: ${error.message}`);
     }
@@ -36,7 +38,7 @@ class Elemento extends Modelo {
    */
   async getByPlaca(placa) {
     try {
-      return (await super.getByField('elementos', 'placa', placa))[0];
+      return (await super.getByField(this.#nameTable, 'placa', placa))[0];
     } catch (error) {
       throw new Error(`Error al obtener el elemento con placa ${placa}: ${error.message}`);
     }
@@ -49,7 +51,7 @@ class Elemento extends Modelo {
    */
   async getBySerial(serial) {
     try {
-      return (await super.getByField('elementos', 'serial', serial))[0];
+      return (await super.getByField(this.#nameTable, 'serial', serial))[0];
     } catch (error) {
       throw new Error(`Error al obtener el elemento con serial ${serial}: ${error.message}`);
     }
@@ -63,7 +65,7 @@ class Elemento extends Modelo {
    */
   async getAllByTipoElementoId(tipoElementoId) {
     try {
-      return await this.getByField('elementos', 'tipo_elemento_id', tipoElementoId);
+      return await this.getByField(this.#nameTable, 'tipo_elemento_id', tipoElementoId);
     } catch (error) {
       throw new Error(`Error al obtener elementos por tipo_elemento_id ${tipoElementoId}: ${error.message}`);
     }
@@ -77,7 +79,7 @@ class Elemento extends Modelo {
    */
   async getAllByEstadoId(estadoId) {
     try {
-      return await this.getByField('elementos', 'estado_id', estadoId);
+      return await this.getByField(this.#nameTable, 'estado_id', estadoId);
     } catch (error) {
       throw new Error(`Error al obtener elementos por estado_id ${estadoId}: ${error.message}`);
     }
@@ -91,7 +93,7 @@ class Elemento extends Modelo {
    */
   async getAllByAmbienteId(ambienteId) {
     try {
-      return await this.getByField('elementos', 'ambiente_id', ambienteId);
+      return await this.getByField(this.#nameTable, 'ambiente_id', ambienteId);
     } catch (error) {
       throw new Error(`Error al obtener elementos por ambiente_id ${ambienteId}: ${error.message}`);
     }
@@ -105,7 +107,7 @@ class Elemento extends Modelo {
    */
   async getAllByInventarioId(inventarioId) {
     try {
-      return await this.getByField('elementos', 'inventario_id', inventarioId);
+      return await this.getByField(this.#nameTable, 'inventario_id', inventarioId);
     } catch (error) {
       throw new Error(`Error al obtener elementos por inventario_id ${inventarioId}: ${error.message}`);
     }
@@ -118,7 +120,7 @@ class Elemento extends Modelo {
    */
   async create(elemento) {
     try {
-      const idCreado = await super.create('elementos', elemento);
+      const idCreado = await super.create(this.#nameTable, elemento);
       if (idCreado) {
         return await this.getById(idCreado);
       }
@@ -136,7 +138,7 @@ class Elemento extends Modelo {
    */
   async update(id, elemento) {
     try {
-      if (await super.update('elementos', id, elemento)) {
+      if (await super.update(this.#nameTable, id, elemento)) {
         return await this.getById(id);
       }
       return null;
@@ -152,7 +154,7 @@ class Elemento extends Modelo {
    */
   async delete(id) {
     try {
-      return await super.delete('elementos', id);
+      return await super.delete(this.#nameTable, id);
     } catch (error) {
       throw new Error(`Error al eliminar el elemento con ID ${id}: ${error.message}`);
     }

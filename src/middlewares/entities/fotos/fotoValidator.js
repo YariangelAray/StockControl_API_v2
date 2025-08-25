@@ -1,4 +1,4 @@
-import { ResponseProvider } from "../../../providers/ResponseProvider.js";
+import ResponseProvider from "../../../providers/ResponseProvider.js";
 
 /**
  * Middleware para validar que se haya enviado una foto (archivo)

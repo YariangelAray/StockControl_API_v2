@@ -1,4 +1,4 @@
-import { ResponseProvider } from "../providers/ResponseProvider.js";
+import ResponseProvider from "../providers/ResponseProvider.js";
 import ProgramaFormacionService from "../services/ProgramaFormacionService.js";
 
 class ProgramaFormacionController {

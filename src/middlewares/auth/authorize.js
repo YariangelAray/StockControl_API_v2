@@ -1,4 +1,4 @@
-import { ResponseProvider } from "../../providers/ResponseProvider";
+import ResponseProvider from "../../providers/ResponseProvider.js";
 
 /**
  * Middleware para verificar si el usuario tiene los permisos necesarios para acceder a una ruta.
