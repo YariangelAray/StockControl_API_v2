@@ -13,7 +13,7 @@ import { ResponseProvider } from "../../providers/ResponseProvider.js";
  */
 export const validateFields = (campos) => {
   return (req, res, next) => {
-    const errors = []; // Array para almacenar errores de validación
+    const errors = []; // Array para almacenar errores de validación    
     const body = req.body || {}; // Cuerpo de la solicitud, se asegura de que no sea undefined
 
     // Itera sobre cada campo definido en la validación

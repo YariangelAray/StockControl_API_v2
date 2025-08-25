@@ -90,7 +90,7 @@ class UsuarioService {
       // Retornamos el usuario creado
       return {
         error: false, code: 201, message: "Usuario creado correctamente",
-        data: await this.#configurarUsuario(usuarioCreado)
+        data: usuarioCreado
       };
     } catch (error) {
       // Retornamos un error en caso de excepción

@@ -13,7 +13,7 @@
  * ResponseProvider.error(res, "Usuario no encontrado", 404);
  */
 export class ResponseProvider {
-  
+
   /**
    * Envía una respuesta de éxito estandarizada al cliente.
    * 
@@ -62,6 +62,33 @@ export class ResponseProvider {
       code: status,                 // Código de estado HTTP para referencia
       message,                      // Mensaje descriptivo del error
       errors: errors                // Detalles adicionales del error (opcional)
+    });
+  }
+
+  /**
+ * Envía una respuesta de error específica para problemas de autenticación con tokens.
+ * 
+ * Este método genera una respuesta JSON estandarizada para errores relacionados con tokens,
+ * como expiración, formato inválido o manipulación. Incluye un indicador de error, código de estado,
+ * mensaje descriptivo y detalles específicos del error de token.
+ * 
+ * @static
+ * @param {Object} res - Objeto de respuesta de Express.js.
+ * @param {string} [message="Error de autenticación de token"] - Mensaje descriptivo del error de token.
+ * @param {number} [status=401] - Código de estado HTTP (401 para errores de autenticación).
+ * @param {string|Object} [authError] - Detalle específico del error de token (ejemplo: "Token expirado").
+ * @returns {Object} Respuesta HTTP con formato JSON estandarizado para errores de token.
+ * 
+ * @example
+ * // Uso básico
+ * ResponseProvider.authError(res, "Token inválido o expirado", 401, "El token ha expirado");
+ */
+  static authError(res, message = "Error de autenticación de token", status = 401, authError) {
+    return res.status(status).json({
+      success: false,               // Indica que la operación falló
+      code: status,                 // Código de estado HTTP para referencia
+      message,                      // Mensaje descriptivo del error de token
+      authError                    // Detalle específico del error de token (opcional)
     });
   }
 }
