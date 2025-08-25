@@ -12,27 +12,50 @@ import { ResponseProvider } from "../../providers/ResponseProvider";
  * @example
  * router.post("/usuarios", authenticate, authorize("usuario.crear"), controlador);
  */
-function authorize(...permisosRequeridos) {
-  return (req, res, next) => {
-    // Extrae los permisos del usuario desde el token decodificado
-    const permisosUsuario = req.user.permisos || [];
+const authorize = (...permisosRequeridos) => {
+    return (req, res, next) => {
+        // Extrae los permisos del usuario desde el token decodificado
+        const permisosUsuario = req.user.permisos || [];
 
-    // Verifica que el usuario tenga todos los permisos requeridos
-    const tienePermiso = permisosRequeridos.every(p => permisosUsuario.includes(p));
+        // Verifica que el usuario tenga todos los permisos requeridos
+        // Verifica si el usuario tiene todos los permisos requeridos
+        const tienePermiso = permisosRequeridos.every(requerido => {
 
-    // Si no tiene los permisos, se bloquea el acceso
-    if (!tienePermiso) {
-      return ResponseProvider.authError(
-        res,
-        "No tienes permiso para realizar esta acción",
-        403,
-        "PERMISSION_DENIED"
-      );
-    }
+            // Para cada permiso requerido, buscamos si el usuario tiene algún permiso que lo cubra
+            return permisosUsuario.some(asignado => {
 
-    // Si todo está bien, continúa con la siguiente función
-    next();
-  };
+                // ✅ Coincidencia exacta: el permiso asignado es igual al requerido
+                if (asignado === requerido) return true;
+
+                // ✅ Coincidencia con comodín: por ejemplo, "tabla.*" cubre "tabla.crear", "tabla.editar", etc.
+                if (asignado.endsWith(".*")) {
+                    // Extraemos la parte base del permiso, por ejemplo "tabla" desde "tabla.*"
+                    const base = asignado.replace(".*", "");
+
+                    // Verificamos si el permiso requerido comienza con esa base seguida de un punto
+                    // Ejemplo: "tabla.crear".startsWith("tabla.") → true
+                    return requerido.startsWith(base + ".");
+                }
+
+                // Si no hay coincidencia exacta ni por comodín, este permiso asignado no cubre el requerido
+                return false;
+            });
+        });
+
+
+        // Si no tiene los permisos, se bloquea el acceso
+        if (!tienePermiso) {
+            return ResponseProvider.authError(
+                res,
+                "No tienes permiso para realizar esta acción",
+                403,
+                "PERMISSION_DENIED"
+            );
+        }
+
+        // Si todo está bien, continúa con la siguiente función
+        next();
+    };
 }
 
 export default authorize;

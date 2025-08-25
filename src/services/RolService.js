@@ -9,6 +9,7 @@ class RolService {
   static objPermiso = new Permiso();
   static objPermisoRol = new PermisoRol();
   static objRolUsuario = new RolUsuario();
+  static rolSuperadministrador = 1;
 
   static async getAllRoles() {
     try {
@@ -107,6 +108,10 @@ class RolService {
       // Validamos si el rol existe
       if (!rol) {
         return { error: true, code: 404, message: "Rol no encontrado" };
+      }
+
+      if (rol.id == this.rolSuperadministrador) {
+        return { error: true, code: 403, message: "No se puede eliminar el rol del superadministrador" };
       }
 
       const rolesPermisoRol = await this.objPermisoRol.getAllByRolId(id);

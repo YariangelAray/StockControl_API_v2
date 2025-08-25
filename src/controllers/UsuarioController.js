@@ -112,12 +112,65 @@ class UsuarioController {
     }
   };
 
-  // Actualizar la contraseña de un usuario
-  static updateContrasena = async (req, res) => {
-    const { id } = req.params;
+  // Obtener el propio usuario
+  static getUsuarioMe = async (req, res) => {    
+    const { id } = req.user;
+    try {
+      // Llamamos al servicio para obtener el usuario por su ID
+      const response = await UsuarioService.getUsuarioById(id);
+      // Validamos si no hay usuario
+      if (response.error) {
+        // Llamamos el provider para centralizar los mensajes de respuesta
+        return ResponseProvider.error(res, response.message, response.code);
+      }
+      return ResponseProvider.success(res, response.data, response.message, response.code);
+    } catch (error) {
+      // Llamamos el provider para centralizar los mensajes de respuesta
+      return ResponseProvider.error(res, "Error interno en el servidor", 500);
+    }
+  };
+
+  // Actualizar el propio usuario
+  static updateUsuarioMe = async (req, res) => {
+    const { id } = req.user;
+    const usuario = req.body;
+    try {
+      const response = await UsuarioService.updateUsuario(id, usuario);
+      // Validamos si no hay usuarios
+      if (response.error) {
+        // Llamamos el provider para centralizar los mensajes de respuesta
+        return ResponseProvider.error(res, response.message, response.code);
+      }
+      return ResponseProvider.success(res, response.data, response.message, response.code);
+
+    } catch (error) {
+      return ResponseProvider.error(res, "Error interno en el servidor", 500);
+    }
+  };
+
+  // Actualizar la contraseña del propio usuario
+  static updateContrasenaMe = async (req, res) => {
+    const { id } = req.user;
     const contrasenas = req.body;
     try {
       const response = await UsuarioService.updateContrasena(id, contrasenas);
+      // Validamos si no hay usuarios
+      if (response.error) {
+        // Llamamos el provider para centralizar los mensajes de respuesta
+        return ResponseProvider.error(res, response.message, response.code);
+      }
+      return ResponseProvider.success(res, response.data, response.message, response.code);
+
+    } catch (error) {
+      return ResponseProvider.error(res, "Error interno en el servidor", 500);
+    }
+  };
+  // Actualizar la contraseña del propio usuario
+  static updateDesactivarMe = async (req, res) => {
+    const { id } = req.user;
+    const { activo } = req.body;
+    try {
+      const response = await UsuarioService.updateUsuario(id, { activo });
       // Validamos si no hay usuarios
       if (response.error) {
         // Llamamos el provider para centralizar los mensajes de respuesta

@@ -113,6 +113,23 @@ class InventarioController {
     }
   };
 
+  // Obtener todos los inventarios propios del usuario
+  static getInventariosMe = async (req, res) => {
+    const { id } = req.user;
+    try {
+      const response = await InventarioService.getInventariosByUsuarioId(id);
+      // Validamos si no hay inventarios
+      if (response.error) {
+        // Llamamos el provider para centralizar los mensajes de respuesta
+        return ResponseProvider.error(res, response.message, response.code);
+      }
+      return ResponseProvider.success(res, response.data, response.message, response.code);
+
+    } catch (error) {
+      return ResponseProvider.error(res, "Error interno en el servidor", 500);
+    }
+  };
+
   // Obtener todos los ambientes cubiertos por el inventario
   static getAmbientesCubiertos = async (req, res) => {
     const { id } = req.params;    

@@ -12,7 +12,7 @@
  * // Para enviar una respuesta de error
  * ResponseProvider.error(res, "Usuario no encontrado", 404);
  */
-export class ResponseProvider {
+export default class ResponseProvider {
 
   /**
    * Envía una respuesta de éxito estandarizada al cliente.
@@ -81,7 +81,7 @@ export class ResponseProvider {
  * 
  * @example
  * // Uso básico
- * ResponseProvider.authError(res, "Token inválido o expirado", 401, "El token ha expirado");
+ * ResponseProvider.authError(res, "Token inválido o expirado", 401, "TOKEN_EXPIRED");
  */
   static authError(res, message = "Error de autenticación de token", status = 401, authError) {
     return res.status(status).json({

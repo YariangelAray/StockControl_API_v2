@@ -5,6 +5,9 @@ import { validarInventario, validarInventarioParcial } from "../middlewares/enti
 
 const router = express.Router();
 
+// Obtener inventarios propios
+router.get("/me", InventarioController.getInventariosMe);
+
 // Obtener todos los inventarios
 router.get("/", InventarioController.getAllInventarios);
 

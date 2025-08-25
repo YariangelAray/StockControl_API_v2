@@ -58,6 +58,14 @@ export const validateFields = (campos) => {
           continue; // Continúa con el siguiente campo
         }
       }
+
+      // Valida que el campo sea un booleano
+      if (type === "boolean" && value !== undefined) {
+        if (!(value === true || value === false || value === "true" || value === "false" || value === 1 || value === 0 || value === "1" || value === "0")) {
+          errors.push({ campo: name, message: `El campo '${name}' debe ser un valor booleano (true/false, 1/0).` });
+          continue; // Continúa con el siguiente campo
+        }
+      }
     }
 
     // Si hay errores de validación, envía una respuesta de error

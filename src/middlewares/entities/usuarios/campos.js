@@ -9,6 +9,7 @@ export const campos = [
   { name: "correo", required: true, minLength: 6, maxLength: 100, type: "string" },
   { name: "ficha_id", required: false, minLength: 1, maxLength: 11, type: "number" },
   { name: "contrasena", required: false, minLength: 8, maxLength: 30, type: "string" },  
+  { name: "activo", required: false, minLength: 1, maxLength: 5, type: "boolean" },
 ];
 
 export const camposLogin = [

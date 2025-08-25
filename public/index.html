@@ -28,6 +28,22 @@
     <p>Explora los <a href="/stockcontrol_api">endpoints</a> disponibles para interactuar con el sistema.</p>
   </section>
 
+  <section>
+    <h2>🔐 Autenticación y permisos</h2>
+    <p>
+      El acceso a los endpoints protegidos requiere haber iniciado sesión.<br>
+      El backend gestiona la sesión mediante un <strong>token JWT</strong>, enviado como <code>cookie HttpOnly</code> en
+      la respuesta.<br>
+      La validación de acceso y permisos se realiza automáticamente en cada petición.
+    </p>
+    <ul>
+      <li>🍪 <strong>Autenticación:</strong> El token se almacena en una cookie segura, no accesible desde JavaScript.
+        Se verifica en cada solicitud mediante middlewares.</li>
+      <li>🛡️ <strong>Permisos:</strong> Los endpoints protegidos requieren permisos específicos según el tipo de acción
+        y el rol del usuario.</li>
+    </ul>
+  </section>
+
   <footer>
     <p>Desarrollado por <strong>Yariangel Aray</strong> — Backend con <code>Node.js</code></p>
   </footer>
