@@ -7,9 +7,9 @@ INSERT INTO permisos (nombre, descripcion) VALUES
 ('usuario.update', 'Modificar información de usuarios'), -- 3
 ('usuario.delete', 'Eliminar usuarios del sistema'), -- 4
 
-('user.view-own', 'Ver su propio perfil de usuario'), -- 5
-('user.update-own', 'Actualizar su propio perfil de usuario'), -- 6
-('user.disable-own', 'Solicitar la desactivación de su propia cuenta'), -- 7
+('usuario.view-own', 'Ver su propio perfil de usuario'), -- 5
+('usuario.update-own', 'Actualizar su propio perfil de usuario'), -- 6
+('usuario.disable-own', 'Solicitar la desactivación de su propia cuenta'), -- 7
 
 ('usuario.view-role', 'Consultar los roles asignados a usuarios'), -- 8
 ('usuario.assign-role', 'Asignar roles a usuarios'), -- 9
@@ -148,7 +148,10 @@ INSERT INTO permisos (nombre, descripcion) VALUES
 -- CODIGOS ACCESO
 ('access-code.create', 'Crear códigos de acceso'), -- 93
 ('access-code.view', 'Ver la lista de códigos de acceso'), -- 94
-('access-code.invalidate', 'Invalidar códigos de acceso') -- 95
+('access-code.invalidate', 'Invalidar códigos de acceso'), -- 95
+('ambiente.view-card', 'Ver ambientes en cards'),
+('superadmin.access-home', 'Ver ambientes en cards'), -- Permiso para en el front mostrar el home del superadmin
+
 ;
 
 INSERT INTO permisos_roles (permiso_id, rol_id) VALUES
@@ -212,6 +215,7 @@ INSERT INTO permisos_roles (permiso_id, rol_id) VALUES
 (81,2),
 (91,2),
 (92,2),
+(96,2),
 
 -- CORRIENTE
 

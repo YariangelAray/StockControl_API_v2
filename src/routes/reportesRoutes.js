@@ -10,7 +10,7 @@ const router = express.Router();
 // Obtener todos los reportes de un inventario propio especifico
 router.get("inventario/me/:inventarioId", authenticate, authorize('reporte.view-inventory-own'), ReporteController.getReportesByInventarioIdMe);
 
-// Obtener todos los reportes
+// Obtener todos los reportes del usuario
 router.get("/me", authenticate, authorize('reporte.view-own'), ReporteController.getAllReportesMe);
 
 // Obtener todos los reportes
