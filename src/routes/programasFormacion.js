@@ -8,10 +8,10 @@ import authorize from "../middlewares/auth/authorize.js";
 const router = express.Router();
 
 // Obtener todos los programas de formación
-router.get("/", authenticate, authorize('programa-formacion.view'), ProgramaFormacionController.getAllProgramas);
+router.get("/", ProgramaFormacionController.getAllProgramas);
 
 // Obtener un programa de formación por ID
-router.get("/:id", authenticate, authorize('programa-formacion.view'), ProgramaFormacionController.getProgramaFormacionById);
+router.get("/:id", ProgramaFormacionController.getProgramaFormacionById);
 
 // Crear un nuevo programa de formación
 router.post("/",  authenticate, authorize('programa-formacion.create'), validarPrograma, ProgramaFormacionController.createProgramaFormacion);

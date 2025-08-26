@@ -8,10 +8,10 @@ import authorize from "../middlewares/auth/authorize.js";
 const router = express.Router();
 
 // Obtener todos los tipos de documentos
-router.get("/", authenticate, authorize('tipo-documento.view'), TipoDocumentoController.getAllTiposDocumentos);
+router.get("/", TipoDocumentoController.getAllTiposDocumentos);
 
 // Obtener un tipo de documento por ID
-router.get("/:id", authenticate, authorize('tipo-documento.view'), TipoDocumentoController.getTipoDocumentoById);
+router.get("/:id", TipoDocumentoController.getTipoDocumentoById);
 
 // Crear un nuevo tipo de documento
 router.post("/", authenticate, authorize('tipo-documento.create'), validarTipoDocumento, TipoDocumentoController.createTipoDocumento);

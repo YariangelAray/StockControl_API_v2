@@ -8,10 +8,10 @@ import authorize from "../middlewares/auth/authorize.js";
 const router = express.Router();
 
 // Obtener todas las fichas
-router.get("/", authenticate, authorize('ficha.view'), FichaController.getAllFichas);
+router.get("/", FichaController.getAllFichas);
 
 // Obtener una ficha por ID
-router.get("/:id", authenticate, authorize('ficha.view'), FichaController.getFichaById);
+router.get("/:id", FichaController.getFichaById);
 
 // Crear una nueva ficha
 router.post("/", authenticate, authorize('ficha.create'), validarFicha, FichaController.createFicha);

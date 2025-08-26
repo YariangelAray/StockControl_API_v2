@@ -8,10 +8,10 @@ import authenticate from "../middlewares/auth/authenticate.js";
 const router = express.Router();
 
 // Obtener todos los estados
-router.get("/", authenticate, authorize('estado.view'), EstadoController.getAllEstados);
+router.get("/", EstadoController.getAllEstados);
 
 // Obtener un estado por ID
-router.get("/:id", authenticate, authorize('estado.view'), EstadoController.getEstadoById);
+router.get("/:id", EstadoController.getEstadoById);
 
 // Crear un nuevo estado
 router.post("/", authenticate, authorize('estado.create'), validarEstado, EstadoController.createEstado);

@@ -1,4 +1,5 @@
 INSERT INTO permisos (nombre, descripcion) VALUES
+
 -- USUARIOS
 
 ('usuario.create', 'Crear nuevos usuarios'), -- 1

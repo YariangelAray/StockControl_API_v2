@@ -8,10 +8,10 @@ import authorize from "../middlewares/auth/authorize.js";
 const router = express.Router();
 
 // Obtener todos los generos
-router.get("/", authenticate, authorize('genero.view'), GeneroController.getAllGeneros);
+router.get("/", GeneroController.getAllGeneros);
 
 // Obtener un genero por ID
-router.get("/:id", authenticate, authorize('genero.view'), GeneroController.getGeneroById);
+router.get("/:id", GeneroController.getGeneroById);
 
 // Crear un nuevo genero
 router.post("/", authenticate, authorize('genero.create'), validarGenero, GeneroController.createGenero);

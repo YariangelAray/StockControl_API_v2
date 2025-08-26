@@ -8,10 +8,10 @@ import authenticate from "../middlewares/auth/authenticate.js";
 const router = express.Router();
 
 // Obtener todos los ambientes
-router.get("/", authenticate, authorize('ambiente.view'), AmbienteController.getAllAmbientes);
+router.get("/", AmbienteController.getAllAmbientes);
 
 // Obtener un ambiente por ID
-router.get("/:id", authenticate, authorize('ambiente.view'), AmbienteController.getAmbienteById);
+router.get("/:id", AmbienteController.getAmbienteById);
 
 // Crear un nuevo ambiente
 router.post("/", authenticate, authorize('ambiente.create'), validarAmbiente, AmbienteController.createAmbiente);

@@ -8,10 +8,10 @@ import authorize from "../middlewares/auth/authorize.js";
 const router = express.Router();
 
 // Obtener todos los centros
-router.get("/", authenticate, authorize('centro.view'), CentroController.getAllCentros);
+router.get("/", CentroController.getAllCentros);
 
 // Obtener un centro por ID
-router.get("/:id", authenticate, authorize('centro.view'), CentroController.getCentroById);
+router.get("/:id", CentroController.getCentroById);
 
 // Crear un nuevo centro
 router.post("/", authenticate, authorize('centro.create'), validarCentro, CentroController.createCentro);
