@@ -1,7 +1,7 @@
-import Permiso from "../models/Permiso";
-import PermisoRol from "../models/PermisoRol";
-import Rol from "../models/Rol";
-import RolUsuario from "../models/RolUsuario";
+import Permiso from "../models/Permiso.js";
+import PermisoRol from "../models/PermisoRol.js";
+import Rol from "../models/Rol.js";
+import RolUsuario from "../models/RolUsuario.js";
 
 // Configura los datos del usuario para incluir roles y permisos
 export const getPermisos = async (userId) => {
@@ -38,5 +38,5 @@ export const getPermisos = async (userId) => {
   );
 
   // Elimina permisos nulos y evita duplicados
-  return permisos = [...new Set(permisos.flat().filter(permiso => permiso))];
+  return [...new Set(permisos.flat().filter(permiso => permiso))];
 }

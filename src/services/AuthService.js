@@ -24,7 +24,7 @@ class AuthService {
     static refreshExpiration = process.env.REFRESH_EXPIRATION;
 
     // Umbral para decidir si se debe renovar el refresh token
-    static refreshTreshold = process.env.REFRESH_TOKEN_THRESHOLD || 24 * 60 * 60;
+    static refreshTreshold = parseInt(process.env.REFRESH_TOKEN_THRESHOLD, 10);
 
     // Renueva el access token y opcionalmente el refresh token si está por expirar
     static async refresh(user, refreshTokenTimeLeft) {

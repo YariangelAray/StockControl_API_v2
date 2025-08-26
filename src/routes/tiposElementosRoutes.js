@@ -2,6 +2,8 @@ import express from "express";
 
 import TipoElementoController from "../controllers/TipoElementoController.js";
 import { validarTipoElemento, validarTipoElementoParcial } from "../middlewares/entities/tiposElementos/tipoElementoValidator.js";
+import authenticate from "../middlewares/auth/authenticate.js";
+import authorize from "../middlewares/auth/authorize.js";
 
 const router = express.Router();
 
