@@ -12,14 +12,14 @@ class ElementoService {
   static objAmbiente = new Ambiente();
   static objInventario = new Inventario();
 
-  static async getAllElementos(idUSer = null) {
+  static async getAllElementos(idUser = null) {
     try {
 
       // Llamamos el método listar
       let elementos = await this.objElemento.getAll();
 
-      if (idUSer) {
-        const inventariosPermitidos = await this.#getInventariosDelUsuario(idUSer);
+      if (idUser) {
+        const inventariosPermitidos = await this.#getInventariosDelUsuario(idUser);
         elementos = elementos.filter(e => inventariosPermitidos.includes(e.inventario_id));
       }
 
@@ -40,7 +40,7 @@ class ElementoService {
     }
   }
 
-  static async getElementoById(id, idUSer = null) {
+  static async getElementoById(id, idUser = null) {
     try {
 
       // Llamamos el método consultar por ID
@@ -50,8 +50,8 @@ class ElementoService {
         return { error: true, code: 404, message: "Elemento no encontrado" };
       }
 
-      if (idUSer) {
-        const inventariosPermitidos = await this.#getInventariosDelUsuario(idUSer);
+      if (idUser) {
+        const inventariosPermitidos = await this.#getInventariosDelUsuario(idUser);
         if (!inventariosPermitidos.includes(elemento.inventario_id)) {
           return { error: true, code: 403, message: "No tienes acceso a este elemento" };
         }
@@ -68,14 +68,14 @@ class ElementoService {
     }
   }
 
-  static async createElemento(elemento, idUSer = null) {
+  static async createElemento(elemento, idUser = null) {
     try {
 
       const error = await this.#validarForaneas(elemento);
       if (error) return error;
 
-      if (idUSer) {
-        const inventariosPermitidos = await this.#getInventariosDelUsuario(idUSer);
+      if (idUser) {
+        const inventariosPermitidos = await this.#getInventariosDelUsuario(idUser);
         if (!inventariosPermitidos.includes(elemento.inventario_id)) {
           return { error: true, code: 403, message: "No puedes crear elementos en este inventario" };
         }
@@ -105,7 +105,7 @@ class ElementoService {
     }
   }
 
-  static async updateElemento(id, elemento, idUSer = null) {
+  static async updateElemento(id, elemento, idUser = null) {
     try {
 
       // Llamamos el método consultar por ID
@@ -115,8 +115,8 @@ class ElementoService {
         return { error: true, code: 404, message: "Elemento no encontrado" };
       }
 
-      if (idUSer) {
-        const inventariosPermitidos = await this.#getInventariosDelUsuario(idUSer);
+      if (idUser) {
+        const inventariosPermitidos = await this.#getInventariosDelUsuario(idUser);
         if (!inventariosPermitidos.includes(existente.inventario_id)) {
           return { error: true, code: 403, message: "No tienes acceso para modificar este elemento" };
         }
@@ -177,11 +177,11 @@ class ElementoService {
     }
   }
 
-  static async getElementosByInventarioId(inventarioId, idUSer = null) {
+  static async getElementosByInventarioId(inventarioId, idUser = null) {
     try {
 
-      if (idUSer) {
-        const inventariosPermitidos = await this.#getInventariosDelUsuario(idUSer);
+      if (idUser) {
+        const inventariosPermitidos = await this.#getInventariosDelUsuario(idUser);
         if (!inventariosPermitidos.includes(inventarioId)) {
           return { error: true, code: 403, message: "No tienes acceso a este inventario" };
         }
@@ -264,10 +264,10 @@ class ElementoService {
     return null; // si no hay error
   }
 
-  static async #getInventariosDelUsuario(idUSer) {
-    if (!idUSer) return [];
+  static async #getInventariosDelUsuario(idUser) {
+    if (!idUser) return [];
 
-    const inventarios = await this.objInventario.getAllByUsuarioAdminId(idUSer);
+    const inventarios = await this.objInventario.getAllByUsuarioAdminId(idUser);
     return inventarios.map(inv => inv.id);
   }
 }

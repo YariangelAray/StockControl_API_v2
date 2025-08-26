@@ -36,12 +36,15 @@ class InventarioService {
   static async getInventarioById(id, userId = null) {
     try {
 
+      if (userId) {
+        const inventariosPermitidos = await this.#getInventariosDelUsuario(idUSer);
+        if (!inventariosPermitidos.includes(id)) {
+          return { error: true, code: 403, message: "No tienes acceso a este inventario" };
+        }
+      }
+
       // Llamamos el método consultar por ID
       const inventario = await this.objInventario.getById(id);
-
-      if (userId) {
-        
-      }
 
       // Validamos si no hay inventario
       if (!inventario) {
@@ -175,6 +178,13 @@ class InventarioService {
 
   static async getAmbientesCubiertos(inventarioId, userId = null) {
     try {
+
+      if (userId) {
+        const inventariosPermitidos = await this.#getInventariosDelUsuario(idUSer);
+        if (!inventariosPermitidos.includes(id)) {
+          return { error: true, code: 403, message: "No tienes acceso a este inventario" };
+        }
+      }
 
       // Llamamos el método consultar por ID
       const inventario = await this.objInventario.getById(inventarioId);

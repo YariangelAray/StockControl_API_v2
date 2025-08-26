@@ -16,7 +16,7 @@ class ReporteService {
     try {
 
       // Llamamos el método listar
-      const reportes = await this.objReporte.getAll();
+      let reportes = await this.objReporte.getAll();
 
       // Validamos si no hay reportes
       if (!reportes || reportes.length === 0) {
@@ -73,13 +73,13 @@ class ReporteService {
       };
     } catch (error) {
       // Retornamos un error en caso de excepción
-      return { error: true, code: 500, message:error.message };
+      return { error: true, code: 500, message: error.message };
     }
   }
 
   static async updateReporte(id, reporte) {
     try {
-      
+
       // Llamamos el método consultar por ID
       const existente = await this.objReporte.getById(id);
       // Validamos si el reporte existe
@@ -138,12 +138,19 @@ class ReporteService {
     }
   }
 
-  static async getReportesByInventarioId(inventarioId) {
+  static async getReportesByInventarioId(inventarioId, idUser = null) {
     try {
 
       const inventarioExistente = this.objInventario.getById(inventarioId);
       if (!inventarioExistente)
         return { error: true, code: 404, message: "El inventario especificado no existe." };
+      
+      if (idUser) {
+        const inventariosPermitidos = await this.#getInventariosDelUsuario(idUser);
+        if (!inventariosPermitidos.includes(inventarioId)) {
+          return { error: true, code: 403, message: "No tienes acceso a este inventario" };
+        }
+      }
 
       // Llamamos el método para obtener reportes por inventario
       const reportes = await this.objReporte.getAllByInventarioId(inventarioId);
@@ -163,10 +170,33 @@ class ReporteService {
     }
   }
 
+  static async getReportesByUsuarioId(idUser) {
+    try {
+
+      // Llamamos el método listar
+      let reportes = await this.objReporte.getAllByUsuarioId(idUser);
+
+      // Validamos si no hay reportes
+      if (!reportes || reportes.length === 0) {
+        return { error: true, code: 404, message: "No hay reportes registrados" };
+      }
+      // Retornamos los reportes obtenidos
+      return {
+        error: false, code: 200, message: "Reportes obtenidos correctamente",
+        data: await this.#complementarReportes(reportes)
+      };
+
+    } catch (error) {
+      // Retornamos un error en caso de excepción
+      console.log(error);
+      return { error: true, code: 500, message: error.message };
+    }
+  }
+
   static async #complementarReportes(reportes) {
     return Promise.all(await reportes.map(async reporte => await this.#complementarReporte(reporte)));
   }
-  
+
   static async #complementarReporte(reporte) {
     const usuario = await this.objUsuario.getById(reporte.usuario_id);
     const elemento = await this.objElemento.getById(reporte.elemento_id);
@@ -178,7 +208,7 @@ class ReporteService {
     return reporte;
   }
 
-  static async #validarForaneas({usuario_id, elemento_id}) {
+  static async #validarForaneas({ usuario_id, elemento_id }) {
     if (usuario_id) {
       const usuarioExistente = await this.objUsuario.getById(usuario_id);
       if (!usuarioExistente)
@@ -192,6 +222,13 @@ class ReporteService {
     }
 
     return null;
+  }
+
+  static async #getInventariosDelUsuario(idUSer) {
+    if (!idUSer) return [];
+
+    const inventarios = await this.objInventario.getAllByUsuarioAdminId(idUSer);
+    return inventarios.map(inv => inv.id);
   }
 }
 

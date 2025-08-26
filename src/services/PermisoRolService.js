@@ -136,6 +136,30 @@ class PermisoRolService {
     }
   }
 
+  static async getAllPermisosRolesByRolId(id) {
+    try {
+
+      // Llamamos el método listar
+      const permisosRoles = await this.objPermisoRol.getAllByRolId(id);
+
+      // Validamos si no hay relaciones
+      if (!permisosRoles || permisosRoles.length === 0) {
+        return { error: true, code: 404, message: `No hay relaciones permiso-rol por el rol con ID ${id}`  };
+      }
+
+      // Retornamos las relaciones obtenidas
+      return {
+        error: false, code: 200, message: `Relaciones permiso-rol de el rol con ID ${id} obtenidas correctamente`,
+        data: permisosRoles
+      };
+
+    } catch (error) {
+
+      // Retornamos un error en caso de excepción
+      return { error: true, code: 500, message: error.message };
+    }
+  }
+
   static async #validarForaneas({ permiso_id, rol_id }) {
     if (permiso_id) {
       const permisoExistente = await this.objPermiso.getById(permiso_id);

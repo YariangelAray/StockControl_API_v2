@@ -112,6 +112,41 @@ class ReporteController {
       return ResponseProvider.error(res, "Error interno en el servidor", 500);
     }
   };
+
+  // Obtener todos los reportes del usuario
+  static getAllReportesMe = async (req, res) => {
+    const { id } = req.user;
+    try {
+      const response = await ReporteService.getReportesByUsuarioId(id);
+      // Validamos si hay un error
+      if (response.error) {
+        // Llamamos el provider para centralizar los mensajes de respuesta
+        return ResponseProvider.error(res, response.message, response.code);
+      }
+      return ResponseProvider.success(res, response.data, response.message, response.code);
+
+    } catch (error) {
+      return ResponseProvider.error(res, "Error interno en el servidor", 500);
+    }
+  };
+
+  // Obtener todos los reportes por id de inventario
+  static getReportesByInventarioIdMe = async (req, res) => {
+    const { inventarioId } = req.params;
+    const { id } = req.user;
+    try {
+      const response = await ReporteService.getReportesByInventarioId(inventarioId, id);
+      // Validamos si no hay reportes
+      if (response.error) {
+        // Llamamos el provider para centralizar los mensajes de respuesta
+        return ResponseProvider.error(res, response.message, response.code);
+      }
+      return ResponseProvider.success(res, response.data, response.message, response.code);
+
+    } catch (error) {
+      return ResponseProvider.error(res, "Error interno en el servidor", 500);
+    }
+  };
 }
 
 export default ReporteController;

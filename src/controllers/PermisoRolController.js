@@ -94,6 +94,23 @@ class PermisoRolController {
       return ResponseProvider.error(res, "Error interno en el servidor", 500);
     }
   }
+
+  // Obtener todos las relaciones permiso-rol
+  static getAllPermisosRolesByRolId = async (req, res) => {
+    const { rolId } = req.params;
+    try {
+      const response = await PermisoRolService.getAllPermisosRolesByRolId(rolId);
+      // Validamos si hay un error
+      if (response.error) {
+        // Llamamos el provider para centralizar los mensajes de respuesta
+        return ResponseProvider.error(res, response.message, response.code);
+      }
+      return ResponseProvider.success(res, response.data, response.message, response.code);
+
+    } catch (error) {
+      return ResponseProvider.error(res, "Error interno en el servidor", 500);
+    }
+  };
 }
 
 export default PermisoRolController;

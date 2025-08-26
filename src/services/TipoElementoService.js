@@ -131,12 +131,19 @@ class TipoElementoService {
         }
     }
 
-    static async getTiposElementosByInventarioId(inventarioId) {
+    static async getTiposElementosByInventarioId(inventarioId, idUser) {
         try {
 
             const inventarioExistente = this.objInventario.getById(inventarioId);
             if (!inventarioExistente)
                 return { error: true, code: 404, message: "El inventario especificado no existe." };
+
+            if (idUser) {
+                const inventariosPermitidos = await this.#getInventariosDelUsuario(idUser);
+                if (!inventariosPermitidos.includes(inventarioId)) {
+                    return { error: true, code: 403, message: "No tienes acceso a este inventario" };
+                }
+            }
 
             // Llamamos el método listar
             const tiposElementos = await this.objTipoElemento.getAll();
@@ -168,10 +175,17 @@ class TipoElementoService {
 
     static async #complementarTiposElementosInventario(tiposElementos, inventarioId) {
         const elementos = await this.objElemento.getAllByInventarioId(inventarioId);
-        return Promise.all(await tiposElementos.map(async tipoElemento => {            
+        return Promise.all(await tiposElementos.map(async tipoElemento => {
             tipoElemento.cantidad_elementos = elementos.filter(e => e.tipo_elemento_id === tipoElemento.id).length;
             return tipoElemento;
         }));
+    }
+
+    static async #getInventariosDelUsuario(idUser) {
+        if (!idUser) return [];
+
+        const inventarios = await this.objInventario.getAllByUsuarioAdminId(idUser);
+        return inventarios.map(inv => inv.id);
     }
 }
 

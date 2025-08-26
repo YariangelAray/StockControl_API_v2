@@ -166,7 +166,7 @@ class InventarioController {
   };
   
   // Obtener todos los ambientes cubiertos por el inventario
-  static getAmbientesCubiertos = async (req, res) => {
+  static getAmbientesCubiertosMe = async (req, res) => {
     const { inventarioId } = req.params;
     const { id } = req.user;
     try {

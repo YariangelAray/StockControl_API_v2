@@ -163,6 +163,30 @@ class RolUsuarioService {
     }
   }
 
+  static async getAllRolesUsuariosByUsuarioId(id) {
+    try {
+
+      // Llamamos el método listar
+      const rolesUsuarios = await this.objRolUsuario.getAllByUsuarioId(id);
+
+      // Validamos si no hay relaciones
+      if (!rolesUsuarios || rolesUsuarios.length === 0) {
+        return { error: true, code: 404, message: `No hay relaciones rol-usuario por el usuario con ID ${id}`  };
+      }
+
+      // Retornamos las relaciones obtenidas
+      return {
+        error: false, code: 200, message: `Relaciones rol-usuario de el usuario con ID ${id} obtenidas correctamente`,
+        data: rolesUsuarios
+      };
+
+    } catch (error) {
+
+      // Retornamos un error en caso de excepción
+      return { error: true, code: 500, message: error.message };
+    }
+  }
+
   static async #validarForaneas({ rol_id, usuario_id }) {
     if (rol_id) {
       const rolExistente = await this.objRol.getById(rol_id);

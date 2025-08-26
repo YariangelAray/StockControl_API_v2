@@ -77,7 +77,7 @@ CREATE TABLE usuarios (
 CREATE TABLE roles_usuarios (
   id INT AUTO_INCREMENT PRIMARY KEY,
   rol_id INT,
-  usuario_id INT,
+  usuario_id INT UNIQUE,
   FOREIGN KEY (rol_id) REFERENCES roles(id),
   FOREIGN KEY (usuario_id) REFERENCES usuarios(id)
 );

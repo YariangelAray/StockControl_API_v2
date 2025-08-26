@@ -7,6 +7,12 @@ import authorize from "../middlewares/auth/authorize.js";
 
 const router = express.Router();
 
+// Obtener todos los reportes de un inventario propio especifico
+router.get("inventario/me/:inventarioId", authenticate, authorize('reporte.view-inventory-own'), ReporteController.getReportesByInventarioIdMe);
+
+// Obtener todos los reportes
+router.get("/me", authenticate, authorize('reporte.view-own'), ReporteController.getAllReportesMe);
+
 // Obtener todos los reportes
 router.get("/", authenticate, authorize('reporte.view'), ReporteController.getAllReportes);
 
@@ -26,7 +32,7 @@ router.patch("/:id", authenticate, authorize('reporte.update'), validarReportePa
 router.delete("/:id", authenticate, authorize('reporte.delete'), ReporteController.deleteReporte);
 
 // Obtener reportes por ID de inventario
-router.get("/inventario/:inventarioId", authenticate, authorize('reporte.view-inventory'), ReporteController.getReportesByInventarioId);
+router.get("/inventario/:inventarioId", authenticate, authorize('reporte.view'), ReporteController.getReportesByInventarioId);
 
 
 export default router;
