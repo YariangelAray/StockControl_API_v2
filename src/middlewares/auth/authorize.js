@@ -17,8 +17,7 @@ const authorize = (...permisosRequeridos) => {
     return async (req, res, next) => {
         // Extrae los permisos del usuario desde el token decodificado        
         const permisosUsuario = await getPermisos(req.user.id);
-
-        // Verifica que el usuario tenga todos los permisos requeridos
+        
         // Verifica si el usuario tiene todos los permisos requeridos
         const tienePermiso = permisosRequeridos.every(requerido => {
 
