@@ -2,6 +2,7 @@ import Inventario from "../models/Inventario.js";
 import Elemento from "../models/Elemento.js";
 import Usuario from "../models/Usuario.js";
 import RolUsuario from "../models/RolUsuario.js";
+import { formatearFecha } from "../utils/formatearFecha.js";
 
 class InventarioService {
 
@@ -37,8 +38,8 @@ class InventarioService {
     try {
 
       if (userId) {
-        const inventariosPermitidos = await this.#getInventariosDelUsuario(idUSer);
-        if (!inventariosPermitidos.includes(id)) {
+        const inventariosPermitidos = await this.#getInventariosDelUsuario(userId);
+        if (!inventariosPermitidos.includes(parseInt(id))) {
           return { error: true, code: 403, message: "No tienes acceso a este inventario" };
         }
       }
@@ -180,8 +181,8 @@ class InventarioService {
     try {
 
       if (userId) {
-        const inventariosPermitidos = await this.#getInventariosDelUsuario(idUSer);
-        if (!inventariosPermitidos.includes(id)) {
+        const inventariosPermitidos = await this.#getInventariosDelUsuario(userId);        
+        if (!inventariosPermitidos.includes(parseInt(inventarioId))) {
           return { error: true, code: 403, message: "No tienes acceso a este inventario" };
         }
       }
@@ -217,6 +218,7 @@ class InventarioService {
 
   static async #complementarInventario(inventario) {
     const elementos = await this.objElemento.getAllByInventarioId(inventario.id);
+    const usuario = await this.objUsuario.getById(inventario.usuario_admin_id);
 
     const totalMonetario = elementos.reduce(
       (total, { valor_monetario }) => total + parseFloat(valor_monetario), 0
@@ -225,6 +227,11 @@ class InventarioService {
     inventario.valor_monetario = parseFloat(totalMonetario.toFixed(2));
     inventario.cantidad_elementos = (elementos || []).length;
     inventario.ambientes_cubiertos = (await this.objInventario.getAmbientesCubiertos(inventario.id) || []).length;
+
+    inventario.gestor = usuario.nombres.split(" ")[0] + " " + usuario.apellidos.split(" ")[0];
+
+    inventario.fecha_creacion = formatearFecha(inventario.fecha_creacion);
+    inventario.ultima_actualizacion = formatearFecha(inventario.ultima_actualizacion, true); // con hora opcional
 
     return inventario;
   }

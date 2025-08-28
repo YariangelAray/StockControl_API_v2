@@ -10,6 +10,12 @@ const connection = await mysql.createConnection({
   user: process.env.DB_USER, // Usuario de la base de datos (definido en .env)
   password: process.env.DB_PASSWORD, // Contraseña de la base de datos (definido en .env)
   database: process.env.DB_NAME, // Nombre de la base de datos (definido en .env)
+  typeCast: function (field, next) {
+    if (field.type === 'TINY' && field.length === 1) {
+      return field.string() === '1'; // convierte a true/false
+    }
+    return next();
+  }
 });
 
 // Exporta la conexión como valor por defecto del módulo

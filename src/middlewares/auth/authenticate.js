@@ -37,6 +37,7 @@ const authenticate = (req, res, next) => {
   } catch (err) {
     // Si el token expiró
     if (err.name === 'TokenExpiredError') {
+      
       return ResponseProvider.authError(res, 'Token expirado', 401, 'TOKEN_EXPIRED');
     }
 

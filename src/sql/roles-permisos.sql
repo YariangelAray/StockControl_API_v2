@@ -151,6 +151,7 @@ INSERT INTO permisos (nombre, descripcion) VALUES
 ('access-code.invalidate', 'Invalidar códigos de acceso'), -- 95
 ('ambiente.view-card', 'Ver ambientes en cards'),
 ('superadmin.access-home', 'Ver ambientes en cards'), -- Permiso para en el front mostrar el home del superadmin
+('inventarios.index', 'Ver la vista de inventarios') -- Permiso para en el front mostrar el home del superadmin
 
 ;
 
@@ -197,6 +198,7 @@ INSERT INTO permisos_roles (permiso_id, rol_id) VALUES
 (87,1),
 (88,1),
 (89,1),
+(97,1),
 
 -- ADMINISTRATIVO
 
@@ -205,6 +207,7 @@ INSERT INTO permisos_roles (permiso_id, rol_id) VALUES
 (7,2),
 (32,2),
 (53,2),
+(54,2),
 (55,2),
 (57,2),
 (69,2),
@@ -216,10 +219,12 @@ INSERT INTO permisos_roles (permiso_id, rol_id) VALUES
 (91,2),
 (92,2),
 (96,2),
+(98,2),
 
 -- CORRIENTE
 
 (5,3),
 (6,3),
-(7,3)
+(7,3),
+(98,3)
 ;

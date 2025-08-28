@@ -182,7 +182,7 @@ class ElementoService {
 
       if (idUser) {
         const inventariosPermitidos = await this.#getInventariosDelUsuario(idUser);
-        if (!inventariosPermitidos.includes(inventarioId)) {
+        if (!inventariosPermitidos.includes(parseInt(inventarioId))) {
           return { error: true, code: 403, message: "No tienes acceso a este inventario" };
         }
       }
@@ -225,7 +225,8 @@ class ElementoService {
 
     elemento.ambiente = ambiente?.nombre;
     elemento.estado = estado.nombre;
-    elemento.tipoElemento = tipoElemento.nombre;
+    elemento.tipo_elemento = tipoElemento.nombre;
+    elemento.tipo_modelo = tipoElemento.modelo;
     elemento.valor_monetario = parseFloat(elemento.valor_monetario);
 
     return elemento;

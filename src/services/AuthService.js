@@ -27,15 +27,15 @@ class AuthService {
     static refreshTreshold = parseInt(process.env.REFRESH_TOKEN_THRESHOLD, 10);
 
     // Renueva el access token y opcionalmente el refresh token si está por expirar
-    static async refresh(user, refreshTokenTimeLeft) {
+    static async refresh(userId, refreshTokenTimeLeft) {
         try {
-            // Genera nuevo access token
-            const newToken = await this.#genToken(user);
+            // Genera nuevo access token            
+            const newToken = await this.#genToken(userId);
             let refreshToken = null;
 
             // Si el tiempo restante del refresh token es menor al umbral, se genera uno nuevo
             if (refreshTokenTimeLeft < this.refreshTreshold) {
-                refreshToken = await this.#genRefreshToken(user);
+                refreshToken = await this.#genRefreshToken(userId);
             }
 
             // Retorna los tokens generados
@@ -93,8 +93,8 @@ class AuthService {
             const usuarioCookie = await this.configurarUsuario(usuarioCreado);
 
             // Genera tokens de autenticación
-          const token = await this.#genToken(usuarioCreado.id);
-          const refreshToken = await this.#genRefreshToken(usuarioCreado.id);
+            const token = await this.#genToken(usuarioCreado.id);
+            const refreshToken = await this.#genRefreshToken(usuarioCreado.id);
 
             // Retorna tokens y datos del usuario
             return {
@@ -136,8 +136,8 @@ class AuthService {
             const usuarioCookie = await this.configurarUsuario(existente);
 
             // Genera tokens de autenticación
-          const token = await this.#genToken(existente.id);
-          const refreshToken = await this.#genRefreshToken(existente.id);
+            const token = await this.#genToken(existente.id);
+            const refreshToken = await this.#genRefreshToken(existente.id);
 
             // Retorna tokens y datos del usuario
             return {

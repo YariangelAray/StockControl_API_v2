@@ -130,6 +130,24 @@ class ReporteController {
     }
   };
 
+  static getReporteByIdMe = async (req, res) => {
+    const { reporteId } = req.params;
+    const { id } = req.user;
+    try {
+      // Llamamos al servicio para obtener el reporte por su ID
+      const response = await ReporteService.getReporteById(reporteId, id);
+      // Validamos si no hay reporte
+      if (response.error) {
+        // Llamamos el provider para centralizar los mensajes de respuesta
+        return ResponseProvider.error(res, response.message, response.code);
+      }
+      return ResponseProvider.success(res, response.data, response.message, response.code);
+    } catch (error) {
+      // Llamamos el provider para centralizar los mensajes de respuesta
+      return ResponseProvider.error(res, "Error interno en el servidor", 500);
+    }
+  };
+
   // Obtener todos los reportes por id de inventario
   static getReportesByInventarioIdMe = async (req, res) => {
     const { inventarioId } = req.params;

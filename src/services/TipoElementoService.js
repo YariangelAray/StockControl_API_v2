@@ -140,7 +140,7 @@ class TipoElementoService {
 
             if (idUser) {
                 const inventariosPermitidos = await this.#getInventariosDelUsuario(idUser);
-                if (!inventariosPermitidos.includes(inventarioId)) {
+                if (!inventariosPermitidos.includes(parseInt(inventarioId))) {
                     return { error: true, code: 403, message: "No tienes acceso a este inventario" };
                 }
             }

@@ -55,8 +55,7 @@ class Ambiente extends Modelo {
   async create(ambiente) {
     try {
       const idCreado = await super.create(this.#nameTable, ambiente);
-      if (idCreado) {
-        console.log(idCreado)
+      if (idCreado) {        
         return await this.getById(idCreado);
       }
       return null;

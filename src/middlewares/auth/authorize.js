@@ -15,7 +15,7 @@ import { getPermisos } from "../../utils/getPermisos.js";
  */
 const authorize = (...permisosRequeridos) => {
     return async (req, res, next) => {
-        // Extrae los permisos del usuario desde el token decodificado
+        // Extrae los permisos del usuario desde el token decodificado        
         const permisosUsuario = await getPermisos(req.user.id);
 
         // Verifica que el usuario tenga todos los permisos requeridos

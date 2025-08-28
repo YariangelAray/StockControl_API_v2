@@ -35,14 +35,22 @@ class ReporteService {
     }
   }
 
-  static async getReporteById(id) {
+  static async getReporteById(id, idUser) {
     try {
 
       // Llamamos el método consultar por ID
       const reporte = await this.objReporte.getById(id);
+      
       // Validamos si no hay reporte
       if (!reporte) {
         return { error: true, code: 404, message: "Reporte no encontrado" };
+      }
+
+      if (idUser) {
+        const inventariosPermitidos = await this.#getInventariosDelUsuario(idUser);
+        if (!inventariosPermitidos.includes(parseInt(id))) {
+          return { error: true, code: 403, message: "No tienes acceso a los reportes de este inventario" };
+        }
       }
       // Retornamos el reporte obtenido
       return {
@@ -147,8 +155,8 @@ class ReporteService {
       
       if (idUser) {
         const inventariosPermitidos = await this.#getInventariosDelUsuario(idUser);
-        if (!inventariosPermitidos.includes(inventarioId)) {
-          return { error: true, code: 403, message: "No tienes acceso a este inventario" };
+        if (!inventariosPermitidos.includes(parseInt(inventarioId))) {
+          return { error: true, code: 403, message: "No tienes acceso a los reportes de este inventario" };
         }
       }
 

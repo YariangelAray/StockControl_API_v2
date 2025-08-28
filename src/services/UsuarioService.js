@@ -24,16 +24,29 @@ class UsuarioService {
     try {
 
       // Llamamos el método listar
-      const usuarios = await this.objUsuario.getAll();
+      let usuarios = await this.objUsuario.getAll();
 
       // Validamos si no hay usuarios
       if (!usuarios || usuarios.length === 0) {
         return { error: true, code: 404, message: "No hay usuarios registrados" };
       }
+
+
+      const usuariosFiltrados = [];
+
+      for (const usuario of usuarios) {
+        const roles = (await this.objRolUsuario.getAllByUsuarioId(usuario.id))
+          .map(rolUsuario => rolUsuario.rol_id);
+
+        if (!roles.includes(1)) {
+          usuariosFiltrados.push(usuario);
+        }
+      }
+
       // Retornamos los usuarios obtenidos
       return {
         error: false, code: 200, message: "Usuarios obtenidos correctamente",
-        data: await this.#configurarUsuarios(usuarios)
+        data: await this.#configurarUsuarios(usuariosFiltrados)
       };
 
     } catch (error) {

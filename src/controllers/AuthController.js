@@ -14,7 +14,7 @@ class AuthController {
 
     try {
       // Llama al servicio para generar nuevos tokens si es necesario
-      const response = await AuthService.refresh(user, refreshTokenTimeLeft);
+      const response = await AuthService.refresh(user.id, refreshTokenTimeLeft);
 
       // Si hubo error en el servicio, responde con error
       if (response.error) {
@@ -58,6 +58,8 @@ class AuthController {
       // Elimina las cookies relacionadas con la sesión
       res.clearCookie('token');
       res.clearCookie('refreshToken');
+      res.clearCookie('permisos');
+      res.clearCookie('roles');
       res.clearCookie('usuario');
 
       // Si hubo error en el servicio, responde con error
@@ -105,8 +107,20 @@ class AuthController {
         sameSite: 'Lax'
       });
 
+      const { permisos, roles, ...usuarioInfo } = usuarioCookie
+
       // Guarda los datos del usuario en cookie pública (para el frontend)
-      res.cookie('usuario', JSON.stringify(usuarioCookie), {
+      res.cookie('usuario', JSON.stringify(usuarioInfo), {
+        httpOnly: false,
+        secure: false,
+        sameSite: 'Lax'
+      });
+      res.cookie('permisos', JSON.stringify(permisos), {
+        httpOnly: false,
+        secure: false,
+        sameSite: 'Lax'
+      });
+      res.cookie('roles', JSON.stringify(roles), {
         httpOnly: false,
         secure: false,
         sameSite: 'Lax'

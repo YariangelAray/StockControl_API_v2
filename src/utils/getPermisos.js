@@ -13,7 +13,7 @@ export const getPermisos = async (userId) => {
   const permiso = new Permiso();
   const rol = new Rol();
 
-  // Obtiene todos los roles asociados al usuario
+  // Obtiene todos los roles asociados al usuario  
   const rolesUsuario = await rolUsuario.getAllByUsuarioId(userId);
   let roles = await Promise.all(
     rolesUsuario.map(async (ru) => {
