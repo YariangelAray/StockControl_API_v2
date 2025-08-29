@@ -206,6 +206,7 @@ INSERT INTO permisos_roles (permiso_id, rol_id) VALUES
 (6,2),
 (7,2),
 (32,2),
+(49,2),
 (53,2),
 (54,2),
 (55,2),

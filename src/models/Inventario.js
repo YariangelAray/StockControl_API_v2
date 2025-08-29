@@ -54,7 +54,7 @@ class Inventario extends Modelo {
   async getAmbientesCubiertos(inventarioId) {
     try {
       //Obtenemos el resultado de la consulta
-      const [rows] = await connection.query(`SELECT a.id AS ambiente_id, a.nombre AS ambiente_nombre, a.mapa AS ambiente_mapa, COUNT(e.id) AS cantidad_elementos FROM elementos e JOIN ambientes a ON e.ambiente_id = a.id WHERE e.inventario_id = ? GROUP BY a.id, a.nombre ORDER BY a.nombre`, [inventarioId]);
+      const [rows] = await connection.query(`SELECT a.id AS id, a.nombre AS nombre, a.mapa AS mapa, COUNT(e.id) AS cantidad_elementos FROM elementos e JOIN ambientes a ON e.ambiente_id = a.id WHERE e.inventario_id = ? GROUP BY a.id, a.nombre ORDER BY a.nombre`, [inventarioId]);
       //Retornamos la respuesta al servicio
       return rows;
     } catch (error) {
