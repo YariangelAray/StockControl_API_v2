@@ -100,7 +100,7 @@ class RolUsuarioService {
       const error = await this.#validarForaneas(rolUsuario);
       if (error) return error;
 
-      const errorDuplicado = await this.#validarDuplicado(rolUsuario);
+      const errorDuplicado = await this.#validarDuplicado(rolUsuario, id);
       if (errorDuplicado) return errorDuplicado;
 
       if (existente.rol_id == this.SUPERADMIN_ROLE_ID && existente.usuario_id == this.SUPERADMIN_USER_ID) {

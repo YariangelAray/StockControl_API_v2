@@ -7,7 +7,7 @@ class FotoService {
 
   static objFoto = new Foto();
   static objReporte = new Reporte();
-  static urlBase = "fotos_reportes/";
+  static urlBase = "stockcontrol_api/fotos_reportes/";
 
   static async getAllFotos(userId = null) {
     try {

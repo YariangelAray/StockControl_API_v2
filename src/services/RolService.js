@@ -15,12 +15,15 @@ class RolService {
     try {
 
       // Llamamos el método listar
-      const roles = await this.objRol.getAll();
+      let roles = await this.objRol.getAll();
 
       // Validamos si no hay roles
       if (!roles || roles.length === 0) {
         return { error: true, code: 404, message: "No hay roles registrados" };
       }
+
+      roles = roles.filter(rol => rol.id != this.rolSuperadministrador);
+
       // Retornamos los roles obtenidos
       return {
         error: false, code: 200, message: "Roles obtenidos correctamente",

@@ -3,6 +3,7 @@ import Foto from "../models/Foto.js";
 import Inventario from "../models/Inventario.js";
 import Reporte from "../models/Reporte.js";
 import Usuario from "../models/Usuario.js";
+import { formatearFecha } from "../utils/formatearFecha.js";
 
 class ReporteService {
 
@@ -47,8 +48,9 @@ class ReporteService {
       }
 
       if (idUser) {
+        const elemento = await this.objElemento.getById(reporte.elemento_id)      
         const inventariosPermitidos = await this.#getInventariosDelUsuario(idUser);
-        if (!inventariosPermitidos.includes(parseInt(id))) {
+        if (!inventariosPermitidos.includes(elemento.inventario_id)) {
           return { error: true, code: 403, message: "No tienes acceso a los reportes de este inventario" };
         }
       }
@@ -212,6 +214,7 @@ class ReporteService {
     reporte.usuario = usuario.nombres.split(" ")[0] + " " + usuario.apellidos.split(" ")[0];
     reporte.elemento = { id: elemento.id, placa: elemento.placa };
     reporte.fotos = await this.objFoto.getAllByReporteId(reporte.id);
+    reporte.fecha = formatearFecha(reporte.fecha)
 
     return reporte;
   }

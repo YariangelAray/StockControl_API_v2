@@ -13,8 +13,8 @@ router.get("/inventario/me/:inventarioId", authenticate, authorize('reporte.view
 // Obtener todos los reportes del usuario
 router.get("/me", authenticate, authorize('reporte.view-own'), ReporteController.getAllReportesMe);
 
-// Obtener todos los reportes del usuario por id del reporte
-router.get("/me/:reporteId", authenticate, authorize('reporte.view-own'), ReporteController.getReporteByIdMe);
+// Obtener todos los reportes del inventario por id del reporte
+router.get("/me/:reporteId", authenticate, authorize('reporte.view-inventory-own'), ReporteController.getReporteByIdMe);
 
 // Obtener todos los reportes
 router.get("/", authenticate, authorize('reporte.view'), ReporteController.getAllReportes);

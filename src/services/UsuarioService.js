@@ -174,18 +174,23 @@ class UsuarioService {
       }
       const reportesUsuario = await this.objReporte.getAllByUsuarioId(id);
       // Validamos si no hay reportes
-      if (reportesUsuario && reportesUsuario.length > 0 && roles.includes(3)) {
-        return { error: true, code: 409, message: "No se puede eliminar al usuario corriente porque tiene reportes asociados" };
+      if (reportesUsuario && reportesUsuario.length > 0) {
+        return { error: true, code: 409, message: "No se puede eliminar al usuario porque tiene reportes asociados" };
       }
       // Validamos si no sea el superadministrador
       if (roles.includes(1)) {
         return { error: true, code: 409, message: "No se puede eliminar al superadministrador" };
       }
 
+      // eliminamos la relación con roles
+      const relacionesRoles = await this.objRolUsuario.getAllByUsuarioId(id);
+      const relacionesEliminadas = await relacionesRoles.every(async rr => await this.objRolUsuario.delete(rr.id));
+
       // Llamamos el método eliminar
       const usuarioEliminado = await this.objUsuario.delete(id);
+
       // Validamos si no se pudo eliminar el usuario
-      if (!usuarioEliminado) {
+      if (!usuarioEliminado || !relacionesEliminadas) {
         return { error: true, code: 400, message: "Error al eliminar el usuario" };
       }
 
@@ -248,6 +253,27 @@ class UsuarioService {
 
       const nuevaContrasena = await bcrypt.hash(contrasenas.contrasena_nueva, saltRounds);
       const response = await this.objUsuario.update(id, { contrasena: nuevaContrasena });
+
+      if (response.error) {
+        return { error: true, code: response.code, message: response.message };
+      }
+      return { error: false, code: 200, message: "Contraseña actualizada correctamente" };
+    } catch (error) {
+      return { error: true, code: 500, message: error.message };
+    }
+  }
+  static async updateContrasenaRestaurar(id) {
+    try {
+
+      // Llamamos el método consultar por ID
+      const existente = await this.objUsuario.getById(id);
+      // Validamos si el usuario existe
+      if (!existente) {
+        return { error: true, code: 404, message: "Usuario no encontrado" };
+      }
+      
+      const hash = await bcrypt.hash(existente.documento, saltRounds);
+      const response = await this.objUsuario.update(id, { contrasena: hash });
 
       if (response.error) {
         return { error: true, code: response.code, message: response.message };

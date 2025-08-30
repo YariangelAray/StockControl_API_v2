@@ -165,10 +165,25 @@ class UsuarioController {
       return ResponseProvider.error(res, "Error interno en el servidor", 500);
     }
   };
+  static updateUsuarioContrasena = async (req, res) => {
+    const { id } = req.params;    
+    try {
+      const response = await UsuarioService.updateContrasenaRestaurar(id);
+      // Validamos si no hay usuarios
+      if (response.error) {
+        // Llamamos el provider para centralizar los mensajes de respuesta
+        return ResponseProvider.error(res, response.message, response.code);
+      }
+      return ResponseProvider.success(res, response.data, response.message, response.code);
+
+    } catch (error) {
+      return ResponseProvider.error(res, "Error interno en el servidor", 500);
+    }
+  };
   // Actualizar la contraseña del propio usuario
   static updateDesactivarMe = async (req, res) => {
     const { id } = req.user;
-    const { activo } = req.body;
+    const activo = false;
     try {
       const response = await UsuarioService.updateUsuario(id, { activo });
       // Validamos si no hay usuarios

@@ -14,7 +14,7 @@ export const campos = [
 
 export const camposLogin = [
   { name: "documento", required: true, minLength: 6, maxLength: 11, type: "string" },
-  { name: "contrasena", required: true, minLength: 8, maxLength: 30, type: "string" },
+  { name: "contrasena", required: true, minLength: null, maxLength: null, type: "string" },
 ];
 
 export const camposContrasena = [

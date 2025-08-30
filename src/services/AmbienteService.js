@@ -21,7 +21,7 @@ class AmbienteService {
       // Retornamos los ambientes obtenidos
       return {
         error: false, code: 200, message: "Ambientes obtenidos correctamente",
-        data: ambientes
+        data: await this.#complementarAmbientes(ambientes)
       };
 
     } catch (error) {
@@ -43,7 +43,7 @@ class AmbienteService {
       // Retornamos el ambiente obtenido
       return {
         error: false, code: 200, message: "Ambiente obtenido correctamente",
-        data: ambiente
+        data: await this.#complementarAmbiente(ambiente)
       };
     } catch (error) {
       // Retornamos un error en caso de excepción
@@ -66,7 +66,7 @@ class AmbienteService {
       // Retornamos el ambiente creado
       return {
         error: false, code: 201, message: "Ambiente creado correctamente",
-        data: ambienteCreado
+        data: await this.#complementarAmbiente(ambienteCreado)
       };
     } catch (error) {
       // Retornamos un error en caso de excepción
@@ -96,7 +96,7 @@ class AmbienteService {
       // Retornamos el ambiente actualizado
       return {
         error: false, code: 200, message: "Ambiente actualizado correctamente",
-        data: ambienteActualizado
+        data: await this.#complementarAmbiente(ambienteActualizado)
       };
     } catch (error) {
       // Retornamos un error en caso de excepción
@@ -134,6 +134,16 @@ class AmbienteService {
       return { error: true, code: 500, message: error.message };
     }
   }
+
+  static async #complementarAmbientes(ambientes) {
+      return Promise.all(await ambientes.map(async ambiente => await this.#complementarAmbiente(ambiente)));
+    }
+  
+    static async #complementarAmbiente(ambiente) {
+      const centro = await this.objCentro.getById(ambiente.centro_id);    
+      ambiente.centro = centro.nombre;
+      return ambiente;
+    }
 
   static async #validarForaneas({ centro_id }) {
 

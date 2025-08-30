@@ -24,7 +24,7 @@ app.use(cookieParser()); // Middleware para parsear cookies en las solicitudes
 // 📁 Archivos estáticos
 // ─────────────────────────────────────────────
 app.use(express.static('public')); // Sirve archivos estáticos desde la carpeta 'public'
-app.use('/fotos_reportes', express.static('public/img/reportes')); // Sirve imágenes de reportes desde la carpeta específica
+app.use(API_BASE_PATH+'/fotos_reportes', express.static('public/img/reportes')); // Sirve imágenes de reportes desde la carpeta específica
 
 // ─────────────────────────────────────────────
 // 📌 Ruta principal de documentación

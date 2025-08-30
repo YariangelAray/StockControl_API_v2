@@ -1,7 +1,7 @@
 import express from "express";
 
 import UsuarioController from "../controllers/UsuarioController.js";
-import { validarContrasena, validarDesactivar, validarUsuario, validarUsuarioParcial } from "../middlewares/entities/usuarios/usuarioValidator.js";
+import { validarContrasena, validarUsuario, validarUsuarioParcial } from "../middlewares/entities/usuarios/usuarioValidator.js";
 import authenticate from "../middlewares/auth/authenticate.js";
 import authorize from "../middlewares/auth/authorize.js";
 
@@ -17,7 +17,7 @@ router.put("/me", authenticate, authorize('usuario.update-own'), validarUsuario,
 router.put("/me/contrasena", authenticate, authorize('usuario.update-own'), validarContrasena, UsuarioController.updateContrasenaMe);
 
 // Desactivar la cuenta del usuario
-router.put("/me/desactivar", authenticate, authorize('usuario.disable-own'), validarDesactivar, UsuarioController.updateDesactivarMe);
+router.put("/me/desactivar", authenticate, authorize('usuario.disable-own'), UsuarioController.updateDesactivarMe);
 
 
 // Obtener usuarios administrativos
@@ -37,6 +37,8 @@ router.put("/:id", authenticate, authorize('usuario.update'), validarUsuario, Us
 
 // Actualizar un usuario parcialmente
 router.patch("/:id", authenticate, authorize('usuario.update'), validarUsuarioParcial, UsuarioController.updateUsuario);
+
+router.patch("/:id/contrasena", authenticate, authorize('usuario.update'), UsuarioController.updateUsuarioContrasena);
 
 // Eliminar un usuario
 router.delete("/:id", authenticate, authorize('usuario.delete'), UsuarioController.deleteUsuario);

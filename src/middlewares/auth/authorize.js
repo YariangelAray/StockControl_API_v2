@@ -16,13 +16,13 @@ import { getPermisos } from "../../utils/getPermisos.js";
 const authorize = (...permisosRequeridos) => {
     return async (req, res, next) => {
         // Extrae los permisos del usuario desde el token decodificado        
-        const permisosUsuario = await getPermisos(req.user.id);
+        const permisosUsuario = await getPermisos(req.user.id);        
         
         // Verifica si el usuario tiene todos los permisos requeridos
         const tienePermiso = permisosRequeridos.every(requerido => {
 
             // Para cada permiso requerido, buscamos si el usuario tiene algún permiso que lo cubra
-            return permisosUsuario.some(asignado => {
+            return permisosUsuario.some(asignado => {        
 
                 // ✅ Coincidencia exacta: el permiso asignado es igual al requerido
                 if (asignado === requerido) return true;
