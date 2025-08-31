@@ -17,6 +17,7 @@ import permisosRoles from './permisosRolesRoutes.js'; // Rutas para la entidad '
 import permisos from './permisosRoutes.js'; // Rutas para la entidad 'permisos'
 import roles from './rolesRoutes.js'; // Rutas para la entidad 'roles'
 import auth from './authRoutes.js'; // Rutas para la autenticación
+import access from './accesosRoutes.js'; // Rutas para la gestión de códigos de acceso a inventarios
 
 // Definición de las rutas de la API
 const rutas = [
@@ -38,6 +39,7 @@ const rutas = [
   { path: '/permisos', router: permisos }, // Ruta para manejar permisos
   { path: '/roles', router: roles }, // Ruta para manejar roles
   { path: '/auth', router: auth }, // Ruta para manejar la autenticación
+  { path: '/accesos', router: access }, // Ruta para manejar los códigos de acceso a inventarios
 ];
 
 // Exporta el array de rutas como valor por defecto del módulo

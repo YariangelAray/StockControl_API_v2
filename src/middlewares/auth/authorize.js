@@ -19,7 +19,7 @@ const authorize = (...permisosRequeridos) => {
         const permisosUsuario = await getPermisos(req.user.id);        
         
         // Verifica si el usuario tiene todos los permisos requeridos
-        const tienePermiso = permisosRequeridos.every(requerido => {
+        const tienePermiso = permisosRequeridos.some(requerido => {
 
             // Para cada permiso requerido, buscamos si el usuario tiene algún permiso que lo cubra
             return permisosUsuario.some(asignado => {        

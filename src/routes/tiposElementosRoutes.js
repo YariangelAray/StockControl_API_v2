@@ -11,7 +11,7 @@ const router = express.Router();
 router.get("inventario/me/:inventarioId", authenticate, authorize('tipo-elemento.view-inventory-own'), TipoElementoController.getTiposElementosByInventarioIdMe);
 
 // Obtener todos los tipos de elementos
-router.get("/", authenticate, authorize('tipo-elemento.view'), TipoElementoController.getAllTiposElementos);
+router.get("/", authenticate, TipoElementoController.getAllTiposElementos);
 
 // Obtener un tipo de elemento por ID
 router.get("/:id", authenticate, authorize('tipo-elemento.view'), TipoElementoController.getTipoElementoById);

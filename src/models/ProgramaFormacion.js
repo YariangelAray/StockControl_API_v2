@@ -1,4 +1,4 @@
-import connection from '../utils/db.js';
+import connection from '../utils/connection.js';
 import Modelo from './Modelo.js';
 
 class ProgramaFormacion extends Modelo {

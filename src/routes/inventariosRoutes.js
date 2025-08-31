@@ -13,7 +13,7 @@ router.get("/me", authenticate, authorize('inventario.view-own'), InventarioCont
 router.get("/me/:inventarioId", authenticate, authorize('inventario.view-own'), InventarioController.getInventarioByIdMe);
 
 // Obtener ambientes cubiertos por inventario propio
-router.get("/me/:inventarioId/ambientes", authenticate, authorize('inventario.view-own'), InventarioController.getAmbientesCubiertosMe);
+router.get("/me/:inventarioId/ambientes", authenticate, authorize('inventario.view-own', 'ambiente.view-card'), InventarioController.getAmbientesCubiertosMe);
 
 
 // Obtener todos los inventarios

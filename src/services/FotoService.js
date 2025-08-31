@@ -1,3 +1,4 @@
+import { getInventariosDelUsuario } from "../helpers/getInventariosUsuario.js";
 import Foto from "../models/Foto.js";
 import Inventario from "../models/Inventario.js";
 import Reporte from "../models/Reporte.js";
@@ -17,7 +18,7 @@ class FotoService {
       let fotos = await this.objFoto.getAll();
 
       if (userId) {
-        const inventariosPermitidos = await this.#getInventariosDelUsuario(userId);
+        const inventariosPermitidos = await getInventariosDelUsuario(userId);
         // Obtener todos los reportes permitidos del usuario
         let reportesPermitidos = Promise.all(inventariosPermitidos.map(async (inventarioId) => {
           return (await this.objReporte.getAllByInventarioId(inventarioId)).map(({ id }) => id);
@@ -49,7 +50,7 @@ class FotoService {
         return { error: true, code: 404, message: "Foto no encontrada" };
 
       if (userId) {
-        const inventariosPermitidos = await this.#getInventariosDelUsuario(userId);
+        const inventariosPermitidos = await getInventariosDelUsuario(userId);
 
         const reportesPermitidos = [];
         for (const inventarioId of inventariosPermitidos) {
@@ -77,7 +78,7 @@ class FotoService {
       if (error) return error;
 
       if (userId) {
-        const inventariosPermitidos = await this.#getInventariosDelUsuario(userId);
+        const inventariosPermitidos = await getInventariosDelUsuario(userId);
 
         // Obtener todos los reportes permitidos para esos inventarios
         const reportesPermitidos = [];
@@ -185,13 +186,6 @@ class FotoService {
     }
 
     return null; // No hay errores
-  }
-
-  static async #getInventariosDelUsuario(idUSer) {
-    if (!idUSer) return [];
-
-    const inventarios = await this.objInventario.getAllByUsuarioAdminId(idUSer);
-    return inventarios.map(inv => inv.id);
   }
 
   // static async getFotosByReporteId(reporteId) {

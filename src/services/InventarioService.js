@@ -3,6 +3,7 @@ import Elemento from "../models/Elemento.js";
 import Usuario from "../models/Usuario.js";
 import RolUsuario from "../models/RolUsuario.js";
 import { formatearFecha } from "../utils/formatearFecha.js";
+import { getInventariosDelUsuario } from "../helpers/getInventariosUsuario.js";
 
 class InventarioService {
 
@@ -38,7 +39,7 @@ class InventarioService {
     try {
 
       if (userId) {
-        const inventariosPermitidos = await this.#getInventariosDelUsuario(userId);
+        const inventariosPermitidos = await getInventariosDelUsuario(userId);
         if (!inventariosPermitidos.includes(parseInt(id))) {
           return { error: true, code: 403, message: "No tienes acceso a este inventario" };
         }
@@ -181,7 +182,7 @@ class InventarioService {
     try {
 
       if (userId) {
-        const inventariosPermitidos = await this.#getInventariosDelUsuario(userId);        
+        const inventariosPermitidos = await getInventariosDelUsuario(userId);        
         if (!inventariosPermitidos.includes(parseInt(inventarioId))) {
           return { error: true, code: 403, message: "No tienes acceso a este inventario" };
         }
@@ -248,13 +249,6 @@ class InventarioService {
     }
 
     return null; // No hay errores
-  }
-
-  static async #getInventariosDelUsuario(idUSer) {
-    if (!idUSer) return [];
-
-    const inventarios = await this.objInventario.getAllByUsuarioAdminId(idUSer);
-    return inventarios.map(inv => inv.id);
   }
 }
 

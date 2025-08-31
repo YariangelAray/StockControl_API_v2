@@ -8,25 +8,25 @@ import authorize from "../middlewares/auth/authorize.js";
 const router = express.Router();
 
 // Obtener todos los elementos
-router.get("/me", authenticate, authorize('elemento.view-inventory-own'), ElementoController.getAllElementosMe);
+router.get("/me", authenticate, authorize('elemento.view-inventory-own', 'elemento.view-inventory-access'), ElementoController.getAllElementosMe);
 
 // Obtener un elemento por ID
-router.get("/me/:elementoId", authenticate, authorize('elemento.view-inventory-own'), ElementoController.getElementoByIdMe);
+router.get("/me/:elementoId", authenticate, authorize('elemento.view-inventory-own', 'elemento.view-inventory-access'), ElementoController.getElementoByIdMe);
 
 // Crear un nuevo elemento
 router.post("/me", authenticate, authorize('elemento.create-inventory-own'), validarElemento, ElementoController.createElementoMe);
 
 // Actualizar un elemento
-router.put("/me/:elementoId", authenticate, authorize('elemento.update-inventory-own'), validarElemento, ElementoController.updateElementoMe);
+router.put("/me/:elementoId", authenticate, authorize('elemento.update-inventory-own', 'elemento.update-inventory-access'), validarElemento, ElementoController.updateElementoMe);
 
 // Actualizar un elemento parcialmente
-router.patch("/me/:elementoId", authenticate, authorize('elemento.update-inventory-own'), validarElementoParcial, ElementoController.updateElementoMe);
+router.patch("/me/:elementoId", authenticate, authorize('elemento.update-inventory-own', 'elemento.update-inventory-access'), validarElementoParcial, ElementoController.updateElementoMe);
 
 // // Actualizar un elemento parcialmente
 // router.put("/me/:elementoId/estado/:estado", authenticate, authorize('elemento.change-status-inventory-own'), ElementoController.updateEstadoMe);
 
 // Obtener elementos por ID de inventario
-router.get("me/inventario/:inventarioId", authenticate, authorize('elemento.view-inventory-own'), ElementoController.getElementosByInventarioIdMe);
+router.get("me/inventario/:inventarioId", authenticate, authorize('elemento.view-inventory-own', 'elemento.view-inventory-access'), ElementoController.getElementosByInventarioIdMe);
 
 
 

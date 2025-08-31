@@ -4,6 +4,8 @@ import Estado from "../models/Estado.js";
 import Ambiente from "../models/Ambiente.js";
 import Inventario from "../models/Inventario.js";
 import { formatearFecha } from "../utils/formatearFecha.js";
+import AccesosService from "./AccesosService.js";
+import { getInventariosDelUsuario } from "../helpers/getInventariosUsuario.js";
 
 class ElementoService {
 
@@ -20,7 +22,7 @@ class ElementoService {
       let elementos = await this.objElemento.getAll();
 
       if (idUser) {
-        const inventariosPermitidos = await this.#getInventariosDelUsuario(idUser);
+        const inventariosPermitidos = await getInventariosDelUsuario(idUser);
         elementos = elementos.filter(e => inventariosPermitidos.includes(e.inventario_id));
       }
 
@@ -52,7 +54,7 @@ class ElementoService {
       }
 
       if (idUser) {
-        const inventariosPermitidos = await this.#getInventariosDelUsuario(idUser);
+        const inventariosPermitidos = await getInventariosDelUsuario(idUser);
         if (!inventariosPermitidos.includes(elemento.inventario_id)) {
           return { error: true, code: 403, message: "No tienes acceso a este elemento" };
         }
@@ -76,7 +78,7 @@ class ElementoService {
       if (error) return error;
 
       if (idUser) {
-        const inventariosPermitidos = await this.#getInventariosDelUsuario(idUser);
+        const inventariosPermitidos = await getInventariosDelUsuario(idUser);
         if (!inventariosPermitidos.includes(elemento.inventario_id)) {
           return { error: true, code: 403, message: "No puedes crear elementos en este inventario" };
         }
@@ -117,7 +119,7 @@ class ElementoService {
       }
 
       if (idUser) {
-        const inventariosPermitidos = await this.#getInventariosDelUsuario(idUser);
+        const inventariosPermitidos = await getInventariosDelUsuario(idUser);
         if (!inventariosPermitidos.includes(existente.inventario_id)) {
           return { error: true, code: 403, message: "No tienes acceso para modificar este elemento" };
         }
@@ -126,7 +128,7 @@ class ElementoService {
       const error = await this.#validarForaneas(elemento);
       if (error) return error;
 
-      const existentePlaca = await this.objElemento.getByPlaca(elemento.placa);      
+      const existentePlaca = await this.objElemento.getByPlaca(elemento.placa);
       if (existentePlaca && existentePlaca.id != id) {
         return { error: true, code: 409, message: "El número de placa especificado ya fue registrado." };
       }
@@ -183,17 +185,17 @@ class ElementoService {
   static async getElementosByInventarioId(inventarioId, idUser = null) {
     try {
 
-      if (idUser) {
-        const inventariosPermitidos = await this.#getInventariosDelUsuario(idUser);
-        if (!inventariosPermitidos.includes(parseInt(inventarioId))) {
-          return { error: true, code: 403, message: "No tienes acceso a este inventario" };
-        }
-      }
-
       if (inventarioId) {
         const inventarioExistente = await this.objInventario.getById(inventarioId);
         if (!inventarioExistente) {
           return { error: true, code: 404, message: "El inventario especificado no existe." };
+        }
+      }
+
+      if (idUser) {
+        const inventariosPermitidos = await getInventariosDelUsuario(idUser);
+        if (!inventariosPermitidos.includes(parseInt(inventarioId))) {
+          return { error: true, code: 403, message: "No tienes acceso a este inventario" };
         }
       }
 
@@ -269,12 +271,6 @@ class ElementoService {
     return null; // si no hay error
   }
 
-  static async #getInventariosDelUsuario(idUser) {
-    if (!idUser) return [];
-
-    const inventarios = await this.objInventario.getAllByUsuarioAdminId(idUser);
-    return inventarios.map(inv => inv.id);
-  }
 }
 
 export default ElementoService;

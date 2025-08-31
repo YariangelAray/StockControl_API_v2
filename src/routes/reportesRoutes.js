@@ -23,7 +23,7 @@ router.get("/", authenticate, authorize('reporte.view'), ReporteController.getAl
 router.get("/:id", authenticate, authorize('reporte.view'), ReporteController.getReporteById);
 
 // Crear un nuevo reporte
-router.post("/", authenticate, authorize('reporte.create'), validarReporte, ReporteController.createReporte);
+router.post("/", authenticate, authorize('reporte.create', 'reporte.create-inventory-access'), validarReporte, ReporteController.createReporte);
 
 // Actualizar un reporte
 router.put("/:id", authenticate, authorize('reporte.update'), validarReporte, ReporteController.updateReporte);

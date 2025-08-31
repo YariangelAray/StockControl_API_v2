@@ -1,6 +1,7 @@
 import TipoElemento from "../models/TipoElemento.js";
 import Elemento from "../models/Elemento.js";
 import Inventario from "../models/Inventario.js";
+import { getInventariosDelUsuario } from "../helpers/getInventariosUsuario.js";
 
 class TipoElementoService {
 
@@ -139,7 +140,7 @@ class TipoElementoService {
                 return { error: true, code: 404, message: "El inventario especificado no existe." };
 
             if (idUser) {
-                const inventariosPermitidos = await this.#getInventariosDelUsuario(idUser);
+                const inventariosPermitidos = await getInventariosDelUsuario(idUser);
                 if (!inventariosPermitidos.includes(parseInt(inventarioId))) {
                     return { error: true, code: 403, message: "No tienes acceso a este inventario" };
                 }
@@ -179,13 +180,6 @@ class TipoElementoService {
             tipoElemento.cantidad_elementos = elementos.filter(e => e.tipo_elemento_id === tipoElemento.id).length;
             return tipoElemento;
         }));
-    }
-
-    static async #getInventariosDelUsuario(idUser) {
-        if (!idUser) return [];
-
-        const inventarios = await this.objInventario.getAllByUsuarioAdminId(idUser);
-        return inventarios.map(inv => inv.id);
     }
 }
 

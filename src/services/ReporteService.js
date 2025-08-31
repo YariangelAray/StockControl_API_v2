@@ -1,3 +1,4 @@
+import { getInventariosDelUsuario } from "../helpers/getInventariosUsuario.js";
 import Elemento from "../models/Elemento.js";
 import Foto from "../models/Foto.js";
 import Inventario from "../models/Inventario.js";
@@ -49,7 +50,7 @@ class ReporteService {
 
       if (idUser) {
         const elemento = await this.objElemento.getById(reporte.elemento_id)      
-        const inventariosPermitidos = await this.#getInventariosDelUsuario(idUser);
+        const inventariosPermitidos = await getInventariosDelUsuario(idUser);
         if (!inventariosPermitidos.includes(elemento.inventario_id)) {
           return { error: true, code: 403, message: "No tienes acceso a los reportes de este inventario" };
         }
@@ -156,7 +157,7 @@ class ReporteService {
         return { error: true, code: 404, message: "El inventario especificado no existe." };
       
       if (idUser) {
-        const inventariosPermitidos = await this.#getInventariosDelUsuario(idUser);
+        const inventariosPermitidos = await getInventariosDelUsuario(idUser);
         if (!inventariosPermitidos.includes(parseInt(inventarioId))) {
           return { error: true, code: 403, message: "No tienes acceso a los reportes de este inventario" };
         }
@@ -233,13 +234,6 @@ class ReporteService {
     }
 
     return null;
-  }
-
-  static async #getInventariosDelUsuario(idUSer) {
-    if (!idUSer) return [];
-
-    const inventarios = await this.objInventario.getAllByUsuarioAdminId(idUSer);
-    return inventarios.map(inv => inv.id);
   }
 }
 

@@ -146,13 +146,25 @@ INSERT INTO permisos (nombre, descripcion) VALUES
 ('foto.create-inventory-own', 'Crear fotos en reportes de un inventario propio'), -- 92
 
 -- CODIGOS ACCESO
-('access-code.create', 'Crear códigos de acceso'), -- 93
-('access-code.view', 'Ver la lista de códigos de acceso'), -- 94
-('access-code.invalidate', 'Invalidar códigos de acceso'), -- 95
-('ambiente.view-card', 'Ver ambientes en cards'),
-('superadmin.access-home', 'Ver ambientes en cards'), -- Permiso para en el front mostrar el home del superadmin
-('inventarios.index', 'Ver la vista de inventarios') -- Permiso para en el front mostrar el home del superadmin
+('access-code.create', 'Crear códigos de acceso'), -- 93    no
+('access-code.view', 'Ver la lista de códigos de acceso'), -- 94 no 
+('access-code.invalidate', 'Invalidar códigos de acceso'), -- 95 no
 
+('ambiente.view-card', 'Ver ambientes en cards'), -- 96
+('superadmin.access-home', 'Ver ambientes en cards'), -- 97
+
+('inventario.index', 'Ver la vista de inventarios'), -- 98
+('inventario.generate-code', 'Generar código de acceso a inventario'), -- 99
+
+('inventario.access-code', 'Acceder a un inventario con código'), -- 100
+('reporte.create-inventory-access', 'Crear reportes en un inventario con código'), -- 101
+('elemento.view-inventory-access', 'Ver elementos de un inventario con código'), -- 102
+('elemento.update-inventory-access', 'Actualizar elementos en un inventario con código'), -- 103
+
+-- Permiso para ver cuantos usuarios estan gestionando el inventario en ese momento
+('inventario.view-access', 'Ver accesos de inventarios propios'), -- 104 no
+
+('inventario.view-access-own', 'Ver inventarios con acceso') -- 105
 ;
 
 INSERT INTO permisos_roles (permiso_id, rol_id) VALUES
@@ -222,11 +234,19 @@ INSERT INTO permisos_roles (permiso_id, rol_id) VALUES
 (92,2),
 (96,2),
 (98,2),
+(99,2),
+-- (104,2),
 
 -- CORRIENTE
 
 (5,3),
 (6,3),
 (7,3),
-(98,3)
+(96,3),
+(98,3),
+(100,3),
+(101,3),
+(102,3),
+(103,3),
+(105,3)
 ;

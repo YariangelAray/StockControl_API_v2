@@ -1,4 +1,4 @@
-import connection from "../utils/db.js";
+import connection from "../utils/connection.js";
 
 /**
  * Clase Modelo para interactuar con la base de datos.
