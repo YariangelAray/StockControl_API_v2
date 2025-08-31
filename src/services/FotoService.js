@@ -1,13 +1,15 @@
 import Foto from "../models/Foto.js";
+import Inventario from "../models/Inventario.js";
 import Reporte from "../models/Reporte.js";
 import fs from "fs";
 import path from "path"
 
 class FotoService {
 
+  static objInventario = new Inventario();
   static objFoto = new Foto();
   static objReporte = new Reporte();
-  static urlBase = "stockcontrol_api/fotos_reportes/";
+  static urlBase = "fotos_reportes/";
 
   static async getAllFotos(userId = null) {
     try {
@@ -18,7 +20,7 @@ class FotoService {
         const inventariosPermitidos = await this.#getInventariosDelUsuario(userId);
         // Obtener todos los reportes permitidos del usuario
         let reportesPermitidos = Promise.all(inventariosPermitidos.map(async (inventarioId) => {
-          return (await this.objReporte.getAllByInventarioId(inventarioId)).map(({id}) => id);
+          return (await this.objReporte.getAllByInventarioId(inventarioId)).map(({ id }) => id);
         }));
         // Filtrar las fotos que pertenecen a esos reportes
         fotos = fotos.filter(f => reportesPermitidos.includes(f.reporte_id));
@@ -47,12 +49,19 @@ class FotoService {
         return { error: true, code: 404, message: "Foto no encontrada" };
 
       if (userId) {
-        const reporte = await this.objReporte.getById(foto.reporte_id);
         const inventariosPermitidos = await this.#getInventariosDelUsuario(userId);
-        if (!inventariosPermitidos.includes(reporte.inventario_id)) {
+
+        const reportesPermitidos = [];
+        for (const inventarioId of inventariosPermitidos) {
+          const reportes = await this.objReporte.getAllByInventarioId(inventarioId);
+          reportesPermitidos.push(...reportes.map(r => r.id));
+        }
+
+        if (!reportesPermitidos.includes(foto.reporte_id)) {
           return { error: true, code: 403, message: "No tienes acceso a esta foto" };
         }
       }
+
 
       // Retornamos la foto obtenida
       return { error: false, code: 200, message: "Foto obtenida correctamente", data: foto };
@@ -64,14 +73,20 @@ class FotoService {
 
   static async createFoto(reporteId, archivo, userId = null) {
     try {
-
       const error = await this.#validarForaneas({ reporte_id: reporteId });
       if (error) return error;
 
       if (userId) {
-        const reporte = await this.objReporte.getById(reporteId);
         const inventariosPermitidos = await this.#getInventariosDelUsuario(userId);
-        if (!inventariosPermitidos.includes(reporte.inventario_id)) {
+
+        // Obtener todos los reportes permitidos para esos inventarios
+        const reportesPermitidos = [];
+        for (const inventarioId of inventariosPermitidos) {
+          const reportes = await this.objReporte.getAllByInventarioId(inventarioId);
+          reportesPermitidos.push(...reportes.map(r => r.id));
+        }        
+
+        if (!reportesPermitidos.includes(parseInt(reporteId))) {
           return { error: true, code: 403, message: "No puedes agregar fotos a este reporte" };
         }
       }
@@ -82,25 +97,20 @@ class FotoService {
       // Llamamos el método crear
       const fotoCreada = await this.objFoto.create({ url, reporte_id: reporteId });
 
-      // Validamos si no se pudo crear la foto
-      if (!fotoCreada){
-        // Eliminamos el archivo si hubo error
+      if (!fotoCreada) {
         const ruta = path.join("public", "img", "reportes", archivo.filename);
         if (fs.existsSync(ruta)) fs.unlinkSync(ruta);
         return { error: true, code: 400, message: "Error al crear la foto" };
       }
 
-      // Retornamos la foto creada
       return { error: false, code: 201, message: "Foto creada correctamente", data: fotoCreada };
     } catch (error) {
-      // Eliminamos el archivo si hubo error
       const ruta = path.join("public", "img", "reportes", archivo.filename);
       if (fs.existsSync(ruta)) fs.unlinkSync(ruta);
-      
-      // Retornamos un error en caso de excepción
       return { error: true, code: 500, message: error.message };
     }
   }
+
 
   static async updateFoto(id, reporteId, archivo) {
     try {
@@ -120,15 +130,15 @@ class FotoService {
       }
 
       // Llamamos el método actualizar
-      const fotoActualizada = await this.objFoto.update(id, { url: nuevaUrl ?? existente.url , reporte_id: reporteId ?? existente.reporte_id });
+      const fotoActualizada = await this.objFoto.update(id, { url: nuevaUrl ?? existente.url, reporte_id: reporteId ?? existente.reporte_id });
       // Validamos si no se pudo actualizar la foto
       if (!fotoActualizada)
         return { error: true, code: 400, message: "Error al actualizar la foto" };
 
-       // Eliminamos el archivo anterior del disco
+      // Eliminamos el archivo anterior del disco
       const rutaAnterior = path.join("public", "img", "reportes", path.basename(existente.url));
       if (fs.existsSync(rutaAnterior)) fs.unlinkSync(rutaAnterior);
-      
+
       // Retornamos la foto actualizada
       return { error: false, code: 200, message: "Foto actualizada correctamente", data: fotoActualizada };
     } catch (error) {
@@ -157,7 +167,7 @@ class FotoService {
       // Eliminamos el archivo del disco
       const ruta = path.join("public", "img", "reportes", path.basename(foto.url));
       if (fs.existsSync(ruta)) fs.unlinkSync(ruta);
-      
+
       // Retornamos la foto eliminada
       return { error: false, code: 200, message: "Foto eliminada correctamente" };
     } catch (error) {

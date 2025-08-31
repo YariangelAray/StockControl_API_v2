@@ -130,7 +130,7 @@ class UsuarioService {
       }
 
       const existenteCorreo = await this.objUsuario.getByCorreo(usuario.correo);
-      if (existenteCorreo && usuario.correo != existente.correo) {
+      if (existenteCorreo && existenteCorreo.id != id) {
         return { error: true, code: 409, message: "El correo especificado ya fue registrado." };
       }
 

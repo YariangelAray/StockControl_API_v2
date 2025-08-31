@@ -10,7 +10,7 @@ const router = express.Router();
 
 router.get("/me", authenticate, authorize('foto.view-inventory-own'), FotoController.getAllFotosMe);
 router.get("/me/:fotoId", authenticate, authorize('foto.view-inventory-own'), FotoController.getFotoByIdMe);
-router.post("/", authenticate, authorize('foto.create-inventory-own'), uploadFotoMiddleware, validarFoto, FotoController.subirFotoMe);
+router.post("/me", authenticate, authorize('foto.create-inventory-own'), uploadFotoMiddleware, validarFoto, FotoController.subirFotoMe);
 
 router.get("/", authenticate, authorize('foto.view'), FotoController.getAllFotos);
 router.get("/:id", authenticate, authorize('foto.view'), FotoController.getFotoById);

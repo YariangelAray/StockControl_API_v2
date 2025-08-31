@@ -81,7 +81,7 @@ class TipoElementoService {
             }
 
             const existenteConsecutivo = await this.objTipoElemento.getByConsecutivo(tipoElemento.consecutivo);
-            if (existenteConsecutivo && tipoElemento.consecutivo != existente.consecutivo) {
+            if (existenteConsecutivo && existenteConsecutivo.id != id) {
                 return { error: true, code: 409, message: "El número de consecutivo especificado ya fue registrado." };
             }
 

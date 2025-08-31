@@ -3,6 +3,7 @@ import TipoElemento from "../models/TipoElemento.js";
 import Estado from "../models/Estado.js";
 import Ambiente from "../models/Ambiente.js";
 import Inventario from "../models/Inventario.js";
+import { formatearFecha } from "../utils/formatearFecha.js";
 
 class ElementoService {
 
@@ -45,7 +46,7 @@ class ElementoService {
 
       // Llamamos el método consultar por ID
       let elemento = await this.objElemento.getById(id);
-      // Validamos si no hay elemento
+      // Validamos si no hay elemento      
       if (!elemento) {
         return { error: true, code: 404, message: "Elemento no encontrado" };
       }
@@ -56,7 +57,7 @@ class ElementoService {
           return { error: true, code: 403, message: "No tienes acceso a este elemento" };
         }
       }
-      
+
       // Retornamos el elemento obtenido
       return {
         error: false, code: 200, message: "Elemento obtenido correctamente",
@@ -125,15 +126,17 @@ class ElementoService {
       const error = await this.#validarForaneas(elemento);
       if (error) return error;
 
-      const existentePlaca = await this.objElemento.getByPlaca(elemento.placa);
-      if (existentePlaca && elemento.placa != existente.placa) {
+      const existentePlaca = await this.objElemento.getByPlaca(elemento.placa);      
+      if (existentePlaca && existentePlaca.id != id) {
         return { error: true, code: 409, message: "El número de placa especificado ya fue registrado." };
       }
 
+
       const existenteSerial = await this.objElemento.getBySerial(elemento.serial);
-      if (existenteSerial && elemento.serial != existente.serial) {
+      if (existenteSerial && existenteSerial.id != id) {
         return { error: true, code: 409, message: "El número de serial especificado ya fue registrado." };
       }
+
 
       // Llamamos el método actualizar
       const elementoActualizado = await this.objElemento.update(id, elemento);
@@ -228,6 +231,7 @@ class ElementoService {
     elemento.tipo_elemento = tipoElemento.nombre;
     elemento.tipo_modelo = tipoElemento.modelo;
     elemento.valor_monetario = parseFloat(elemento.valor_monetario);
+    elemento.fecha_adquisicion = formatearFecha(elemento.fecha_adquisicion)
 
     return elemento;
   }

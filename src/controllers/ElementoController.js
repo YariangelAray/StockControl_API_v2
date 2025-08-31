@@ -56,11 +56,11 @@ class ElementoController {
 
   // Obtener un elemento por su ID
   static getElementoByIdMe = async (req, res) => {
-    const { idElemento } = req.params;
+    const { elementoId } = req.params;
     const { id } = req.user;
     try {
       // Llamamos al servicio para obtener el elemento por su ID
-      const response = await ElementoService.getElementoById(idElemento, id);
+      const response = await ElementoService.getElementoById(elementoId, id);
       // Validamos si no hay elemento
       if (response.error) {
         // Llamamos el provider para centralizar los mensajes de respuesta
@@ -137,7 +137,7 @@ class ElementoController {
     const { id, estado } = req.params;    
     try {            
       // Llamamos al método actualizar del modelo
-      const response = await ElementoService.updateElemento(id, {estado});
+      const response = await ElementoService.updateElemento(id, {activo: Boolean(estado)});
       // Validamos que la respuesta no tenga error
       if (response.error) {
         // Llamamos el provider para centralizar los mensajes de respuesta
@@ -154,12 +154,12 @@ class ElementoController {
 
   // Actualizar un elemento
   static updateElementoMe = async (req, res) => {
-    const { idElemento } = req.params;
+    const { elementoId } = req.params;
     const elemento = req.body;
     const { id } = req.user;
     try {
       // Llamamos al método actualizar del modelo
-      const response = await ElementoService.updateElemento(idElemento, elemento, id);
+      const response = await ElementoService.updateElemento(elementoId, elemento, id);
       // Validamos que la respuesta no tenga error
       if (response.error) {
         // Llamamos el provider para centralizar los mensajes de respuesta
@@ -175,11 +175,11 @@ class ElementoController {
   };
   // Actualizar un elemento
   static updateEstadoMe = async (req, res) => {
-    const { idElemento, estado } = req.params;    
+    const { elementoId, estado } = req.params;    
     const { id } = req.user;
     try {
       // Llamamos al método actualizar del modelo
-      const response = await ElementoService.updateElemento(idElemento, {estado}, id);
+      const response = await ElementoService.updateElemento(elementoId, {activo: Boolean(estado)}, id);
       // Validamos que la respuesta no tenga error
       if (response.error) {
         // Llamamos el provider para centralizar los mensajes de respuesta

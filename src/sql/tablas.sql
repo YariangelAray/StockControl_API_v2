@@ -141,7 +141,7 @@ CREATE TABLE elementos (
   valor_monetario DECIMAL(12, 2),
   estado_id INT,
   observaciones TEXT,
-  estado_activo BOOLEAN DEFAULT TRUE,
+  activo BOOLEAN DEFAULT TRUE,
   ambiente_id INT NULL,
   inventario_id INT,
   FOREIGN KEY (tipo_elemento_id) REFERENCES tipos_elementos(id),

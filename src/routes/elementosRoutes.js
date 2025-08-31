@@ -20,10 +20,10 @@ router.post("/me", authenticate, authorize('elemento.create-inventory-own'), val
 router.put("/me/:elementoId", authenticate, authorize('elemento.update-inventory-own'), validarElemento, ElementoController.updateElementoMe);
 
 // Actualizar un elemento parcialmente
-router.patch("/me/:elementoId", authenticate, authorize('elemento.update-inventory-own', 'elemento.update-patch-inventory-access'), validarElementoParcial, ElementoController.updateElementoMe);
+router.patch("/me/:elementoId", authenticate, authorize('elemento.update-inventory-own'), validarElementoParcial, ElementoController.updateElementoMe);
 
-// Actualizar un elemento parcialmente
-router.put("/me/:elementoId/estado/:estado", authenticate, authorize('elemento.change-status-inventory-own'), ElementoController.updateEstadoMe);
+// // Actualizar un elemento parcialmente
+// router.put("/me/:elementoId/estado/:estado", authenticate, authorize('elemento.change-status-inventory-own'), ElementoController.updateEstadoMe);
 
 // Obtener elementos por ID de inventario
 router.get("me/inventario/:inventarioId", authenticate, authorize('elemento.view-inventory-own'), ElementoController.getElementosByInventarioIdMe);
@@ -45,8 +45,8 @@ router.put("/:id", authenticate, authorize('elemento.update'), validarElemento, 
 // Actualizar un elemento parcialmente
 router.patch("/:id", authenticate, authorize('elemento.update'), validarElementoParcial, ElementoController.updateElemento);
 
-// Actualizar el estado de un elemento
-router.put("/:id/estado/:estado", authenticate, authorize('elemento.change-status'), ElementoController.updateEstado);
+// // Actualizar el estado de un elemento
+// router.put("/:id/estado/:estado", authenticate, authorize('elemento.change-status'), ElementoController.updateEstado);
 
 // Eliminar un elemento
 router.delete("/:id", authenticate, authorize('elemento.delete'), ElementoController.deleteElemento);

@@ -129,7 +129,7 @@ class FotoController {
     const { reporte_id } = req.body;
     const archivo = req.file;
     const { id } = req.user;
-
+    
     try {
       const response = await FotoService.createFoto(reporte_id, archivo, id);
 

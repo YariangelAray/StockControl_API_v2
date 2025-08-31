@@ -176,6 +176,7 @@ class AuthService {
         usuarioToken.nombre_corto = `${usuario.nombres.split(" ")[0]} ${usuario.apellidos.split(" ")[0]}`;
         usuarioToken.nombres = usuario.nombres;
         usuarioToken.apellidos = usuario.apellidos;
+        usuarioToken.id = usuario.id;
 
         // Instancia modelos para obtener roles y permisos
         const rolUsuario = new RolUsuario();

@@ -19,7 +19,7 @@ const storage = multer.diskStorage({
    * Define el nombre del archivo guardado
    */
   filename: (req, file, cb) => {
-    const reporteId = req.body.reporte_id; // ID del reporte asociado
+    const reporteId = req.body.reporte_id; // ID del reporte asociado    
     const ext = path.extname(file.originalname); // Extensión del archivo
     const nombreUnico = `foto_reporte_${reporteId}_${Date.now()}${ext}`; // Nombre único
     cb(null, nombreUnico); // Usa ese nombre para guardar
