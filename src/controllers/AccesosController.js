@@ -4,7 +4,7 @@ import AccesosService from "../services/AccesosService.js";
 class AcessosController{
     static async obtenerInventariosUsuario(req, res) {
         try {
-            const usuarioId = req.user.id; // Suponiendo que el ID del usuario está en req.user.id
+            const usuarioId = req.user.id;
             const response = await AccesosService.obtenerInventariosUsuario(usuarioId);
             if (response.error) return ResponseProvider.error(res, response.message, response.code);
             return ResponseProvider.success(res, response.data, response.message, 200);
