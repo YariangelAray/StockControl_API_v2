@@ -183,9 +183,10 @@ class UsuarioController {
   // Actualizar la contraseña del propio usuario
   static updateDesactivarMe = async (req, res) => {
     const { id } = req.user;
+    const { contrasena_actual } = req.body;
     const activo = false;
     try {
-      const response = await UsuarioService.updateUsuario(id, { activo });
+      const response = await UsuarioService.updateUsuario(id, { activo, contrasena_actual });
       // Validamos si no hay usuarios
       if (response.error) {
         // Llamamos el provider para centralizar los mensajes de respuesta

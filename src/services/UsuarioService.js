@@ -138,6 +138,10 @@ class UsuarioService {
         return { error: true, code: 409, message: "La contraseña del usuario no se puede actualizar por este método." };
       }
 
+      if (usuario.contrasena_actual && !await bcrypt.compare(usuario.contrasena_actual, existente.contrasena)) {
+        return { error: true, code: 401, message: "La contraseña es incorrecta." };
+      } else delete usuario.contrasena_actual;
+
       // Llamamos el método actualizar
       const usuarioActualizado = await this.objUsuario.update(id, usuario);
       // Validamos si no se pudo actualizar el usuario

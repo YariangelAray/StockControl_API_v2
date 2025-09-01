@@ -8,7 +8,7 @@ import authorize from "../middlewares/auth/authorize.js";
 const router = express.Router();
 
 // Obtener todos los tipos de elementos de un inventario propio especifico
-router.get("inventario/me/:inventarioId", authenticate, authorize('tipo-elemento.view-inventory-own'), TipoElementoController.getTiposElementosByInventarioIdMe);
+router.get("/inventario/me/:inventarioId", authenticate, authorize('tipo-elemento.view-inventory-own'), TipoElementoController.getTiposElementosByInventarioIdMe);
 
 // Obtener todos los tipos de elementos
 router.get("/", authenticate, TipoElementoController.getAllTiposElementos);

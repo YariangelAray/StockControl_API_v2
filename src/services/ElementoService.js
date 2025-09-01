@@ -200,7 +200,7 @@ class ElementoService {
       }
 
       // Llamamos el método listar
-      const elementos = await this.objElemento.getAllByInventarioId(inventarioId);
+      const elementos = await this.objElemento.getAllByInventarioId(inventarioId);      
 
       // Validamos si no hay elementos
       if (!elementos || elementos.length == 0) {

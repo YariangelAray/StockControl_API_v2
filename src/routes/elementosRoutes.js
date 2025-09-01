@@ -7,6 +7,8 @@ import authorize from "../middlewares/auth/authorize.js";
 
 const router = express.Router();
 
+// Obtener elementos por ID de inventario
+router.get("/me/inventario/:inventarioId", authenticate, authorize('elemento.view-inventory-own', 'elemento.view-inventory-access'), ElementoController.getElementosByInventarioIdMe);
 // Obtener todos los elementos
 router.get("/me", authenticate, authorize('elemento.view-inventory-own', 'elemento.view-inventory-access'), ElementoController.getAllElementosMe);
 
@@ -25,8 +27,6 @@ router.patch("/me/:elementoId", authenticate, authorize('elemento.update-invento
 // // Actualizar un elemento parcialmente
 // router.put("/me/:elementoId/estado/:estado", authenticate, authorize('elemento.change-status-inventory-own'), ElementoController.updateEstadoMe);
 
-// Obtener elementos por ID de inventario
-router.get("me/inventario/:inventarioId", authenticate, authorize('elemento.view-inventory-own', 'elemento.view-inventory-access'), ElementoController.getElementosByInventarioIdMe);
 
 
 

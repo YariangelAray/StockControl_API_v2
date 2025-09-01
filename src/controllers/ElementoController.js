@@ -232,7 +232,7 @@ class ElementoController {
   // Obtener todos los elementos por id de inventario
   static getElementosByInventarioIdMe = async (req, res) => {
     const { inventarioId } = req.params;
-    const { id } = req.user;
+    const { id } = req.user;    
     try {
       const response = await ElementoService.getElementosByInventarioId(inventarioId, id);
       // Validamos si no hay elementos
