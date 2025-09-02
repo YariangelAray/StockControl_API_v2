@@ -90,7 +90,7 @@ CREATE TABLE inventarios (
   id INT AUTO_INCREMENT PRIMARY KEY,
   nombre VARCHAR(50),
   fecha_creacion DATE,
-  ultima_actualizacion DATE,
+  ultima_actualizacion DATETIME,
   usuario_admin_id INT,
   FOREIGN KEY (usuario_admin_id) REFERENCES usuarios(id)
 );

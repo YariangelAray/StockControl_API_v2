@@ -14,16 +14,16 @@ router.get("/inventario/me/:inventarioId", authenticate, authorize('tipo-element
 router.get("/", authenticate, TipoElementoController.getAllTiposElementos);
 
 // Obtener un tipo de elemento por ID
-router.get("/:id", authenticate, authorize('tipo-elemento.view'), TipoElementoController.getTipoElementoById);
+router.get("/:id", authenticate, authorize('tipo-elemento.view', 'tipo-elemento.view-inventory-own'), TipoElementoController.getTipoElementoById);
 
 // Crear un nuevo tipo de elemento
-router.post("/", authenticate, authorize('tipo-elemento.create'), validarTipoElemento, TipoElementoController.createTipoElemento);
+router.post("/", authenticate, authorize('tipo-elemento.create', 'tipo-elemento.create-inventory-own'), validarTipoElemento, TipoElementoController.createTipoElemento);
 
 // Actualizar un tipo de elemento
-router.put("/:id", authenticate, authorize('tipo-elemento.update'), validarTipoElemento, TipoElementoController.updateTipoElemento);
+router.put("/:id", authenticate, authorize('tipo-elemento.update', 'tipo-elemento.update-inventory-own'), validarTipoElemento, TipoElementoController.updateTipoElemento);
 
 // Actualizar un tipo de elemento parcialmente
-router.patch("/:id", authenticate, authorize('tipo-elemento.update'), validarTipoElementoParcial, TipoElementoController.updateTipoElemento);
+router.patch("/:id", authenticate, authorize('tipo-elemento.update', 'tipo-elemento.view-inventory-own'), validarTipoElementoParcial, TipoElementoController.updateTipoElemento);
 
 // Eliminar un tipo de elemento
 router.delete("/:id", authenticate, authorize('tipo-elemento.delete'), TipoElementoController.deleteTipoElemento);

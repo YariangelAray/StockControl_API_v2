@@ -164,7 +164,10 @@ INSERT INTO permisos (nombre, descripcion) VALUES
 -- Permiso para ver cuantos usuarios estan gestionando el inventario en ese momento
 ('inventario.view-access', 'Ver accesos de inventarios propios'), -- 104 no
 
-('inventario.view-access-own', 'Ver inventarios con acceso') -- 105
+('inventario.view-access-own', 'Ver inventarios con acceso'), -- 105
+
+('tipo-elemento.create-inventory-own', 'Crear un tipo de elemento en un inventario propio'),
+('tipo-elemento.update-inventory-own', 'Actualizar un tipo de elemento en un inventario propio')
 ;
 
 INSERT INTO permisos_roles (permiso_id, rol_id) VALUES
@@ -218,10 +221,6 @@ INSERT INTO permisos_roles (permiso_id, rol_id) VALUES
 (6,2),
 (7,2),
 (32,2),
-(49,2),
-(53,2),
-(54,2),
-(55,2),
 (57,2),
 (69,2),
 (70,2),
@@ -235,7 +234,8 @@ INSERT INTO permisos_roles (permiso_id, rol_id) VALUES
 (96,2),
 (98,2),
 (99,2),
--- (104,2),
+(106,2),
+(107,2),
 
 -- CORRIENTE
 

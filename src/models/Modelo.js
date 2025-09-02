@@ -59,7 +59,7 @@ class Modelo {
   async getByField(tabla, campo, valor) {
     try {      
       // Obtenemos el resultado de la consulta
-      const [rows] = await connection.query(`SELECT * FROM ${tabla} WHERE ${campo} = ?`, [valor]);
+      const [rows] = await connection.query(`SELECT * FROM ${tabla} WHERE ${campo} = ? ORDER BY id DESC`, [valor]);
       // Retornamos la respuesta al servicio
       return rows; // Retorna todos los registros que coinciden con el filtro
     } catch (error) {
